@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: dotnet restore Backend/
       - name: Build
-        run: dotnet build Backend/ --configuration Release --no-restore
+        run: dotnet build Backend/ --no-restore
       - name: Test
         run: dotnet test Backend/ --no-build
     
