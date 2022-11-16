@@ -22,7 +22,7 @@ jobs:
         node-version: latest
 
     - name: Install Node dependencies
-      run: npm install
+      run: npm install --prefix ./frontend/
 
     - name: Build
       run: ng build frontend
