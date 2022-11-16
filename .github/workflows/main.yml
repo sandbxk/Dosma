@@ -1,0 +1,36 @@
+
+# triggers
+on:
+  push:
+    branches: 
+      - dev*
+  pull_request:
+    branches:
+      - main
+
+# setup
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6
+      - name: Install dependencies
+        run: dotnet restore Backend/
+      - name: Build
+        run: dotnet build Backend/ --configuration Release --no-restore
+ 
+  test:
+    runs-on: ubuntu-latest
+    needs: 
+      - build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6
+      - run: dotnet test Backend/ --no-restore --no-build --verbosity normal
+    
