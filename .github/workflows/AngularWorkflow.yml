@@ -22,7 +22,7 @@ jobs:
         node-version: 18
 
     - name: Install Node dependencies
-      run: npm install --prefix ./frontend/
+      run: npm ci
       
     - name: Build
       run: ng build frontend
