@@ -1,0 +1,62 @@
+{
+	"version": "2.0.0",
+	"tasks": [ 
+		{
+			"label": "launch frontend",
+			"type": "npm",
+			"script": "start",
+			"path": "Frontend",
+			"detail": "host the web server locally on port 4200",
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "dotnet build",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"build",
+				"${workspaceFolder}/Backend/API/API.csproj",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary"
+			],
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "dotnet run",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"run",
+				"--project",
+				"${workspaceFolder}/Backend/API/API.csproj"
+			],
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "dotnet restore",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"restore",
+				"${workspaceFolder}/Backend/API/API.csproj",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary"
+			],
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "dotnet watch",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"watch",
+				"run",
+				"--project",
+				"${workspaceFolder}/Backend/API/API.csproj"
+			],
+			"problemMatcher": "$msCompile"
+		}
+	]
+}
