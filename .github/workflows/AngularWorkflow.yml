@@ -27,9 +27,12 @@ jobs:
         node-version: 18
 
     - name: Install Node dependencies
-      run: npm install
+      run: npm install @angular/cli
       working-directory: ${{env.working-directory}} 
       
+    - name: Install Angular dependencies
+      run: npm install @angular/cli
+      working-directory: ${{env.working-directory}} 
       
     - name: Build
       run: ng build frontend
