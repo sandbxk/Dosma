@@ -35,5 +35,5 @@ jobs:
       working-directory: ${{env.working-directory}} 
       
     - name: Build
-      run: ng build frontend
+      run: npm run build frontend
       working-directory: ${{env.working-directory}} 
