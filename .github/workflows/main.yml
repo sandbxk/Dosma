@@ -1,4 +1,5 @@
-name: Build & Test backend
+name: Build and Test backend
+
 # triggers
 on:
   push:
