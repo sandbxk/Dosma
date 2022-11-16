@@ -10,7 +10,7 @@ on:
   
 
 jobs:
-  install:
+  Install-and-Build:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -22,9 +22,7 @@ jobs:
         node-version: 18
 
     - name: Install Node dependencies
-      run: npm install
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build
-        run: ng build frontend
+      run: npm install --prefix ./frontend/
+      
+    - name: Build
+      run: ng build frontend
