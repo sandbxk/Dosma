@@ -16,13 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET Core SDK
-      - uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6
       - name: Install dependencies
-      - run: dotnet restore Backend/
+        run: dotnet restore Backend/
       - name: Build
-      - run: dotnet build Backend/ --configuration Release --no-restore
+        run: dotnet build Backend/ --configuration Release --no-restore
       - name: Test
-      - run: dotnet test Backend/ --no-build
+        run: dotnet test Backend/ --no-build
     
