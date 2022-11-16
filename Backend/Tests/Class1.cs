@@ -5,6 +5,6 @@ public class Class1
     [Fact]
     public void AlwaysTrue()
     {
-        Assert.True(true);
+        Assert.True(false);
     }
 }
