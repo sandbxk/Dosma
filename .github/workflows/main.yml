@@ -20,8 +20,8 @@ jobs:
         with:
           dotnet-version: 6
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore .\Backend\
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build .\Backend\ --configuration Release --no-restore
       - name: Test
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test .\Backend\ --no-restore --verbosity normal
