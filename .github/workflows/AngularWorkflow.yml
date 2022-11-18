@@ -19,20 +19,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - run: cd Frontend
-
     - name: Setup Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: 18
 
-    - name: Install Node dependencies
-      run: npm install @angular/cli
+    - name: Install dependencies
+      run: npm install
       working-directory: ${{env.working-directory}} 
       
-    - name: Install Angular dependencies
-      run: npm install @angular/cli
-      working-directory: ${{env.working-directory}} 
       
     - name: Build
       run: npm run build Frontend
