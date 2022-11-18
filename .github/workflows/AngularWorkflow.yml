@@ -1,4 +1,4 @@
-name: Install Angular dependencies
+name: Install Angular dependencies and build
 
 on:
   push:
