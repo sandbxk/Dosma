@@ -18,7 +18,6 @@ public struct List
     public DateTime Created { get; set; }
     public DateTime Modified { get; set; }
     public bool IsArchived { get; set; }
-
 }
 
 public struct UserAccess
