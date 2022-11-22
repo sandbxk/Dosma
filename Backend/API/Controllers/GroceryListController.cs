@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
 using Domain;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -19,8 +20,19 @@ public class GroceryListController : ControllerBase
     [HttpPost]
     public ActionResult<GroceryListController> CreateGroceryList(GroceryListDTO dto)
     {
-        _groceryListService.CreateGroceryList(dto);
-        return Ok();
+        try
+        {
+            var result = _groceryListService.Create(dto);
+            return Created("product/" + result.Id, result);
+        }
+        catch (ValidationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
     }
 
 }

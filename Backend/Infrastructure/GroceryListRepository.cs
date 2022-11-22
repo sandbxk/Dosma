@@ -19,7 +19,8 @@ public class GroceryListRepository : IRepository<GroceryList>
 
     public GroceryList Create(GroceryList t)
     {
-        throw new NotImplementedException();
+        _dbContext.Add(t);
+        return t;
     }
 
     public bool Delete(int id)

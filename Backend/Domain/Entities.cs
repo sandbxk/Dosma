@@ -9,7 +9,7 @@ public struct User
     //TODO JWT
 }
 
-public struct GroceryList
+public struct List
 {
     public int Id { get; set; }
     public string Title { get; set; }

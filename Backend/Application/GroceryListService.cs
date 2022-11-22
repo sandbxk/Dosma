@@ -26,6 +26,11 @@ public class GroceryListService : IGroceryListService
 
     public GroceryList Create(GroceryListDTO dto)
     {
-        return _groceryListRepository.Create(dto);
+        var validation = _postDTOValidator.Validate(dto);
+
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
+        
+        return _groceryListRepository.Create(_mapper.Map<GroceryList>(dto));
     }
 }
