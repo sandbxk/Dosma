@@ -1,6 +1,5 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
-using Application.Valdiators;
 using AutoMapper;
 using Domain;
 using FluentValidation;
@@ -12,21 +11,21 @@ public class GroceryListService : IGroceryListService
 {
     private IRepository<GroceryList> _groceryListRepository;
     private IMapper _mapper;
-    private IValidator<GroceryListValidators> _Validator;
-    private IValidator<GroceryListDTO> _DTOValidator;
+    private IValidator<GroceryListDTO> _dtoValidator;
+    private IValidator<GroceryList> _validator;
     
-    public GroceryListService(IRepository<GroceryList> repository, IMapper mapper, IValidator<GroceryListValidators> postValidator, IValidator<GroceryListDTO> DTOValidator)
+    public GroceryListService(IRepository<GroceryList> repository, IMapper mapper, IValidator<GroceryListDTO> dtoValidator, IValidator<GroceryList> validator)
     {
         _groceryListRepository = repository;
         _mapper = mapper;
-        _DTOValidator = DTOValidator;
-        _Validator = postValidator;
+        _dtoValidator = dtoValidator;
+        _validator = validator;
     }
 
 
     public GroceryList Create(GroceryListDTO dto)
     {
-        var validation = _DTOValidator.Validate(dto);
+        var validation = _dtoValidator.Validate(dto);
 
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());

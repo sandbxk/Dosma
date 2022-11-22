@@ -4,17 +4,17 @@ using FluentValidation;
 
 namespace Application.Valdiators;
 
-public class GroceryListValidators : AbstractValidator<GroceryList>
+public class GroceryListValidator : AbstractValidator<GroceryList>
 {
-    public GroceryListValidators()
+    public GroceryListValidator()
     {
         RuleFor(x=>x.Title).NotEmpty().WithMessage("Title is required");
     }
 }
 
-public class PostBoxValidator : AbstractValidator<GroceryListDTO>
+public class PostGroceryListValidator : AbstractValidator<GroceryListDTO>
 {
-    public PostBoxValidator()
+    public PostGroceryListValidator()
     {
         RuleFor(x => x.Title).NotEmpty().WithMessage("Title is required");
     }
