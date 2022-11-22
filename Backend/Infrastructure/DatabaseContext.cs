@@ -11,6 +11,9 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<GroceryList>()
+            .Property(l => l.Id)
+            .ValueGeneratedOnAdd();
     }
     
     public DbSet<GroceryList> GroceryLists { get; set; }

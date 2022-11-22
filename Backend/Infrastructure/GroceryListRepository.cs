@@ -45,6 +45,7 @@ public class GroceryListRepository : IRepository<GroceryList>
 
     public void BuildDB()
     {
-        throw new NotImplementedException();
+        _dbContext.Database.EnsureDeleted();
+        _dbContext.Database.EnsureCreated();
     }
 }
