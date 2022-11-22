@@ -12,21 +12,21 @@ public class GroceryListService : IGroceryListService
 {
     private IRepository<GroceryList> _groceryListRepository;
     private IMapper _mapper;
-    private IValidator<GroceryListValidators> _postValidator;
-    private IValidator<GroceryListDTO> _postDTOValidator;
+    private IValidator<GroceryListValidators> _Validator;
+    private IValidator<GroceryListDTO> _DTOValidator;
     
-    public GroceryListService(IRepository<GroceryList> repository, IMapper mapper, IValidator<GroceryListValidators> postValidator, IValidator<GroceryListDTO> postDTOValidator)
+    public GroceryListService(IRepository<GroceryList> repository, IMapper mapper, IValidator<GroceryListValidators> postValidator, IValidator<GroceryListDTO> DTOValidator)
     {
         _groceryListRepository = repository;
         _mapper = mapper;
-        _postDTOValidator = postDTOValidator;
-        _postValidator = postValidator;
+        _DTOValidator = DTOValidator;
+        _Validator = postValidator;
     }
 
 
     public GroceryList Create(GroceryListDTO dto)
     {
-        var validation = _postDTOValidator.Validate(dto);
+        var validation = _DTOValidator.Validate(dto);
 
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
