@@ -1,4 +1,4 @@
-interface ListItem {
+export interface ListItem {
   id: number;
   title: string;
   quantity: number;
