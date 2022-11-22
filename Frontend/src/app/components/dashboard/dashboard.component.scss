@@ -1,0 +1,25 @@
+.listCard {
+  margin: 0 0 20px 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
+  height: 18em;
+  width: 13em;
+  background-color: #e5e5f7;
+  border-radius: 10px;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+
+}
+
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

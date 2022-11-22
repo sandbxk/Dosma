@@ -8,18 +8,28 @@ import { ListItemComponent } from './components/list-item/list-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { NewListDialogueComponent } from './dialogues/new-list-dialogue/new-list-dialogue.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {FlexLayoutModule} from "@angular/flex-layout";
+import {MatCardModule} from "@angular/material/card";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
     AppComponent,
     GroceryListComponent,
     ListItemComponent,
-    NewListDialogueComponent
+    NewListDialogueComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatDialogModule,
+    FlexLayoutModule,
+    MatCardModule,
+    MatButtonModule
   ],
   providers: [MatSnackBar],
   bootstrap: [AppComponent]

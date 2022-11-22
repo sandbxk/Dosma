@@ -1,0 +1,26 @@
+<div class="centered">
+<div fxLayout="row wrap"
+     fxLayoutAlign="start start"
+     fxLayoutGap="32px 12px grid">
+  <div class="listCard">
+    <button mat-button (click)="newGroceryList()">+</button>
+  </div>
+
+  <div *ngFor="let list of groceryLists" (click)="selectList(list)">
+    <mat-card class="listCard">
+      <mat-card-header>
+        <mat-card-title>{{list.title}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul>
+          <li *ngFor="let item of list.listItems | slice:0:3; let i=index">{{item.title}}</li>
+        </ul>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="editList(list)">Edit</button>
+        <button mat-button (click)="deleteList(list)">Delete</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+</div>
