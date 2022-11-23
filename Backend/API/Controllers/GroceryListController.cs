@@ -16,6 +16,27 @@ public class GroceryListController : ControllerBase
     {
         _groceryListService = groceryListService;
     }
+
+    [HttpGet]
+    public IEnumerable<GroceryList> GetAllLists()
+    {
+        return _groceryListService.GetAllLists();
+    }
+
+    [HttpGet]
+    [Route("{id}")]
+    public IEnumerable<GroceryList> GetListsByUser(User user)
+    {
+        return _groceryListService.GetListsByUser(user);
+    }
+    
+    [HttpGet]
+    [Route("{id}")]
+    public GroceryList GetListbyId([FromRoute] int id)
+    {
+        return _groceryListService.GetListById(id);
+    }
+    
     
     [HttpPost]
     public ActionResult<GroceryListController> CreateGroceryList(GroceryListDTO dto)

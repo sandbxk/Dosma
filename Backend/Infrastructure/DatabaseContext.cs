@@ -11,10 +11,20 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>()
+            .Property(u => u.Id)
+            .ValueGeneratedOnAdd();
+
         modelBuilder.Entity<GroceryList>()
             .Property(l => l.Id)
             .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Item>()
+            .Property(i => i.Id)
+            .ValueGeneratedOnAdd();
     }
-    
-    public DbSet<GroceryList> GroceryLists { get; set; }
+    public DbSet<Item> ListItemTable { get; set; }
+
+    public DbSet<User> UserTable { get; set; }
+    public DbSet<GroceryList> GroceryListsTable { get; set; }
 }

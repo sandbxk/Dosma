@@ -14,12 +14,12 @@ public class GroceryListRepository : IRepository<GroceryList>
     
     public IEnumerable<GroceryList> All()
     {
-        throw new NotImplementedException();
+        return _dbContext.GroceryListsTable.ToList();
     }
 
     public GroceryList Create(GroceryList t)
     {
-        _dbContext.Add(t);
+        _dbContext.GroceryListsTable.Add(t);
         return t;
     }
 

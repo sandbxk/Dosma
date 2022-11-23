@@ -1,4 +1,5 @@
-﻿using Application.DTOs;
+﻿using System.Collections;
+using Application.DTOs;
 using Application.Interfaces;
 using AutoMapper;
 using Domain;
@@ -31,5 +32,20 @@ public class GroceryListService : IGroceryListService
             throw new ValidationException(validation.ToString());
         
         return _groceryListRepository.Create(_mapper.Map<GroceryList>(dto));
+    }
+
+    public GroceryList GetListById(int id)
+    {
+        return _groceryListRepository.Single(id);
+    }
+
+    public IEnumerable<GroceryList> GetListsByUser(User user)
+    {
+        return _groceryListRepository.All();
+    }
+
+    public IEnumerable<GroceryList> GetAllLists()
+    {
+        return _groceryListRepository.All();
     }
 }
