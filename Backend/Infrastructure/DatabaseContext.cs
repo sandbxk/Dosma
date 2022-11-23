@@ -53,10 +53,9 @@ public class DatabaseContext : DbContext
             .HasOne(ul => ul.User)
             .WithMany(ul => ul.GroceryLists)
             .HasForeignKey(ul => ul.UserID);
-
     }
+    
     public DbSet<Item> ListItemTable { get; set; }
-
     public DbSet<User> UserTable { get; set; }
     public DbSet<GroceryList> GroceryListsTable { get; set; }
 }

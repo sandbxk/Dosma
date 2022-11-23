@@ -48,9 +48,4 @@ public class GroceryListService : IGroceryListService
     {
         return _groceryListRepository.All();
     }
-
-    public IEnumerable<GroceryList> GetListByName(string name)
-    {
-        return _groceryListRepository.SearchByName(name);
-    }
 }

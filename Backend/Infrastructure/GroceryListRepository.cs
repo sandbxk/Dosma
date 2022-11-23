@@ -29,11 +29,6 @@ public class GroceryListRepository : IRepository<GroceryList>
         throw new NotImplementedException();
     }
 
-    public IEnumerable<GroceryList> SearchByName(string tName)
-    {
-        throw new NotImplementedException();
-    }
-
     public GroceryList Single(long id)
     {
         throw new NotImplementedException();
