@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure;
 
@@ -38,11 +39,21 @@ public class DatabaseContext : DbContext
             .Property(i => i.Id)
             .ValueGeneratedOnAdd();
         
-        //One-To-Many Relationship
+        /**
+         * One-To-Many Relationship
+         */
+            //Item to GroceryList
+        modelBuilder.Entity<Item>()
+            .HasOne(i => i.GroceryList)
+            .WithMany(i=> i.Items)
+            .HasForeignKey(i => i.GroceryListId)
+            .OnDelete(DeleteBehavior.Cascade);
 
 
-        //Many-To-Many Relationship
-            //GroceryList-Users Relationship
+        /**
+         * Many-To-Many Relationship
+         */
+            //GroceryList-Users
         modelBuilder.Entity<UserList>()
             .HasKey(ul => new { ul.UserID, ul.GroceryListID });
         modelBuilder.Entity<UserList>()
