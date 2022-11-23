@@ -39,12 +39,12 @@ public class GroceryListService : IGroceryListService
         return _groceryListRepository.Single(id);
     }
 
-    public IEnumerable<GroceryList> GetListsByUser(User user)
+    public List<GroceryList> GetListsByUser(User user)
     {
         return _groceryListRepository.All();
     }
 
-    public IEnumerable<GroceryList> GetAllLists()
+    public List<GroceryList> GetAllLists()
     {
         return _groceryListRepository.All();
     }

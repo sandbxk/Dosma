@@ -55,7 +55,7 @@ public class DatabaseContext : DbContext
             .HasForeignKey(ul => ul.UserID);
     }
     
-    public DbSet<Item> ListItemTable { get; set; }
+    public DbSet<Item> ItemTable { get; set; }
     public DbSet<User> UserTable { get; set; }
     public DbSet<GroceryList> GroceryListsTable { get; set; }
 }

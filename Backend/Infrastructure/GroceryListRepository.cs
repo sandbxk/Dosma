@@ -12,7 +12,7 @@ public class GroceryListRepository : IRepository<GroceryList>
         _dbContext = dbContext;
     }
     
-    public IEnumerable<GroceryList> All()
+    public List<GroceryList> All()
     {
         return _dbContext.GroceryListsTable.ToList();
     }

@@ -2,7 +2,7 @@
 
 public interface IRepository<T>
 {
-    IEnumerable<T> All();
+    List<T> All();
     T Create(T t);
     bool Delete(int id);
     T Single(long id);

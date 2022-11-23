@@ -7,6 +7,6 @@ public interface IGroceryListService
 {
     public GroceryList Create(GroceryListDTO dto);
     public GroceryList GetListById(int id);
-    public IEnumerable<GroceryList> GetListsByUser(User user);
-    public IEnumerable<GroceryList> GetAllLists();
+    public List<GroceryList> GetListsByUser(User user);
+    public List<GroceryList> GetAllLists();
 }
