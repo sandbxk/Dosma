@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Domain;
 using Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 
@@ -15,7 +16,7 @@ public class GroceryListRepository : IRepository<GroceryList>
     
     public List<GroceryList> All()
     {
-        return _dbContext.GroceryListsTable.ToList();
+        return _dbContext.GroceryListsTable.Include(i => i.Items).ToList();
     }
 
     public GroceryList Create(GroceryList t)
