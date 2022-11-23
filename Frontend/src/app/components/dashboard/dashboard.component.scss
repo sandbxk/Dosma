@@ -1,17 +1,17 @@
 .listCard {
   margin: 0.5rem;
   padding: 0.5rem;
-  list-style: none;
-  display: flex;
+  list-style: circle;
+  display: block;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
   align-content: center;
-  height: 18em;
-  width: 13em;
-  max-width: 18em;
-  max-height: 13em;
+  height: 20em;
+  min-width: 15em;
+  max-width: 45em;
+  max-height: 30em;
   background-color: #c2e3c0;
   border-radius: 10px;
   border-width: thin;
@@ -20,10 +20,6 @@
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
   transition: 0.3s;
 }
-//TODO: Align header to top, add dropdown menu for actions, add divicer between header and body
-.listCard > mat-card-header{
-  alignment: top;
-}
 
 .listCard:hover {
   background-color: #5ca45d;
@@ -31,18 +27,108 @@
   position: relative;
 }
 
+.listCard > mat-card-header {
+  min-height: 2em;
+  margin-bottom: 0.2em;
+}
+
+.listCardTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.listCardTitle h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+  font-weight: 500;
+  color: #111111;
+  position: absolute;
+  top: 0.2em;
+  left: 5%;
+}
+
+.menuButton {
+  float: right;
+  position: absolute;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.listCard:hover > mat-card-header > div > button
+{
+  opacity: 1;
+}
+
+.opened
+{
+  opacity: 1;
+}
+
+.listCard > mat-card-content {
+  padding-top: 1em;
+  padding-right: 1em;
+  display: flex;
+  justify-content: left;
+  align-items: start;
+  align-content: start;
+  height: 4em;
+  width: 100%;
+  max-height: 6em;
+  color: #3d3d3d;
+  font-weight: 200;
+}
+
+.listCard > mat-card-footer {
+  display: block;
+  justify-content: space-between;
+  height: 1em;
+  width: 100%;
+  max-height: 1em;
+}
+
+.listCard > mat-card-footer > span {
+  position: absolute;
+  bottom: 0.5em;
+  right: 0.8em;
+  font-size: 1em;
+  color: #3d3d3d;
+  font-weight: 450;
+}
+
+
+
+
+
+
 .listCardButton{
   @extend .listCard;
+  display: flex;
   background-color: #83cb8f;
+}
+
+.listCardButton > mat-icon {
+  transform: scale(2);
+  color: #3d3d3d;
+  transition: 0.3s;
+}
+.listCardButton:hover > mat-icon {
+  transform: scale(2.5);
+  color: #b7b7b7;
 }
 
 .listCardButton:active {
   background-color: #83cb8f;
 }
 
-.addListIcon {
-  transform: scale(2);
-  color: #3d3d3d;
+
+.emptyListText {
+  color: #7a7a7a;
+  font-size: 1em;
+  font-weight: 400;
+
 }
 
 
@@ -52,4 +138,5 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  overflow: auto;
 }

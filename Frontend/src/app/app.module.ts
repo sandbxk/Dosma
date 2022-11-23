@@ -14,6 +14,9 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatDividerModule} from "@angular/material/divider";
+import {TruncatePipe} from "./util/truncate.pipe";
 
 @NgModule({
   declarations: [
@@ -21,18 +24,21 @@ import {MatIconModule} from "@angular/material/icon";
     GroceryListComponent,
     ListItemComponent,
     NewListDialogueComponent,
-    DashboardComponent
+    DashboardComponent,
+    TruncatePipe
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatDialogModule,
-        FlexLayoutModule,
-        MatCardModule,
-        MatButtonModule,
-        MatIconModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    FlexLayoutModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatDividerModule
+  ],
   providers: [MatSnackBar],
   bootstrap: [AppComponent]
 })
