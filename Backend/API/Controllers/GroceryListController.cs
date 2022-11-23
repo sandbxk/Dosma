@@ -51,4 +51,23 @@ public class GroceryListController : ControllerBase
         }
     }
 
+    [HttpDelete]
+    [Route("{id}")]
+    public ActionResult<GroceryList> DeleteList([FromRoute] int id)
+    {
+        try
+        {
+            return Ok(_groceryListService.DeleteList(id));
+        }
+        catch (KeyNotFoundException e)
+        {
+            return NotFound("No List with id: " + id);
+        }
+        catch (Exception e)
+        {
+            return (StatusCode(500, e.ToString()));
+        }
+            
+    }
+
 }

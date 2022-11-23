@@ -48,4 +48,9 @@ public class GroceryListService : IGroceryListService
     {
         return _groceryListRepository.All();
     }
+
+    public GroceryList DeleteList(int id)
+    {
+        return _groceryListRepository.Delete(id);
+    }
 }

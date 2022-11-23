@@ -24,9 +24,12 @@ public class GroceryListRepository : IRepository<GroceryList>
         return t;
     }
 
-    public bool Delete(int id)
+    public GroceryList Delete(int id)
     {
-        throw new NotImplementedException();
+        var groceryList = _dbContext.GroceryListsTable.Find(id);
+        _dbContext.GroceryListsTable.Remove(groceryList);
+        _dbContext.SaveChanges();
+        return groceryList;
     }
 
     public GroceryList Single(long id)
