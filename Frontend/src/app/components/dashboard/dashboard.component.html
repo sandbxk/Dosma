@@ -1,10 +1,14 @@
 <div class="centered">
-<div fxLayout="row wrap"
-     fxLayoutAlign="start start"
-     fxLayoutGap="32px 12px grid">
-  <div class="listCard">
-    <button mat-button (click)="newGroceryList()">+</button>
-  </div>
+
+<div fxLayout="grid wrap"
+      fxLayoutAlign="space-around center">
+
+
+  <mat-card (click)="newGroceryList()"  class="listCardButton">
+    <mat-icon class="addListIcon">
+      add
+    </mat-icon>
+  </mat-card>
 
   <div *ngFor="let list of groceryLists" (click)="selectList(list)">
     <mat-card class="listCard">
@@ -20,6 +24,9 @@
         <button mat-button (click)="editList(list)">Edit</button>
         <button mat-button (click)="deleteList(list)">Delete</button>
       </mat-card-actions>
+      <mat-card-footer>
+        <span>{{list.listItems.length}} items</span>
+      </mat-card-footer>
     </mat-card>
   </div>
 </div>

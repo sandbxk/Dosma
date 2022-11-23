@@ -1,20 +1,50 @@
 .listCard {
-  margin: 0 0 20px 0;
-  padding: 0;
+  margin: 0.5rem;
+  padding: 0.5rem;
   list-style: none;
   display: flex;
   flex-wrap: wrap;
+  flex-direction: row;
   justify-content: space-around;
   align-items: center;
   align-content: center;
   height: 18em;
   width: 13em;
-  background-color: #e5e5f7;
+  max-width: 18em;
+  max-height: 13em;
+  background-color: #c2e3c0;
   border-radius: 10px;
+  border-width: thin;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+//TODO: Align header to top, add dropdown menu for actions, add divicer between header and body
+.listCard > mat-card-header{
+  alignment: top;
+}
+
+.listCard:hover {
+  background-color: #5ca45d;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
   position: relative;
-
 }
+
+.listCardButton{
+  @extend .listCard;
+  background-color: #83cb8f;
+}
+
+.listCardButton:active {
+  background-color: #83cb8f;
+}
+
+.addListIcon {
+  transform: scale(2);
+  color: #3d3d3d;
+}
+
 
 
 .centered {

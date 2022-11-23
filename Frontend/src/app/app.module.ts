@@ -13,6 +13,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
   declarations: [
@@ -22,15 +23,16 @@ import {MatButtonModule} from "@angular/material/button";
     NewListDialogueComponent,
     DashboardComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    FlexLayoutModule,
-    MatCardModule,
-    MatButtonModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+        FlexLayoutModule,
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule
+    ],
   providers: [MatSnackBar],
   bootstrap: [AppComponent]
 })
