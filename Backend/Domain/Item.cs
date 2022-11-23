@@ -8,7 +8,7 @@ public class Item
     //public ListItemStatus Status { get; set; }
     //public ListItemCategory Category { get; set; }
     
-    public int ListId { get; set; }
+    public int GroceryListId { get; set; }
     public GroceryList GroceryList { get; set; }
     
     //TODO: Expected cost
