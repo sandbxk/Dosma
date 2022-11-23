@@ -15,7 +15,10 @@ public class GroceryListRepository : IRepository<GroceryList>
     
     public List<GroceryList> All()
     {
-        return _dbContext.GroceryListsTable.Include(i => i.Items).ToList();
+        return _dbContext.GroceryListsTable
+            .Include(l => l.Items)
+            .Include(l => l.Users)
+            .ToList();
     }
 
     public GroceryList Create(GroceryList t)
