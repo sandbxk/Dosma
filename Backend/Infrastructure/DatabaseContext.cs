@@ -11,6 +11,20 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //Setting Primary Keys
+        modelBuilder.Entity<User>()
+            .HasKey(u => u.Id)
+            .HasName("PK_User");
+
+        modelBuilder.Entity<GroceryList>()
+            .HasKey(g => g.Id)
+            .HasName("PK_GroceryList");
+        
+        modelBuilder.Entity<Item>()
+            .HasKey(i => i.Id)
+            .HasName("PK_Item");
+        
+        //Auto ID generation
         modelBuilder.Entity<User>()
             .Property(u => u.Id)
             .ValueGeneratedOnAdd();

@@ -20,12 +20,12 @@
 //    public bool IsArchived { get; set; }
 //}
 
-public struct UserAccess
-{
-    public User User { get; set; }
-    public bool CanEdit { get; set; }
-    public bool CanDelete { get; set; }
-}
+//public struct UserAccess
+//{
+//    public User User { get; set; }
+//    public bool CanEdit { get; set; }
+//    public bool CanDelete { get; set; }
+//}
 
 //public struct ListItem
 //{

@@ -9,5 +9,4 @@ public interface IGroceryListService
     public GroceryList GetListById(int id);
     public IEnumerable<GroceryList> GetListsByUser(User user);
     public IEnumerable<GroceryList> GetAllLists();
-
 }
