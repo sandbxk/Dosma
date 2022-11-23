@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using System.Collections.Immutable;
+using Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
@@ -36,6 +37,23 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Item>()
             .Property(i => i.Id)
             .ValueGeneratedOnAdd();
+        
+        //One-To-Many Relationship
+
+
+        //Many-To-Many Relationship
+            //GroceryList-Users Relationship
+        modelBuilder.Entity<UserList>()
+            .HasKey(ul => new { ul.UserID, ul.GroceryListID });
+        modelBuilder.Entity<UserList>()
+            .HasOne(ul => ul.GroceryList)
+            .WithMany(ul => ul.Users)
+            .HasForeignKey(ul => ul.GroceryListID);
+        modelBuilder.Entity<UserList>()
+            .HasOne(ul => ul.User)
+            .WithMany(ul => ul.GroceryLists)
+            .HasForeignKey(ul => ul.UserID);
+
     }
     public DbSet<Item> ListItemTable { get; set; }
 
