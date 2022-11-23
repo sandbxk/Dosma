@@ -2,13 +2,14 @@
 
 public interface IRepository<T>
 {
-    IEnumerable<T> All();
+    List<T> All();
     T Create(T t);
-    bool Delete(int id);
-    IEnumerable<T> SearchByName(string tName);
+    T Delete(int id);
     T Single(long id);
     T Update(long id, T model);
-    
+}
+public interface IDatabase
+{
     void BuildDB();
 }
 
