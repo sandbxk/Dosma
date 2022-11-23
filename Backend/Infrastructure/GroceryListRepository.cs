@@ -20,6 +20,7 @@ public class GroceryListRepository : IRepository<GroceryList>
     public GroceryList Create(GroceryList t)
     {
         _dbContext.GroceryListsTable.Add(t);
+        _dbContext.SaveChanges();
         return t;
     }
 
