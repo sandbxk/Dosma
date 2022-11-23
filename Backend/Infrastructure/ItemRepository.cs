@@ -1,7 +1,6 @@
 ﻿using Domain;
 using Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure;
 
