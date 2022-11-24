@@ -23,14 +23,15 @@ namespace Backend.Application
             IUserRepository userRepository,
             IMapper mapper,
             IValidator<LoginRequestDTO> loginValidator,
-            IValidator<User> userValidator
+            IValidator<User> userValidator,
+            byte[] secret
         )
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _loginValidator = loginValidator;
             _validator = userValidator;
-            _secret = Encoding.ASCII.GetBytes("This is a secret key");
+            _secret = secret;
         }
 
         /*
