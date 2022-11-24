@@ -45,7 +45,7 @@ public class UserRepository : IUserRepository
 
     public User Find(string username)
     {
-        return _DBContext.UserTable.Where(u => ReflectionHelpers.FieldEquals(u, nameof(u.Username), username)).FirstOrDefault() ?? throw new NullReferenceException("User not found");
+        return _DBContext.UserTable.Where(u => u.Username == username).FirstOrDefault() ?? throw new NullReferenceException("User not found");
     }
 
     public User Update(long id, User model)
