@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {GroceryList} from '../../interfaces/GroceryList';
 import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
+import {CreateListDialogComponent} from "../../dialogs/create-list-dialog/create-list-dialog.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -40,7 +43,9 @@ export class DashboardComponent implements OnInit {
 
   groceryLists: GroceryList[] = [];
 
-  constructor() { }
+  constructor(
+    private dialogue: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.groceryLists.push({
@@ -82,24 +87,23 @@ export class DashboardComponent implements OnInit {
       modified: new Date()
     });
   }
-//TODO Fix scrolling, redo colours
+//TODO Fix scrolling, redo colours, routing, edit dialog, menu styling
 
   newGroceryList() {
-    //TODO Dialog to create new list with name
+    let dialogueRef = this.dialogue.open(CreateListDialogComponent);
 
-    let newList: GroceryList = {
-      id: -1,
-      title: 'New List',
-      listItems: [],
-      created: new Date(),
-      modified: new Date()
-      };
-    this.groceryLists.splice(0, 0, newList);
+    dialogueRef.afterClosed().subscribe(result => {
+      if (result !== undefined && result !== null) {
+        let newList: GroceryList = result;
+        this.groceryLists.splice(0, 0, newList);
+        //HTTP add LIST
+      }
+    });
 
   }
 
   selectList(list: GroceryList) {
-
+    //Routing to list
   }
 
   editList(list: GroceryList) {
@@ -107,12 +111,23 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteList(list: GroceryList) {
-  //TODO Dialog to confirm delete
-    this.groceryLists.splice(this.groceryLists.indexOf(list), 1);
+    let dialogueRef = this.dialogue.open(ConfirmationDialogComponent, {
+      data: {
+        title: 'Delete Grocery List',
+        message: "Are you sure you want to delete this grocery list?",
+      }
+    });
+
+    dialogueRef.afterClosed().subscribe(userSaidYes => {
+      if (userSaidYes) {
+        this.groceryLists.splice(this.groceryLists.indexOf(list), 1);
+        //HTTP DELETE LIST
+      }
+    });
   }
 
   duplicateList(list: GroceryList) {
-    //TODO duplicate
+    //HTTP DUPLICATE LIST
     this.groceryLists.splice(this.groceryLists.indexOf(list), 0, list);
   }
 }

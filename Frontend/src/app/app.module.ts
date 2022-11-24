@@ -7,7 +7,7 @@ import { GroceryListComponent } from './components/grocery-list/grocery-list.com
 import { ListItemComponent } from './components/list-item/list-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBar} from "@angular/material/snack-bar";
-import { NewListDialogueComponent } from './dialogues/new-list-dialogue/new-list-dialogue.component';
+import { CreateListDialogComponent } from './dialogs/create-list-dialog/create-list-dialog.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {FlexLayoutModule} from "@angular/flex-layout";
@@ -17,15 +17,21 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatDividerModule} from "@angular/material/divider";
 import {TruncatePipe} from "./util/truncate.pipe";
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
+import {FormsModule} from "@angular/forms";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+
 
 @NgModule({
   declarations: [
     AppComponent,
     GroceryListComponent,
     ListItemComponent,
-    NewListDialogueComponent,
+    CreateListDialogComponent,
     DashboardComponent,
-    TruncatePipe
+    TruncatePipe,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +43,11 @@ import {TruncatePipe} from "./util/truncate.pipe";
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDialogModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [MatSnackBar],
   bootstrap: [AppComponent]
