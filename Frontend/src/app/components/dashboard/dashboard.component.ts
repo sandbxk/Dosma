@@ -4,12 +4,13 @@ import {animate, keyframes, state, style, transition, trigger} from "@angular/an
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {CreateListDialogComponent} from "../../dialogs/create-list-dialog/create-list-dialog.component";
+import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  animations: [  // This is the animation for the list items, triggered upon adding and removing items
+  animations: [  // This is the animation for the items, triggered upon adding and removing items
     trigger("inOutAnimation", [
       state("in", style({ opacity: 1 })),
       transition(":enter", [
@@ -87,7 +88,7 @@ export class DashboardComponent implements OnInit {
       modified: new Date()
     });
   }
-//TODO Fix scrolling, redo colours, routing, edit dialog, menu styling
+//TODO Fix scrolling, redo colours, routing, menu styling
 
   newGroceryList() {
     let dialogueRef = this.dialogue.open(CreateListDialogComponent);
@@ -107,7 +108,19 @@ export class DashboardComponent implements OnInit {
   }
 
   editList(list: GroceryList) {
-  //TODO Dialog to edit list title
+    let dialogueRef = this.dialogue.open(EditListDialogComponent, {
+      data: {
+        groceryList: list
+      }
+    });
+
+    dialogueRef.afterClosed().subscribe(result => {
+      if (result !== null) {
+        let newList: GroceryList = result;
+        this.groceryLists.findIndex(x => x.id === newList.id);
+        //HTTP PATCH LIST
+      }
+    });
   }
 
   deleteList(list: GroceryList) {

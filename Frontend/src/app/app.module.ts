@@ -18,9 +18,10 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatDividerModule} from "@angular/material/divider";
 import {TruncatePipe} from "./util/truncate.pipe";
 import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import { EditListDialogComponent } from './dialogs/edit-list-dialog/edit-list-dialog.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {MatInputModule} from "@angular/material/input";
     CreateListDialogComponent,
     DashboardComponent,
     TruncatePipe,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    EditListDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +50,7 @@ import {MatInputModule} from "@angular/material/input";
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    ReactiveFormsModule,
   ],
   providers: [MatSnackBar],
   bootstrap: [AppComponent]
