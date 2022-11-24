@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Application.DTOs;
 using Application.Interfaces;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ public class ItemController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<Item> CreateItem(Item item)
+    public ActionResult<Item> CreateItem(ItemDTO item)
     {
         try
         {
