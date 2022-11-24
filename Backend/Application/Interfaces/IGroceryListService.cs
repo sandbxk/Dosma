@@ -9,5 +9,6 @@ public interface IGroceryListService
     public GroceryList GetListById(int id);
     public List<GroceryList> GetListsByUser(User user);
     public List<GroceryList> GetAllLists();
-    public GroceryList DeleteList(int id);
+    public GroceryList DeleteList(int id, GroceryList groceryList);
+    public GroceryList UpdateList(int id, GroceryList groceryList);
 }

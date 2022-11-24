@@ -51,23 +51,39 @@ public class GroceryListController : ControllerBase
         }
     }
 
-    [HttpDelete]
+    [HttpPatch]
     [Route("{id}")]
-    public ActionResult<GroceryList> DeleteList([FromRoute] int id)
+    public ActionResult<GroceryList> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList)
     {
         try
         {
-            return Ok(_groceryListService.DeleteList(id));
+            return Ok(_groceryListService.UpdateList(id, groceryList));
         }
-        catch (KeyNotFoundException e)
+        catch (ValidationException e)
         {
-            return NotFound("No List with id: " + id);
+            return BadRequest(e.Message);
         }
         catch (Exception e)
         {
-            return (StatusCode(500, e.ToString()));
+            return StatusCode(500, e.Message);
         }
-            
     }
-
+    
+    [HttpDelete]
+    [Route("{id}")]
+    public ActionResult<GroceryList> DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList)
+    {
+        try
+        {
+            return Ok(_groceryListService.DeleteList(id, groceryList));
+        }
+        catch (ValidationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
 }
