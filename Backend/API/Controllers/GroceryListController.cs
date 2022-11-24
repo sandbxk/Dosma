@@ -61,7 +61,7 @@ public class GroceryListController : ControllerBase
         {
             return Ok(_groceryListService.DeleteList(id));
         }
-        catch (KeyNotFoundException e)
+        catch (KeyNotFoundException)
         {
             return NotFound("No List with id: " + id);
         }
