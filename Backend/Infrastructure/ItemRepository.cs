@@ -20,9 +20,11 @@ public class ItemRepository : IRepository<Item>
 
     public Item Create(Item t)
     {
-        GroceryList groceryList = _dbContext.GroceryListsTable.Find(t.GroceryListId);
-        t.GroceryList = groceryList;
-        _dbContext.GroceryListsTable.FirstOrDefault(l => l.Id == t.GroceryListId).Items.Add(t);
+        GroceryList groceryList = _dbContext.GroceryListsTable.Find(t.GrocerylistId);
+        Item item = new Item();
+        item.Title = t.Title;
+        item.GrocerylistId = t.GrocerylistId;
+        groceryList.Items.Add(item);
         _dbContext.SaveChanges();
         return t;
     }
