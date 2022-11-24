@@ -10,7 +10,7 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class GroceryListController : ControllerBase
 {
-    private readonly IGroceryListService _groceryListService;
+    private IGroceryListService _groceryListService;
     
     public GroceryListController(IGroceryListService groceryListService)
     {
@@ -34,12 +34,12 @@ public class GroceryListController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<GroceryList> CreateGroceryList([FromBody] GroceryListDTO dto)
+    public ActionResult<GroceryListController> CreateGroceryList(GroceryListDTO dto)
     {
         try
         {
             var result = _groceryListService.Create(dto);
-            return Created("GroceryList/" + result.Id, result);
+            return Created("product/" + result.Id, result);
         }
         catch (ValidationException e)
         {
@@ -51,24 +51,39 @@ public class GroceryListController : ControllerBase
         }
     }
 
+    [HttpPatch]
+    [Route("{id}")]
+    public ActionResult<GroceryList> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList)
+    {
+        try
+        {
+            return Ok(_groceryListService.UpdateList(id, groceryList));
+        }
+        catch (ValidationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+    
     [HttpDelete]
     [Route("{id}")]
     public ActionResult<GroceryList> DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList)
     {
-        if (groceryList.Id != id)
-            throw new ValidationException("Item ID does not match ID in URL.");
         try
         {
-            return Ok(_groceryListService.DeleteList(id));
+            return Ok(_groceryListService.DeleteList(id, groceryList));
         }
-        catch (KeyNotFoundException e)
+        catch (ValidationException e)
         {
-            return NotFound("No List with id: " + id);
+            return BadRequest(e.Message);
         }
         catch (Exception e)
         {
-            return (StatusCode(500, e.ToString()));
+            return StatusCode(500, e.Message);
         }
     }
-
 }

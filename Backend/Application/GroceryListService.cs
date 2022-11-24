@@ -34,6 +34,11 @@ public class GroceryListService : IGroceryListService
         return _groceryListRepository.Create(_mapper.Map<GroceryList>(dto));
     }
 
+    public GroceryList GetListById(int id)
+    {
+        return _groceryListRepository.Single(id);
+    }
+
     public List<GroceryList> GetListsByUser(User user)
     {
         return _groceryListRepository.All();
@@ -44,8 +49,23 @@ public class GroceryListService : IGroceryListService
         return _groceryListRepository.All();
     }
 
-    public GroceryList DeleteList(int id)
+    public GroceryList DeleteList(int id, GroceryList groceryList)
     {
+        if (id != groceryList.Id)
+            throw new ValidationException("ID in body does not match route.");
+        var validation = _validator.Validate(groceryList);
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
         return _groceryListRepository.Delete(id);
+    }
+
+    public GroceryList UpdateList(int id, GroceryList groceryList)
+    {
+        if (id != groceryList.Id)
+            throw new ValidationException("ID in body does not match route.");
+        var validation = _validator.Validate(groceryList);
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
+        return _groceryListRepository.Update(groceryList);
     }
 }

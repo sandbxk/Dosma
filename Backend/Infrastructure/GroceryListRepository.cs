@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using System.ComponentModel.DataAnnotations;
+using Domain;
 using Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,8 +41,11 @@ public class GroceryListRepository : IRepository<GroceryList>
         throw new NotImplementedException();
     }
 
-    public GroceryList Update(long id, GroceryList model)
+    public GroceryList Update(GroceryList model)
     {
-        throw new NotImplementedException();
+        
+        _dbContext.GroceryListsTable.Update(model);
+        _dbContext.SaveChanges();
+        return model;
     }
 }
