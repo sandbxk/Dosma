@@ -73,45 +73,6 @@ public class DatabaseContext : DbContext
         //GroceryList-Userr
 
     }
-
-    private void CreateGroceryListTable(ref ModelBuilder modelBuilder)
-    {
-        //Setting Primary Keys
-        modelBuilder.Entity<GroceryList>()
-            .HasKey(g => g.Id)
-            .HasName("PK_GroceryList");
-        
-        //Auto ID generation
-        modelBuilder.Entity<GroceryList>()
-            .Property(l => l.Id)
-            .ValueGeneratedOnAdd();
-    }
-
-    private void CreateItemTable(ref ModelBuilder modelBuilder)
-    {
-        //Setting Primary Keys
-        modelBuilder.Entity<Item>()
-            .HasKey(i => i.Id)
-            .HasName("PK_Item");
-
-        //Auto ID generation
-        modelBuilder.Entity<Item>()
-            .Property(i => i.Id)
-            .ValueGeneratedOnAdd();
-    }
-
-    private void CreateUserTable(ref ModelBuilder modelBuilder)
-    {
-        //Setting Primary Keys
-        modelBuilder.Entity<User>()
-            .HasKey(u => u.Id)
-            .HasName("PK_User");
-
-        //Auto ID generation
-        modelBuilder.Entity<User>()
-            .Property(u => u.Id)
-            .ValueGeneratedOnAdd();
-    }
     
     public DbSet<Item> ItemTable { get; set; } = null!;
     public DbSet<User> UserTable { get; set; } = null!;
