@@ -15,17 +15,21 @@ public class ItemRepository : IRepository<Item>
 
     public List<Item> All()
     {
-        return _dbContext.ItemTable.Include(i => i.GroceryList).ToList();
+        throw new NotImplementedException();
     }
 
     public Item Create(Item t)
     {
-        t.GroceryList = _dbContext
-                .GroceryListsTable
-                .Find(t.GroceryListId) ?? throw new InvalidOperationException();
-        _dbContext.ItemTable.Add(t);
+        var groceryList = _dbContext.GroceryListsTable.Single(l => l.Id == t.GroceryListId);
+        var newItem = new Item
+        {
+            Title = t.Title,
+            GroceryList = groceryList
+        };
+        
+        _dbContext.ItemTable.Add(newItem);
         _dbContext.SaveChanges();
-        return t;
+        return newItem;
     }
 
     public Item Delete(int id)
