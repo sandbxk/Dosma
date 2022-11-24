@@ -43,27 +43,22 @@ public class DatabaseContext : DbContext
          * One-To-Many Relationship
          */
             //Item to GroceryList
-        modelBuilder.Entity<Item>()
-            .HasOne(i => i.GroceryList)
-            .WithMany(i=> i.Items)
-            .HasForeignKey(i => i.GroceryListId)
-            .OnDelete(DeleteBehavior.Cascade);
 
 
-        /**
-         * Many-To-Many Relationship
-         */
+            /**
+             * Many-To-Many Relationship
+             */
             //GroceryList-Users
-        modelBuilder.Entity<UserList>()
-            .HasKey(ul => new { ul.UserID, ul.GroceryListID });
-        modelBuilder.Entity<UserList>()
-            .HasOne(ul => ul.GroceryList)
-            .WithMany(ul => ul.Users)
-            .HasForeignKey(ul => ul.GroceryListID);
-        modelBuilder.Entity<UserList>()
-            .HasOne(ul => ul.User)
-            .WithMany(ul => ul.GroceryLists)
-            .HasForeignKey(ul => ul.UserID);
+    //  modelBuilder.Entity<UserList>()
+    //      .HasKey(ul => new { ul.UserID, ul.GroceryListID });
+    //  modelBuilder.Entity<UserList>()
+    //      .HasOne(ul => ul.GroceryList)
+    //      .WithMany(ul => ul.Users)
+    //      .HasForeignKey(ul => ul.GroceryListID);
+    //  modelBuilder.Entity<UserList>()
+    //      .HasOne(ul => ul.User)
+    //      .WithMany(ul => ul.GroceryLists)
+    //      .HasForeignKey(ul => ul.UserID);
     }
     
     public DbSet<Item> ItemTable { get; set; }

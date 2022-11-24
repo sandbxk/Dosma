@@ -18,7 +18,6 @@ public class GroceryListRepository : IRepository<GroceryList>
     {
         return _dbContext.GroceryListsTable
             .Include(l => l.Items)
-            .Include(l => l.Users)
             .ToList();
     }
 
