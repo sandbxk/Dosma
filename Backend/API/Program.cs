@@ -34,6 +34,8 @@ Infrastructure.Dependencies
     .DependencyResolverService
     .RegisterInfrastructureLayer(builder.Services);
 
+builder.Services.AddSingleton(mapper);
+
 builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

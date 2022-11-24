@@ -21,11 +21,11 @@ public class AuthController : ControllerBase
     [HttpPost]
     public IActionResult Login([FromBody] LoginRequestDTO loginDTO)
     {
-        if (_authenticationService.ValidateLogin(loginDTO.Username, loginDTO.Password, out string token))
+        if (_authenticationService.ValidateLogin(loginDTO, out string result))
         {
-            return Ok(new TokenResponseDTO { Token = token });
+            return Ok(new TokenResponseDTO { Token = result });
         }
 
-        return BadRequest(new TokenResponseDTO { Status = 400, ErrorMessage = "Invalid username or password" });
+        return BadRequest(new TokenResponseDTO { Status = 400, ErrorMessage = result });
     }
 }
