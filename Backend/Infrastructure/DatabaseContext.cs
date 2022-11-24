@@ -65,11 +65,8 @@ public class DatabaseContext : DbContext
          * One-To-Many Relationship
          */
         //Item to GroceryList
-        modelBuilder.Entity<Item>()
-            .HasOne(i => i.GroceryList)
-            .WithMany(i => i.Items)
-            .HasForeignKey(i => i.GroceryListId)
-            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<GroceryList>()
+            .HasMany(i => i.Items);
 
 
         /**
