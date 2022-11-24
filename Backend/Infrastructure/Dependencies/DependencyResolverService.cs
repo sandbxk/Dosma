@@ -11,5 +11,6 @@ public class DependencyResolverService
         services.AddScoped<IDatabase, DatabaseRepository>();
         services.AddScoped<IRepository<GroceryList>, GroceryListRepository>();
         services.AddScoped<IRepository<Item>, ItemRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 }
