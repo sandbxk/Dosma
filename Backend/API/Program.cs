@@ -20,9 +20,11 @@ builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlite(
 ApplicationDependencies.RegisterApplicationLayer(builder.Services);
 InfrastructureDependencies.RegisterInfrastructureLayer(builder.Services);
 
-builder.Services.AddSingleton(
-    new MapperConfiguration(config => config.CreateMap<GroceryListDTO, GroceryList>()).CreateMapper()
-);
+var mapper = new MapperConfiguration(config => {
+    config.CreateMap<GroceryListDTO, GroceryList>();
+});
+
+builder.Services.AddSingleton(mapper.CreateMapper());
 
 builder.Services.AddCors();
 builder.Services.AddControllers();
