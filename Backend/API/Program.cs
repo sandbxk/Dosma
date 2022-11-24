@@ -1,10 +1,12 @@
+using System.Text;
 using Application.DTOs;
 using AutoMapper;
 using Domain;
 using FluentValidation;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.IdentityModel.Tokens;
 using ApplicationDependencies = Application.Dependencies.DependencyResolverService;
 using InfrastructureDependencies = Infrastructure.Dependencies.DependencyResolverService;
 
@@ -18,6 +20,8 @@ builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlite(
 ));
 
 ApplicationDependencies.RegisterApplicationLayer(builder.Services);
+ApplicationDependencies.RegisterSecurityLayer(builder.Services, Encoding.ASCII.GetBytes("This is a secret"));
+
 InfrastructureDependencies.RegisterInfrastructureLayer(builder.Services);
 
 var mapper = new MapperConfiguration(config =>
