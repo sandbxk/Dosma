@@ -4,21 +4,21 @@ using Domain;
 using FluentValidation;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
+
+using ApplicationDependencies = Application.Dependencies.DependencyResolverService;
+using InfrastructureDependencies = Infrastructure.Dependencies.DependencyResolverService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlite(
     "Data Source=db.db"
 ));
 
-builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+ApplicationDependencies.RegisterApplicationLayer(builder.Services);
+InfrastructureDependencies.RegisterInfrastructureLayer(builder.Services);
 
 var mapper = new MapperConfiguration(config =>
 {
@@ -35,8 +35,9 @@ Infrastructure.Dependencies
     .RegisterInfrastructureLayer(builder.Services);
 
 builder.Services.AddCors();
-
-builder.Services.AddSingleton(mapper);
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
