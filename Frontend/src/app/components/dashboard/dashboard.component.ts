@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
       modified: new Date()
     });
   }
-//TODO Fix scrolling, redo colours, routing, menu styling
+//TODO redo colours, routing, menu styling
 
   newGroceryList() {
     let dialogueRef = this.dialogue.open(CreateListDialogComponent);
