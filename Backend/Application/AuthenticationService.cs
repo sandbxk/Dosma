@@ -6,14 +6,14 @@ namespace Backend.Application
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IRepository<User> _authenticationRepository;
+        private readonly IUserRepository _userRepository;
 
-        public AuthenticationService(IRepository<User> authenticationRepository)
+        public AuthenticationService(IUserRepository userRepository)
         {
-            _authenticationRepository = authenticationRepository;
+            _userRepository = userRepository;
         }
 
-        public bool ValidateLogin(string userName, string password, out string token)
+        public bool ValidateLogin(string username, string password, out string token)
         {
             token = string.Empty;
             return false;
