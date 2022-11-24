@@ -41,6 +41,5 @@ public class DependencyResolverService
                 ClockSkew = TimeSpan.FromMinutes(5)
             };
         });
-        services.AddScoped<IAuthenticationService, AuthenticationService>();
     }
 }
