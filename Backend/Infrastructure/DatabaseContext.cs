@@ -76,7 +76,7 @@ public class DatabaseContext : DbContext
 
     }
     
-    public DbSet<Item> ItemTable { get; set; }
-    public DbSet<User> UserTable { get; set; }
-    public DbSet<GroceryList> GroceryListsTable { get; set; }
+    public DbSet<Item> ItemTable { get; set; } = null!;
+    public DbSet<User> UserTable { get; set; } = null!;
+    public DbSet<GroceryList> GroceryListsTable { get; set; } = null!;
 }
