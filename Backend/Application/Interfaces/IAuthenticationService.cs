@@ -4,7 +4,5 @@ namespace Application.Interfaces;
 
 public interface IAuthenticationService
 {
-    public bool ValidateLogin(string username, string password, out string token);
-
-    public bool ValidateToken(string token, string[] claims);
+    public bool ValidateLogin(LoginRequestDTO login, out string result);
 }

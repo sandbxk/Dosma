@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+using Application.DTOs;
 using Application.Interfaces;
 using AutoMapper;
 using Backend.Application;
@@ -41,5 +41,6 @@ public class DependencyResolverService
                 ClockSkew = TimeSpan.FromMinutes(5)
             };
         });
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
     }
 }
