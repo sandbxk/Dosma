@@ -12,6 +12,44 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
+// Default:
+// $Frontend-primary: mat.define-palette(mat.$indigo-palette);
+// $Frontend-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+$primary-green-palette: (
+  50: #e4f8f1,
+  100: #beeddb,
+  200: #91e1c5,
+  300: #5ad6ae,
+  400: #13cc9c,
+  500: #00c28a,
+  600: #00b27d,
+  700: #009f6e,
+  800: #008d61,
+  900: #006d48,
+  A100: #ccff90,
+  A200: #b2ff59,
+  A400: #76ff03,
+  A700: #64dd17,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $dark-primary-text,
+    600: $dark-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $dark-primary-text,
+  )
+);
+
+
 $Frontend-primary: mat.define-palette(mat.$indigo-palette);
 $Frontend-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
@@ -20,7 +58,14 @@ $Frontend-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$Frontend-theme: mat.define-light-theme((
+$Light-theme: mat.define-light-theme((
+  color: (
+    primary: $Frontend-primary,
+    accent: $Frontend-accent,
+    warn: $Frontend-warn,
+  )
+));
+$Dark-theme: mat.define-dark-theme((
   color: (
     primary: $Frontend-primary,
     accent: $Frontend-accent,
