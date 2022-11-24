@@ -4,9 +4,7 @@ using AutoMapper;
 using Domain;
 using FluentValidation;
 using Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using ApplicationDependencies = Application.Dependencies.DependencyResolverService;
 using InfrastructureDependencies = Infrastructure.Dependencies.DependencyResolverService;
 
@@ -30,6 +28,8 @@ var mapper = new MapperConfiguration(config =>
     config.CreateMap<ItemDTO, Item>();
 }).CreateMapper();
 
+builder.Services.AddSingleton(mapper);
+
 Application.Dependencies
     .DependencyResolverService
     .RegisterApplicationLayer(builder.Services);
@@ -38,7 +38,6 @@ Infrastructure.Dependencies
     .DependencyResolverService
     .RegisterInfrastructureLayer(builder.Services);
 
-builder.Services.AddSingleton(mapper);
 
 builder.Services.AddCors();
 builder.Services.AddControllers();
