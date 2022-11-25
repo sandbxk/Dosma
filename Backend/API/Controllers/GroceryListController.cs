@@ -53,11 +53,11 @@ public class GroceryListController : ControllerBase
 
     [HttpDelete]
     [Route("{id}")]
-    public ActionResult<GroceryList> DeleteList([FromRoute] int id)
+    public ActionResult<GroceryList> DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList)
     {
         try
         {
-            return Ok(_groceryListService.DeleteList(id));
+            return Ok(_groceryListService.DeleteList(groceryList, id));
         }
         catch (KeyNotFoundException e)
         {
@@ -67,7 +67,6 @@ public class GroceryListController : ControllerBase
         {
             return (StatusCode(500, e.ToString()));
         }
-            
     }
 
 }

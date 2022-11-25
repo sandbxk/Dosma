@@ -49,8 +49,12 @@ public class GroceryListService : IGroceryListService
         return _groceryListRepository.All();
     }
 
-    public GroceryList DeleteList(int id)
+    public GroceryList DeleteList(GroceryList groceryList, int id)
     {
+        if (groceryList.Id != id)
+            throw new ValidationException("Item ID does not match ID in URL.");
+        
+        var validation = _validator.Validate(groceryList);
         return _groceryListRepository.Delete(id);
     }
 }
