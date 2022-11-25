@@ -7,7 +7,7 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class DatabaseController : ControllerBase
 {
-    private IDatabase _database;
+    private readonly IDatabase _database;
 
     public DatabaseController(IDatabase database)
     {
