@@ -38,10 +38,6 @@ public class ItemService : IItemService
 
     public Item DeleteItemFromList(int id, Item item)
     {
-        var validation = _validator.Validate(item);
-        if (!validation.IsValid)
-            throw new ValidationException(validation.ToString());
-
         return _itemRepository.Delete(item.Id);
     }
 

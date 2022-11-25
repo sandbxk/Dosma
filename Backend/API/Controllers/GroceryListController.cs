@@ -55,9 +55,11 @@ public class GroceryListController : ControllerBase
     [Route("{id}")]
     public ActionResult<GroceryList> DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList)
     {
+        if (groceryList.Id != id)
+            throw new ValidationException("Item ID does not match ID in URL.");
         try
         {
-            return Ok(_groceryListService.DeleteList(groceryList, id));
+            return Ok(_groceryListService.DeleteList(id));
         }
         catch (KeyNotFoundException e)
         {
