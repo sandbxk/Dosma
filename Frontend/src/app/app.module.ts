@@ -8,7 +8,7 @@ import { ListItemComponent } from './components/list-item/list-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { CreateListDialogComponent } from './dialogs/create-list-dialog/create-list-dialog.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { UserGroceryListsComponent } from './components/user-grocery-lists/user-grocery-lists.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatCardModule} from "@angular/material/card";
@@ -30,7 +30,7 @@ import { EditListDialogComponent } from './dialogs/edit-list-dialog/edit-list-di
     GroceryListComponent,
     ListItemComponent,
     CreateListDialogComponent,
-    DashboardComponent,
+    UserGroceryListsComponent,
     TruncatePipe,
     ConfirmationDialogComponent,
     EditListDialogComponent

@@ -3,6 +3,8 @@ import axios from "axios";
 import {environment} from "../environments/environment";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {catchError} from "rxjs";
+import {GroceryList} from "../app/interfaces/GroceryList";
+import {ListItem} from "../app/interfaces/ListItem";
 
 export const axiosInstance = axios.create({
   baseURL: environment.apiBaseUrl
@@ -13,7 +15,7 @@ export const axiosInstance = axios.create({
   providedIn: 'root'
 })
 
-export class HttpService {
+export class HttpGroceryListService {
 
   constructor(private matSnackbar: MatSnackBar) {
     axiosInstance.interceptors.response.use(
@@ -34,9 +36,30 @@ export class HttpService {
     )
   }
 
-  async getUserLists(){
-    //TODO
+  async getAllLists() {
+    const httpResponse = await axiosInstance.get<any>('GroceryList');
+    return httpResponse.data as GroceryList[];
   }
 
+  async getUserLists(userId: number) {
+    const httpResponse = await axiosInstance.get<any>(`GroceryList/${userId})`);
+    return httpResponse.data as GroceryList[];
+  }
+
+  async createList(dto:  { title: string; listItems: ListItem[]; created: Date; modified: Date; }) {
+
+    const httpResult = await axiosInstance.post('GroceryList', dto);
+    return httpResult.data;
+  }
+
+  async updateList(editedList: any) {
+    //TODO
+    return editedList;
+  }
+
+  async deleteList(groceryListId: number) {
+    const httpsResult = await axiosInstance.delete(`GroceryList/${groceryListId}`);
+    return httpsResult.data;
+  }
 
 }

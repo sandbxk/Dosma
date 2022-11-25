@@ -5,11 +5,13 @@ import {MatDialog} from "@angular/material/dialog";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {CreateListDialogComponent} from "../../dialogs/create-list-dialog/create-list-dialog.component";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
+import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
+import {ListItem} from "../../interfaces/ListItem";
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  selector: 'app-user-grocery-lists',
+  templateUrl: './user-grocery-lists.component.html',
+  styleUrls: ['./user-grocery-lists.component.scss'],
   animations: [  // This is the animation for the items, triggered upon adding and removing items
     trigger("inOutAnimation", [
       state("in", style({ opacity: 1 })),
@@ -40,28 +42,37 @@ import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-
     ])
   ]
 })
-export class DashboardComponent implements OnInit {
+export class UserGroceryListsComponent implements OnInit {
 
   groceryLists: GroceryList[] = [];
 
   constructor(
-    private dialogue: MatDialog
+    private dialogue: MatDialog,
+    private httpService: HttpGroceryListService
   ) { }
 
   ngOnInit(): void {
-  
+    this.httpService.getAllLists().then(lists => {
+      this.groceryLists = lists;
+    });
   }
-  
+
 //TODO redo colours, routing, menu styling
 
   newGroceryList() {
     let dialogueRef = this.dialogue.open(CreateListDialogComponent);
 
-    dialogueRef.afterClosed().subscribe(result => {
+    dialogueRef.afterClosed().subscribe(async result => {
       if (result !== undefined && result !== null) {
-        let newList: GroceryList = result;
-        this.groceryLists.splice(0, 0, newList);
-        //HTTP add LIST
+        let newList: any = {
+          title: result.title,
+          listItems: result.listItems,
+          created: result.created,
+          modified: result.modified
+        }
+
+        const createdList = await this.httpService.createList(newList);
+        this.groceryLists.splice(0, 0, createdList);
       }
     });
 
@@ -78,11 +89,12 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    dialogueRef.afterClosed().subscribe(result => {
-      if (result !== null) {
-        let newList: GroceryList = result;
-        this.groceryLists.findIndex(x => x.id === newList.id);
-        // TODO: HTTP PATCH LIST
+    dialogueRef.afterClosed().subscribe(async editedList => {
+      if (editedList !== null) {
+        const patchedList = await this.httpService.updateList(editedList);
+
+        let index = this.groceryLists.findIndex(x => x.id === patchedList.id);
+        this.groceryLists[index] = patchedList;
       }
     });
   }
@@ -97,22 +109,44 @@ export class DashboardComponent implements OnInit {
 
     dialogueRef.afterClosed().subscribe(userSaidYes => {
       if (userSaidYes) {
-        this.groceryLists.splice(this.groceryLists.indexOf(list), 1);
-        //TODO: HTTP DELETE LIST
+        this.httpService.deleteList(list.id).then(() => {
+          this.groceryLists.splice(this.groceryLists.indexOf(list), 1);
+        });
       }
     });
   }
 
-  duplicateList(list: GroceryList) {
+
+  async duplicateList(list: GroceryList) {
     //HTTP DUPLICATE LIST
-    let duplicateGroceryList: GroceryList = {
-      id: -1,
+    let duplicateDTO: any = {
       title: list.title,
-      listItems: list.listItems,
+      listItems: this.createListItemDTO(list.listItems),
       created: new Date(),
       modified: new Date()
     };
 
-    this.groceryLists.splice(0,0, duplicateGroceryList);
+    const duplicateList = await this.httpService.createList(duplicateDTO);
+
+    this.groceryLists.splice(0, 0, duplicateList);
   }
+
+  /*
+  * This function creates a DTO for the list items, so that the list items can be added to the duplicated list
+   */
+  private createListItemDTO(listItems: ListItem[]){
+    let listItemDTOs: any[] = [];
+
+    for (let i = 0; i < listItems.length; i++) {
+      listItemDTOs.push({
+        title: listItems[i].title,
+        quantity: listItems[i].quantity,
+        status: listItems[i].status,
+        category: listItems[i].category
+      });
+    }
+
+    return listItemDTOs;
+  }
+
 }
