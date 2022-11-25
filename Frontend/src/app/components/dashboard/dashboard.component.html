@@ -1,0 +1,57 @@
+<div class="centered">
+
+<div  fxLayout="grid wrap"
+      fxLayoutAlign="space-around center"> <!--fxLayout Container-->
+
+
+  <mat-card (click)="newGroceryList()"  class="listCardButton"> <!--Card button for creating a new list-->
+    <mat-icon class="addListIcon">
+      add
+    </mat-icon>
+  </mat-card>
+
+
+  <div [@inOutAnimation]="'in'" *ngFor="let list of groceryLists" (click)="selectList(list)"> <!--Card for each list-->
+    <mat-card class="listCard">
+      <mat-card-header>
+        <div class="listCardTitle">
+          <h2>{{list.title | truncate:26 }}</h2>
+          <button mat-icon-button [matMenuTriggerFor]="menu" class="menuButton" #t="matMenuTrigger" [class.opened]="t.menuOpen" aria-label="Grocery list menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editList(list)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit name</span>
+            </button>
+            <button mat-menu-item (click)="duplicateList(list)">
+              <mat-icon>content_copy</mat-icon>
+              <span>Duplicate</span>
+            </button>
+            <button mat-menu-item (click)="deleteList(list)">
+              <mat-icon>delete</mat-icon>
+              <span style="color: #d72929; font-weight: 500">Delete</span>
+            </button>
+          </mat-menu>
+        </div>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <ul *ngIf="list.listItems.length > 0; else emptyList">
+          <li *ngFor="let item of list.listItems | slice:0:10; let i=index">
+            {{item.title | truncate:38}}
+          </li>
+          <!-- Make a list of the first 10 items in the list and
+          Truncate the item titles to 38 characters-->
+        </ul>
+        <ng-template #emptyList>
+          <p class="emptyListText">No items in list</p>
+        </ng-template>
+      </mat-card-content>
+      <mat-card-footer>
+        <span>{{list.listItems.length}} items</span>
+      </mat-card-footer>
+    </mat-card>
+  </div>
+</div>
+</div>
