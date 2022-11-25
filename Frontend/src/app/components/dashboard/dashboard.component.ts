@@ -141,6 +141,14 @@ export class DashboardComponent implements OnInit {
 
   duplicateList(list: GroceryList) {
     //HTTP DUPLICATE LIST
-    this.groceryLists.splice(this.groceryLists.indexOf(list), 0, list);
+    let duplicateGroceryList: GroceryList = {
+      id: -1,
+      title: list.title,
+      listItems: list.listItems,
+      created: new Date(),
+      modified: new Date()
+    };
+
+    this.groceryLists.splice(0,0, duplicateGroceryList);
   }
 }
