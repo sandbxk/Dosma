@@ -6,12 +6,12 @@
   <form class="form">
     <mat-form-field class="form-full-width">
       <mat-label>Title</mat-label>
-      <input matInput  [(ngModel)]="title" [ngModelOptions]="{standalone: true}" placeholder="List title">
+      <input matInput (keyup.enter)="onSave()" (keyup.escape)="onCancel()"   [(ngModel)]="title" [ngModelOptions]="{standalone: true}" placeholder="List title">
     </mat-form-field>
   </form>
 </div>
 
 <div mat-dialog-actions>
-  <button mat-button  (keyup.escape)="onCancel()" (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" (keyup.enter)="onSave()" (click)="onSave()">Save</button>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()">Save</button>
 </div>
