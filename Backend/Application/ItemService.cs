@@ -36,9 +36,16 @@ public class ItemService : IItemService
         return _itemRepository.Create(_mapper.Map<Item>(itemDTO));
     }
 
-    public Item RemoveItemFromList(Item item)
+    public Item DeleteItemFromList(int id, Item item)
     {
-        throw new NotImplementedException();
+        if (id != item.Id)
+            throw new ValidationException("Id's do not match");
+        
+        var validation = _validators.Validate(item);
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
+        
+        return _itemRepository.Delete(item.Id);
     }
 
     public Item UpdateItemInList(Item item)
