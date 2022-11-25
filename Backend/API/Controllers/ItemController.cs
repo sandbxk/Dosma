@@ -53,7 +53,6 @@ public class ItemController : ControllerBase
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
     }
