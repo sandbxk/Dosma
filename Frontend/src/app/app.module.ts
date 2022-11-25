@@ -7,19 +7,50 @@ import { GroceryListComponent } from './components/grocery-list/grocery-list.com
 import { ListItemComponent } from './components/list-item/list-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBar} from "@angular/material/snack-bar";
-import { NewListDialogueComponent } from './dialogues/new-list-dialogue/new-list-dialogue.component';
+import { CreateListDialogComponent } from './dialogs/create-list-dialog/create-list-dialog.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {FlexLayoutModule} from "@angular/flex-layout";
+import {MatCardModule} from "@angular/material/card";
+import {MatButtonModule} from "@angular/material/button";
+import {MatIconModule} from "@angular/material/icon";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatDividerModule} from "@angular/material/divider";
+import {TruncatePipe} from "./util/truncate.pipe";
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import { EditListDialogComponent } from './dialogs/edit-list-dialog/edit-list-dialog.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     GroceryListComponent,
     ListItemComponent,
-    NewListDialogueComponent
+    CreateListDialogComponent,
+    DashboardComponent,
+    TruncatePipe,
+    ConfirmationDialogComponent,
+    EditListDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatDialogModule,
+    FlexLayoutModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatDividerModule,
+    MatDialogModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
   ],
   providers: [MatSnackBar],
   bootstrap: [AppComponent]
