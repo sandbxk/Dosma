@@ -35,7 +35,7 @@ public class ItemController : ControllerBase
         }
     }
     
-    [HttpPatch]
+    //[HttpPatch] TODO
     
     
     [HttpDelete]
