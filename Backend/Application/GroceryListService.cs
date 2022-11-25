@@ -50,7 +50,8 @@ public class GroceryListService : IGroceryListService
     }
 
     public GroceryList DeleteList(GroceryList groceryList, int id)
-    {
+    { 
+    // Remove GroceryList entity from param
         if (groceryList.Id != id)
             throw new ValidationException("Item ID does not match ID in URL.");
         
