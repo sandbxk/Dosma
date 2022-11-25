@@ -7,6 +7,7 @@ import {CreateListDialogComponent} from "../../dialogs/create-list-dialog/create
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 import {ListItem} from "../../interfaces/ListItem";
+import {ActivatedRoute, Router, RouterLink, RouterModule} from "@angular/router";
 
 @Component({
   selector: 'app-user-grocery-lists',
@@ -48,7 +49,8 @@ export class UserGroceryListsComponent implements OnInit {
 
   constructor(
     private dialogue: MatDialog,
-    private httpService: HttpGroceryListService
+    private httpService: HttpGroceryListService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -66,9 +68,9 @@ export class UserGroceryListsComponent implements OnInit {
       if (result !== undefined && result !== null) {
         let newList: any = {
           title: result.title,
-          listItems: result.listItems,
-          created: result.created,
-          modified: result.modified
+          //listItems: result.listItems,
+          //created: result.created,
+          //modified: result.modified
         }
 
         const createdList = await this.httpService.createList(newList);
@@ -79,7 +81,7 @@ export class UserGroceryListsComponent implements OnInit {
   }
 
   selectList(list: GroceryList) {
-    //Routing to list
+    this.router.navigate([`grocery-list/GroceryList/${list.id}`]);
   }
 
   editList(list: GroceryList) {
