@@ -34,7 +34,7 @@ public class GroceryListController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<GroceryList> CreateGroceryList(GroceryListDTO dto)
+    public ActionResult<GroceryList> CreateGroceryList([FromBody] GroceryListDTO dto)
     {
         try
         {
