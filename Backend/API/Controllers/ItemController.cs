@@ -42,6 +42,8 @@ public class ItemController : ControllerBase
     [Route("{id}")]
     public ActionResult<Item> DeleteItem([FromRoute] int id, [FromBody] Item item)
     {
+        if (id != item.Id)
+            throw new ValidationException("List ID does not match ID in URL.");
         try
         {
             var result = _itemService.DeleteItemFromList(id, item);

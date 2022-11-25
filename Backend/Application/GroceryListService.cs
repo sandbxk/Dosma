@@ -34,11 +34,6 @@ public class GroceryListService : IGroceryListService
         return _groceryListRepository.Create(_mapper.Map<GroceryList>(dto));
     }
 
-    public GroceryList GetListById(int id)
-    {
-        return _groceryListRepository.Single(id);
-    }
-
     public List<GroceryList> GetListsByUser(User user)
     {
         return _groceryListRepository.All();

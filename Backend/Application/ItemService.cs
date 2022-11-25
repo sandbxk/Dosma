@@ -38,14 +38,11 @@ public class ItemService : IItemService
 
     public Item DeleteItemFromList(int id, Item item)
     {
-        if (id != item.Id)
-            throw new ValidationException("List ID does not match ID in URL.");
-        
         var validation = _validator.Validate(item);
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
 
-        return _itemRepository.Delete(item.Id ?? throw new Exception());
+        return _itemRepository.Delete(item.Id);
     }
 
     public Item UpdateItemInList(Item item)

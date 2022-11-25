@@ -19,6 +19,6 @@ public class ItemDTOValidator : AbstractValidator<ItemDTO>
     {
         RuleFor(x => x.Title).NotEmpty().WithMessage("Title is required");
         RuleFor(x => x.GroceryListId).GreaterThan(0).WithMessage("Grocery List ID is must be greater than 0.");
-        RuleFor(x => x.Quantity).GreaterThanOrEqualTo(0).WithMessage("Quantity must be greater than or equal to 0.");
+        RuleFor(x => x.Quantity).GreaterThanOrEqualTo(1).WithMessage("Quantity must be greater than or equal to 1.");
     }
 }
