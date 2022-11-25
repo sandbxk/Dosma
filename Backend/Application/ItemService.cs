@@ -11,13 +11,13 @@ namespace Application;
 public class ItemService : IItemService
 {
     private readonly IRepository<Item> _itemRepository;
-    private ItemValidators _validators;
+    private ItemValidators _validator;
     private ItemDTOValidator _itemDTOValidator;
     private IMapper _mapper;
-    public ItemService(IRepository<Item> itemRepository, ItemValidators validators, ItemDTOValidator dtoValidator, IMapper mapper)
+    public ItemService(IRepository<Item> itemRepository, ItemValidators validator, ItemDTOValidator dtoValidator, IMapper mapper)
     {
         _itemRepository = itemRepository;
-        _validators = validators;
+        _validator = validator;
         _itemDTOValidator = dtoValidator;
         _mapper = mapper;
     }
@@ -39,13 +39,13 @@ public class ItemService : IItemService
     public Item DeleteItemFromList(int id, Item item)
     {
         if (id != item.Id)
-            throw new ValidationException("Id's do not match");
+            throw new ValidationException("List ID does not match ID in URL.");
         
-        var validation = _validators.Validate(item);
+        var validation = _validator.Validate(item);
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
-        
-        return _itemRepository.Delete(item.Id);
+
+        return _itemRepository.Delete(item.Id ?? throw new Exception());
     }
 
     public Item UpdateItemInList(Item item)

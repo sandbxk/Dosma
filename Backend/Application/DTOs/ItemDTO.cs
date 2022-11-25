@@ -3,4 +3,5 @@
 public class ItemDTO
 {
     public string Title { get; set; }
+    public int GroceryListId { get; set; }
 }

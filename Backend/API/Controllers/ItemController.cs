@@ -35,6 +35,9 @@ public class ItemController : ControllerBase
         }
     }
     
+    [HttpPatch]
+    
+    
     [HttpDelete]
     [Route("{id}")]
     public ActionResult<Item> DeleteItem([FromRoute] int id, [FromBody] Item item)
@@ -50,6 +53,7 @@ public class ItemController : ControllerBase
         }
         catch (Exception e)
         {
+            Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
     }
