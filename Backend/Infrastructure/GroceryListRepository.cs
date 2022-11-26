@@ -37,6 +37,12 @@ public class GroceryListRepository : IRepository<GroceryList>
         var groceryList = _dbContext.GroceryListsTable.Find(id);
         _dbContext.GroceryListsTable.Remove(groceryList);
         _dbContext.SaveChanges();
+
+        if (groceryList.Items == null)
+        {
+            groceryList.Items = new List<Item>();
+        }
+        
         return groceryList;
     }
 

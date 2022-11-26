@@ -74,7 +74,7 @@ export class HttpGroceryListService {
 
   async deleteList(groceryList: GroceryList) {
     console.log(groceryList);
-    const httpsResult = await axiosInstance.delete(`GroceryList/${groceryList.id}`);
+    const httpsResult = await axiosInstance.delete(`GroceryList/${groceryList.id}`, { data: groceryList });
     return httpsResult.data;
   }
 
