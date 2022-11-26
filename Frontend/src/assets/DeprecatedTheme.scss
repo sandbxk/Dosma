@@ -1,0 +1,34 @@
+$indigo-palette: (
+50: #e4f8f1,
+100: #beeddb,
+200: #91e1c5,
+300: #5ad6ae,
+400: #13cc9c,
+500: #00c28a,
+600: #00b27d,
+700: #009f6e,
+800: #008d61,
+900: #006d48,
+  A100: #beedc4,
+  A200: #91e19d,
+  A400: #3fc95e,
+  A700: #009b2d,
+   contrast: (
+50: $dark-primary-text,
+100: $dark-primary-text,
+200: $dark-primary-text,
+300: $light-primary-text,
+400: $light-primary-text,
+500: $light-primary-text,
+600: $light-primary-text,
+700: $light-primary-text,
+800: $light-primary-text,
+900: $light-primary-text,
+  A100: $dark-primary-text,
+  A200: $light-primary-text,
+  A400: $light-primary-text,
+  A700: $light-primary-text,
+   )
+);
+)
+);

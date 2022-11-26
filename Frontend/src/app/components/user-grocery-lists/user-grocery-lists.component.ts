@@ -80,6 +80,7 @@ export class UserGroceryListsComponent implements OnInit {
 
   selectList(list: GroceryList) {
     this.router.navigate([`grocery-list/GroceryList/${list.id}`]);
+    // https://stackoverflow.com/questions/44864303/send-data-through-routing-paths-in-angular
   }
 
   editList(list: GroceryList) {
