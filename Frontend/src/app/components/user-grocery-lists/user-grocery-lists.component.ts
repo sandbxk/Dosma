@@ -7,7 +7,7 @@ import {CreateListDialogComponent} from "../../dialogs/create-list-dialog/create
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 import {Item} from "../../interfaces/Item";
-import {ActivatedRoute, Router, RouterLink, RouterModule} from "@angular/router";
+import {ActivatedRoute, NavigationExtras, Router, RouterLink, RouterModule} from "@angular/router";
 
 @Component({
   selector: 'app-user-grocery-lists',
@@ -79,8 +79,8 @@ export class UserGroceryListsComponent implements OnInit {
   }
 
   selectList(list: GroceryList) {
-    this.router.navigate([`grocery-list/GroceryList/${list.id}`]);
-    // https://stackoverflow.com/questions/44864303/send-data-through-routing-paths-in-angular
+    const listData: NavigationExtras = {state: {data: list}};
+    this.router.navigate([`grocery-list/${list.id}`], listData);
   }
 
   editList(list: GroceryList) {
