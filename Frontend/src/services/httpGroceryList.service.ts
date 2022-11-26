@@ -4,11 +4,11 @@ import {environment} from "../environments/environment";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {catchError} from "rxjs";
 import {GroceryList} from "../app/interfaces/GroceryList";
-import {ListItem} from "../app/interfaces/ListItem";
 
-export const axiosInstance = axios.create({
-  baseURL: environment.apiBaseUrl
-});
+export const axiosInstance =
+   axios.create({
+    baseURL: environment.apiBaseUrl
+  });
 
 
 @Injectable({
@@ -17,7 +17,17 @@ export const axiosInstance = axios.create({
 
 export class HttpGroceryListService {
 
+  headerConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    }
+  }
+
   constructor(private matSnackbar: MatSnackBar) {
+    //axiosInstance.defaults.headers.common['Access-Control-Allow-Origin'] = `*`;
+    //axiosInstance.defaults.headers.post['Content-Type'] = `application/json`;
+
     axiosInstance.interceptors.response.use(
       response => {
         if(response.status==201) {
@@ -46,10 +56,15 @@ export class HttpGroceryListService {
     return httpResponse.data as GroceryList[];
   }
 
-  async createList(dto:  { title: string; listItems: ListItem[]; created: Date; modified: Date; }) {
-
+  async createList(dto: { title: string; }) {
     const httpResult = await axiosInstance.post('GroceryList', dto);
-    return httpResult.data;
+    return httpResult.data as GroceryList;
+  }
+
+  async duplicateList(groceryListId: number) {
+    //TODO implement
+    const httpsResult = await axiosInstance.post(`GroceryList/${groceryListId}`);
+    return httpsResult.data;
   }
 
   async updateList(editedList: any) {
@@ -57,8 +72,9 @@ export class HttpGroceryListService {
     return editedList;
   }
 
-  async deleteList(groceryListId: number) {
-    const httpsResult = await axiosInstance.delete(`GroceryList/${groceryListId}`);
+  async deleteList(groceryList: GroceryList) {
+    console.log(groceryList);
+    const httpsResult = await axiosInstance.delete(`GroceryList/${groceryList.id}`);
     return httpsResult.data;
   }
 

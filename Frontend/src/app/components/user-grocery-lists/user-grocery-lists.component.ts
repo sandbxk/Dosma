@@ -6,7 +6,7 @@ import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/con
 import {CreateListDialogComponent} from "../../dialogs/create-list-dialog/create-list-dialog.component";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
-import {ListItem} from "../../interfaces/ListItem";
+import {Item} from "../../interfaces/Item";
 import {ActivatedRoute, Router, RouterLink, RouterModule} from "@angular/router";
 
 @Component({
@@ -66,14 +66,12 @@ export class UserGroceryListsComponent implements OnInit {
 
     dialogueRef.afterClosed().subscribe(async result => {
       if (result !== undefined && result !== null) {
-        let newList: any = {
-          title: result.title,
-          //listItems: result.listItems,
-          //created: result.created,
-          //modified: result.modified
+
+        let dto = {
+          title: result
         }
 
-        const createdList = await this.httpService.createList(newList);
+        const createdList = await this.httpService.createList(dto);
         this.groceryLists.splice(0, 0, createdList);
       }
     });
@@ -111,8 +109,11 @@ export class UserGroceryListsComponent implements OnInit {
 
     dialogueRef.afterClosed().subscribe(userSaidYes => {
       if (userSaidYes) {
-        this.httpService.deleteList(list.id).then(() => {
+        this.httpService.deleteList(list).then(() => {
           this.groceryLists.splice(this.groceryLists.indexOf(list), 1);
+        })
+          .catch(err => {
+          console.error(err);
         });
       }
     });
@@ -121,34 +122,11 @@ export class UserGroceryListsComponent implements OnInit {
 
   async duplicateList(list: GroceryList) {
     //HTTP DUPLICATE LIST
-    let duplicateDTO: any = {
-      title: list.title,
-      listItems: this.createListItemDTO(list.listItems),
-      created: new Date(),
-      modified: new Date()
-    };
 
-    const duplicateList = await this.httpService.createList(duplicateDTO);
-
-    this.groceryLists.splice(0, 0, duplicateList);
+    const duplicateList = await this.httpService.duplicateList(list.id);
+    //TODO: add to list
+    this.groceryLists.splice(0, 0, list);
   }
 
-  /*
-  * This function creates a DTO for the list items, so that the list items can be added to the duplicated list
-   */
-  private createListItemDTO(listItems: ListItem[]){
-    let listItemDTOs: any[] = [];
-
-    for (let i = 0; i < listItems.length; i++) {
-      listItemDTOs.push({
-        title: listItems[i].title,
-        quantity: listItems[i].quantity,
-        status: listItems[i].status,
-        category: listItems[i].category
-      });
-    }
-
-    return listItemDTOs;
-  }
 
 }
