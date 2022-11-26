@@ -36,7 +36,7 @@
         </div>
       </mat-card-header>
       <mat-divider></mat-divider>
-      <mat-card-content>
+      <mat-card-content (click)="selectList(list)">
         <ul *ngIf="list.items.length > 0; else emptyList">
           <li *ngFor="let item of list.items | slice:0:10; let i=index">
             {{item.title | truncate:38}}

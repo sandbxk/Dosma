@@ -5,7 +5,8 @@
 */
 
 @use '@angular/material' as mat;
-
+@use "sass:map";
+@import 'src/assets/themeVariables.scss';
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 
@@ -32,12 +33,6 @@ $fontConfig: (
 // Foreground Elements
 
 // Light Theme Text
-$dark-text: #000000;
-$dark-primary-text: rgba($dark-text, 0.87);
-$dark-accent-text: rgba($dark-primary-text, 0.54);
-$dark-disabled-text: rgba($dark-primary-text, 0.38);
-$dark-dividers: rgba($dark-primary-text, 0.12);
-$dark-focused: rgba($dark-primary-text, 0.12);
 
 $mat-light-theme-foreground: (
   base:              black,
@@ -59,12 +54,6 @@ $mat-light-theme-foreground: (
 );
 
 // Dark Theme text
-$light-text: #ffffff;
-$light-primary-text: $light-text;
-$light-accent-text: rgba($light-primary-text, 0.7);
-$light-disabled-text: rgba($light-primary-text, 0.5);
-$light-dividers: rgba($light-primary-text, 0.12);
-$light-focused: rgba($light-primary-text, 0.12);
 
 $mat-dark-theme-foreground: (
   base:              $light-text,
@@ -115,14 +104,7 @@ $mat-light-theme-background: (
   disabled-list-option:     $light-bg-darker-10,
 );
 
-// Dark bg
-$dark-background:     #2c2c2c;
-$dark-bg-lighter-5:   lighten($dark-background, 5%);
-$dark-bg-lighter-10:  lighten($dark-background, 10%);
-$dark-bg-lighter-20:  lighten($dark-background, 20%);
-$dark-bg-lighter-30:  lighten($dark-background, 30%);
-$light-bg-alpha-4:    rgba(#fdfdfd, 0.04);
-$light-bg-alpha-12:   rgba(#fdfdfd, 0.12);
+
 
 // Background palette for dark themes.
 $mat-dark-theme-background: (
@@ -149,18 +131,18 @@ $mat-dark-theme-background: (
 // Theme Config
 
 body {
-  --primary-color: #91e1c5;
-  --primary-lighter-color: #def6ee;
-  --primary-darker-color: #74d5b0;
+  --primary-color: map.get($primary-colors, "main");
+  --primary-lighter-color: map.get($primary-colors, "lighter");
+  --primary-darker-color: map.get($primary-colors, "darker");
   --text-primary-color: #{$dark-primary-text};
   --text-primary-lighter-color: #{$dark-primary-text};
   --text-primary-darker-color: #{$dark-primary-text};
 }
 $mat-primary: (
-  main: #91e1c5,
-  lighter: #def6ee,
-  darker: #74d5b0,
-  200: #91e1c5, // For slide toggle,
+  main: map.get($primary-colors, "main"),
+  lighter: map.get($primary-colors, "lighter"),
+  darker: map.get($primary-colors, "darker"),
+  200: map.get($primary-colors, 200), // For slide toggle,
   contrast : (
     main: $dark-primary-text,
     lighter: $dark-primary-text,
@@ -171,19 +153,19 @@ $theme-primary: mat.define-palette($mat-primary, main, lighter, darker);
 
 
 body {
-  --accent-color: #67a185;
-  --accent-lighter-color: #d1e3da;
-  --accent-darker-color: #4a8568;
+  --accent-color: map.get($accent-colors, "main");
+  --accent-lighter-color: map.get($accent-colors, "lighter");
+  --accent-darker-color: map.get($accent-colors, "darker");
   --text-accent-color: #{$dark-primary-text};
   --text-accent-lighter-color: #{$dark-primary-text};
   --text-accent-darker-color: #{$light-primary-text};
 }
 $mat-accent: (
-  main: #67a185,
-  lighter: #d1e3da,
-  darker: #4a8568,
-  200: #67a185, // For slide toggle,
-  contrast : (
+  main: map.get($accent-colors, "main"),
+  lighter: map.get($accent-colors, "lighter"),
+  darker: map.get($accent-colors, "darker"),
+  200: map.get($accent-colors, 200), // For slide toggle,
+  contrast: (
     main: $dark-primary-text,
     lighter: $dark-primary-text,
     darker: $light-primary-text,
@@ -193,18 +175,18 @@ $theme-accent: mat.define-palette($mat-accent, main, lighter, darker);
 
 
 body {
-  --warn-color: #e06453;
-  --warn-lighter-color: #f6d1cb;
-  --warn-darker-color: #d34839;
+  --warn-color: map.get($warn-colors, "main");
+  --warn-lighter-color: map.get($warn-colors, "lighter");
+  --warn-darker-color: map.get($warn-colors, "darker");
   --text-warn-color: #{$dark-primary-text};
   --text-warn-lighter-color: #{$dark-primary-text};
   --text-warn-darker-color: #{$light-primary-text};
 }
 $mat-warn: (
-  main: #e06453,
-  lighter: #f6d1cb,
-  darker: #d34839,
-  200: #e06453, // For slide toggle,
+  main: map.get($warn-colors, "main"),
+  lighter: map.get($warn-colors, "lighter"),
+  darker: map.get($warn-colors, "darker"),
+  200: map.get($warn-colors, 200), // For slide toggle,
   contrast : (
     main: $dark-primary-text,
     lighter: $dark-primary-text,
@@ -212,7 +194,7 @@ $mat-warn: (
   )
 );
 $theme-warn: mat.define-palette($mat-warn, main, lighter, darker);
-;
+
 
 $lightTheme: (
   primary: $theme-primary,
