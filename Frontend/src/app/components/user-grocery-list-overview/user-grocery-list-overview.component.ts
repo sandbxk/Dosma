@@ -5,11 +5,14 @@ import {MatDialog} from "@angular/material/dialog";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {CreateListDialogComponent} from "../../dialogs/create-list-dialog/create-list-dialog.component";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
+import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
+import {Item} from "../../interfaces/Item";
+import {ActivatedRoute, NavigationExtras, Router, RouterLink, RouterModule} from "@angular/router";
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  selector: 'app-user-grocery-list-overview',
+  templateUrl: './user-grocery-list-overview.component.html',
+  styleUrls: ['./user-grocery-list-overview.component.scss'],
   animations: [  // This is the animation for the items, triggered upon adding and removing items
     trigger("inOutAnimation", [
       state("in", style({ opacity: 1 })),
@@ -40,35 +43,44 @@ import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-
     ])
   ]
 })
-export class DashboardComponent implements OnInit {
+export class UserGroceryListOverviewComponent implements OnInit {
 
   groceryLists: GroceryList[] = [];
 
   constructor(
-    private dialogue: MatDialog
+    private dialogue: MatDialog,
+    private httpService: HttpGroceryListService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-  
+    this.httpService.getAllLists().then(lists => {
+      this.groceryLists = lists;
+    });
   }
-  
+
 //TODO redo colours, routing, menu styling
 
   newGroceryList() {
     let dialogueRef = this.dialogue.open(CreateListDialogComponent);
 
-    dialogueRef.afterClosed().subscribe(result => {
+    dialogueRef.afterClosed().subscribe(async result => {
       if (result !== undefined && result !== null) {
-        let newList: GroceryList = result;
-        this.groceryLists.splice(0, 0, newList);
-        //HTTP add LIST
+
+        let dto = {
+          title: result
+        }
+
+        const createdList = await this.httpService.createList(dto);
+        this.groceryLists.splice(0, 0, createdList);
       }
     });
 
   }
 
   selectList(list: GroceryList) {
-    //Routing to list
+    const listData: NavigationExtras = {state: {data: list}};
+    this.router.navigate([`grocery-list/${list.id}`], listData);
   }
 
   editList(list: GroceryList) {
@@ -78,11 +90,12 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    dialogueRef.afterClosed().subscribe(result => {
-      if (result !== null) {
-        let newList: GroceryList = result;
-        this.groceryLists.findIndex(x => x.id === newList.id);
-        // TODO: HTTP PATCH LIST
+    dialogueRef.afterClosed().subscribe(async editedList => {
+      if (editedList !== null) {
+        const patchedList = await this.httpService.updateList(editedList);
+
+        let index = this.groceryLists.findIndex(x => x.id === patchedList.id);
+        this.groceryLists[index] = patchedList;
       }
     });
   }
@@ -97,22 +110,24 @@ export class DashboardComponent implements OnInit {
 
     dialogueRef.afterClosed().subscribe(userSaidYes => {
       if (userSaidYes) {
-        this.groceryLists.splice(this.groceryLists.indexOf(list), 1);
-        //TODO: HTTP DELETE LIST
+        this.httpService.deleteList(list).then(() => {
+          this.groceryLists.splice(this.groceryLists.indexOf(list), 1);
+        })
+          .catch(err => {
+          console.error(err);
+        });
       }
     });
   }
 
-  duplicateList(list: GroceryList) {
-    //HTTP DUPLICATE LIST
-    let duplicateGroceryList: GroceryList = {
-      id: -1,
-      title: list.title,
-      listItems: list.listItems,
-      created: new Date(),
-      modified: new Date()
-    };
 
-    this.groceryLists.splice(0,0, duplicateGroceryList);
+  async duplicateList(list: GroceryList) {
+    //HTTP DUPLICATE LIST
+
+    const duplicateList = await this.httpService.duplicateList(list.id);
+    //TODO: add to list
+    this.groceryLists.splice(0, 0, list);
   }
+
+
 }

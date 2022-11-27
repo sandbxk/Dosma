@@ -11,8 +11,8 @@
   </mat-card>
 
 
-  <div [@inOutAnimation]="'in'" *ngFor="let list of groceryLists" (click)="selectList(list)"> <!--Card for each list-->
-    <mat-card class="listCard">
+  <div [@inOutAnimation]="'in'" *ngFor="let list of groceryLists"> <!--Card for each list-->
+    <mat-card (click)="selectList(list)" class="listCard">
       <mat-card-header>
         <div class="listCardTitle">
           <h2>{{list.title | truncate:26 }}</h2>
@@ -37,8 +37,8 @@
       </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content>
-        <ul *ngIf="list.listItems.length > 0; else emptyList">
-          <li *ngFor="let item of list.listItems | slice:0:10; let i=index">
+        <ul *ngIf="list.items.length > 0; else emptyList">
+          <li *ngFor="let item of list.items | slice:0:10; let i=index">
             {{item.title | truncate:38}}
           </li>
           <!-- Make a list of the first 10 items in the list and
@@ -49,7 +49,7 @@
         </ng-template>
       </mat-card-content>
       <mat-card-footer>
-        <span>{{list.listItems.length}} items</span>
+        <span>{{list.items.length}} items</span>
       </mat-card-footer>
     </mat-card>
   </div>

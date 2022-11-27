@@ -1,9 +1,9 @@
-import {ListItem} from "./ListItem";
+import {Item} from "./Item";
 
 export interface GroceryList {
   id: number;
   title: string;
-  listItems: ListItem[];
-  created: Date;
-  modified: Date;
+  items: Item[];
+  //TBA created: Date;
+  //TBA modified: Date;
 }

@@ -13,9 +13,9 @@ export class EditListDialogComponent implements OnInit {
   groceryList: GroceryList = {
     id: -1,
     title: "",
-    listItems: [],
-    created: new Date(),
-    modified: new Date()
+    items: [],
+    //TBA created: new Date(),
+    //TBA modified: new Date()
   };
 
   form: any = {};

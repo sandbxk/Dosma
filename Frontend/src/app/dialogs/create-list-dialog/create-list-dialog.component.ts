@@ -25,32 +25,19 @@ export class CreateListDialogComponent implements OnInit {
   }
 
   onSave() {
-    console.log(this.title);
     this.dialogRef.close(this.createListObj())
   }
 
   private createListObj() {
     let postTitle = this.title.trim();
 
-    console.log(postTitle);
-
     if (postTitle === ""){
       postTitle = faker.word.noun() //Use emoji??
     }
 
-    console.log(postTitle);
-
     const capitalizedTitle = postTitle.charAt(0).toUpperCase() + postTitle.slice(1);
 
-    let groceryList = {
-      id: -1,
-      title: capitalizedTitle,
-      listItems: [],
-      created: new Date(),
-      modified: new Date()
-    }
-
-    return groceryList;
+    return capitalizedTitle;
   }
 
 

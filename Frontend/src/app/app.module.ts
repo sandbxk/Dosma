@@ -8,7 +8,7 @@ import { ListItemComponent } from './components/list-item/list-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { CreateListDialogComponent } from './dialogs/create-list-dialog/create-list-dialog.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { UserGroceryListOverviewComponent } from './components/user-grocery-list-overview/user-grocery-list-overview.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatCardModule} from "@angular/material/card";
@@ -22,6 +22,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { EditListDialogComponent } from './dialogs/edit-list-dialog/edit-list-dialog.component';
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 
 @NgModule({
@@ -30,28 +31,29 @@ import { EditListDialogComponent } from './dialogs/edit-list-dialog/edit-list-di
     GroceryListComponent,
     ListItemComponent,
     CreateListDialogComponent,
-    DashboardComponent,
+    UserGroceryListOverviewComponent,
     TruncatePipe,
     ConfirmationDialogComponent,
     EditListDialogComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    FlexLayoutModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    MatDividerModule,
-    MatDialogModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+        FlexLayoutModule,
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        MatDividerModule,
+        MatDialogModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        DragDropModule,
+    ],
   providers: [MatSnackBar],
   bootstrap: [AppComponent]
 })

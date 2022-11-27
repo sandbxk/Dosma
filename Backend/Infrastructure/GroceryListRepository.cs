@@ -22,6 +22,11 @@ public class GroceryListRepository : IRepository<GroceryList>
 
     public GroceryList Create(GroceryList t)
     {
+        if (t.Items == null)
+        {
+            t.Items = new List<Item>();
+        }
+        
         _dbContext.GroceryListsTable.Add(t);
         _dbContext.SaveChanges();
         return t;
@@ -32,6 +37,12 @@ public class GroceryListRepository : IRepository<GroceryList>
         var groceryList = _dbContext.GroceryListsTable.Find(id);
         _dbContext.GroceryListsTable.Remove(groceryList);
         _dbContext.SaveChanges();
+
+        if (groceryList.Items == null)
+        {
+            groceryList.Items = new List<Item>();
+        }
+        
         return groceryList;
     }
 
