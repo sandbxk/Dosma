@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+using Application.DTOs;
 using Application.Interfaces;
 using Domain;
 using FluentValidation;
@@ -61,7 +61,7 @@ public class GroceryListController : ControllerBase
         {
             return Ok(_groceryListService.DeleteList(id));
         }
-        catch (KeyNotFoundException)
+        catch (KeyNotFoundException e)
         {
             return NotFound("No List with id: " + id);
         }
