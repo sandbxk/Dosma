@@ -24,7 +24,7 @@ public class InfrastructureTests
     {
         var test = new ReflectionTestClass("value1");
 
-        Assert.True(ReflectionHelpers.FieldEquals(test, nameof(test.TestProperty), "value1"));
+        Assert.True(ReflectionHelpers.FieldEquals(test, "TestProperty", "value1"));
     }
     
     [Fact]
@@ -32,7 +32,7 @@ public class InfrastructureTests
     {
         var test = new ReflectionTestClass("value1");
 
-        Assert.False(ReflectionHelpers.FieldEquals(test, nameof(test.TestProperty), "value2"));
+        Assert.False(ReflectionHelpers.FieldEquals(test, "TestProperty", "value2"));
     }
 
     [Fact]
@@ -45,6 +45,6 @@ public class InfrastructureTests
             new ReflectionTestClass("value2"),
         };
         
-        testList.Where(t => ReflectionHelpers.FieldEquals(t, nameof(t.TestProperty), "value2")).ToList().ForEach(t => Assert.Equal("value2", t.TestProperty));
+        testList.Where(t => ReflectionHelpers.FieldEquals(t, "TestProperty", "value2")).AsParallel().ForAll(t => Assert.Equal("value2", t.TestProperty));
     }
 }

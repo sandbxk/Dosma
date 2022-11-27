@@ -19,6 +19,12 @@ public class DependencyResolverService
         services.AddScoped<IItemService, ItemService>();
     }
 
+    /*
+        manually add all the dependencies here
+
+        reason: serverSecrets is needed for the JWT token generation and in the startup sequence. 
+                to store it in one place, reducing the risk of breaking authentication.
+    */
     public static void RegisterSecurityLayer(IServiceCollection services, byte[] serverSecret)
     {
         services.AddScoped<IAuthenticationService, AuthenticationService>(x => new AuthenticationService(

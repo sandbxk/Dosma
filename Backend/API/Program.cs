@@ -4,9 +4,7 @@ using AutoMapper;
 using Domain;
 using FluentValidation;
 using Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using ApplicationDependencies = Application.Dependencies.DependencyResolverService;
 using InfrastructureDependencies = Infrastructure.Dependencies.DependencyResolverService;
 
