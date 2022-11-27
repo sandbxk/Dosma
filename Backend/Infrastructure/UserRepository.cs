@@ -63,4 +63,9 @@ public class UserRepository : IUserRepository
 
         throw new NullReferenceException("User not found");
     }
+
+    public User Update(User model)
+    {
+        throw new NotImplementedException();
+    }
 }
