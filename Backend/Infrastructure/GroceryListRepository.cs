@@ -36,6 +36,12 @@ public class GroceryListRepository : IRepository<GroceryList>
     public GroceryList Delete(int id)
     {
         var groceryList = _dbContext.GroceryListsTable.Find(id);
+
+        if (groceryList == null)
+        {
+            throw new NullReferenceException("Grocery list not found");
+        }
+
         _dbContext.GroceryListsTable.Remove(groceryList);
         _dbContext.SaveChanges();
 

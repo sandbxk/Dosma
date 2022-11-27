@@ -3,11 +3,11 @@ using SQLitePCL;
 
 namespace Infrastructure;
 
-public class DatabaseRepistory : IDatabase
+public class DatabaseRepository : IDatabase
 {
     private DatabaseContext _dbcontext;
     
-    public DatabaseRepistory(DatabaseContext dbcontext)
+    public DatabaseRepository(DatabaseContext dbcontext)
     {
         _dbcontext = dbcontext;
     }

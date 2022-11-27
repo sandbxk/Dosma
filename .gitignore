@@ -399,3 +399,5 @@ FodyWeavers.xsd
 .idea/.idea.Dosma.dir/.idea/workspace.xml
 .idea/
 .idea/.idea.Dosma.dir/.idea/workspace.xml
+Backend/API/db.db-shm
+Backend/API/db.db-wal
