@@ -27,7 +27,6 @@ public class GroceryListService : IGroceryListService
     public GroceryList Create(GroceryListDTO dto)
     {
         var validation = _dtoValidator.Validate(dto);
-
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
         
@@ -49,14 +48,13 @@ public class GroceryListService : IGroceryListService
         return _groceryListRepository.All();
     }
 
-    public GroceryList DeleteList(int id, GroceryList groceryList)
+    public GroceryList DeleteList(GroceryList groceryList)
     {
-        if (id != groceryList.Id)
-            throw new ValidationException("ID in body does not match route.");
         var validation = _validator.Validate(groceryList);
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
-        return _groceryListRepository.Delete(id);
+        
+        return _groceryListRepository.Delete(groceryList.Id);
     }
 
     public GroceryList UpdateList(int id, GroceryList groceryList)
@@ -64,6 +62,7 @@ public class GroceryListService : IGroceryListService
         var validation = _validator.Validate(groceryList);
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
+        
         return _groceryListRepository.Update(groceryList);
     }
 }
