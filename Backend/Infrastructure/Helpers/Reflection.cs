@@ -4,7 +4,7 @@ namespace Backend.Helpers
 {
     public static class ReflectionHelpers
     {
-        public static bool FieldEquals<T>(T t, string fieldName, object value) where T : class
+        public static bool FieldEquals(object t, string fieldName, object value)
         {
             PropertyInfo? propertyInfo = t.GetType().GetProperty(fieldName);
 
