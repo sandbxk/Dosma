@@ -3,6 +3,17 @@
 
 $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
 
+.flexContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  align-content: center;
+  flex-grow: 4; /* default 0 */
+}
+
+
 .listCard {
   margin: 0.5rem;
   padding: 0.5rem;
@@ -90,8 +101,8 @@ $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
   padding-right: 1em;
   display: flex;
   justify-content: left;
-  align-items: start;
-  align-content: start;
+  align-items: flex-start;
+  align-content: flex-start;
   height: 4em;
   width: 100%;
   max-height: 6em;
