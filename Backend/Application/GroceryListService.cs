@@ -49,7 +49,7 @@ public class GroceryListService : IGroceryListService
         return _groceryListRepository.All();
     }
 
-    public GroceryList DeleteList(int id, GroceryList groceryList)
+    public bool DeleteList(int id, GroceryList groceryList)
     {
         if (id != groceryList.Id)
             throw new ValidationException("ID in body does not match route.");

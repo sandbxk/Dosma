@@ -76,7 +76,7 @@ public class GroceryListController : ControllerBase
     
     [HttpDelete]
     [Route("{id}")]
-    public ActionResult<GroceryList> DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList)
+    public ActionResult DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList)
     {
         try
         {

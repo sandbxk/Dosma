@@ -36,7 +36,7 @@ public class ItemService : IItemService
         return _itemRepository.Create(_mapper.Map<Item>(itemDTO));
     }
 
-    public Item DeleteItemFromList(int id, Item item)
+    public bool DeleteItemFromList(int id, Item item)
     {
         return _itemRepository.Delete(item.Id);
     }

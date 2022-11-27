@@ -33,24 +33,23 @@ public class GroceryListRepository : IRepository<GroceryList>
         return t;
     }
 
-    public GroceryList Delete(int id)
+    public bool Delete(int id)
     {
         var groceryList = _dbContext.GroceryListsTable.Find(id);
 
         if (groceryList == null)
         {
-            throw new NullReferenceException("Grocery list not found");
+            throw new NullReferenceException("List not found.");
         }
 
         _dbContext.GroceryListsTable.Remove(groceryList);
-        _dbContext.SaveChanges();
-
-        if (groceryList.Items == null)
-        {
-            groceryList.Items = new List<Item>();
-        }
+        int change = _dbContext.SaveChanges();
         
-        return groceryList;
+        if (change == 0)
+        {
+            throw new NullReferenceException("List not found.");
+        }
+        return true;
     }
 
     public GroceryList Single(long id)

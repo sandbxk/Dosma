@@ -26,12 +26,22 @@ public class ItemRepository : IRepository<Item>
         return t;
     }
 
-    public Item Delete(int id)
+    public bool Delete(int id)
     {
         var item = _dbContext.ItemTable.Find(id);
+        if (item == null)
+        {
+            throw new NullReferenceException("Item not found.");
+        }
+        
         _dbContext.Remove(item);
-        _dbContext.SaveChanges();
-        return item;
+        int change = _dbContext.SaveChanges();
+        
+        if (change == 0)
+        {
+            throw new NullReferenceException("Item not found.");
+        }
+        return true;
     }
 
     public Item Single(long id)

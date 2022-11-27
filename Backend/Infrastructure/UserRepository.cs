@@ -25,17 +25,21 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public User Delete(int id)
+    public bool Delete(int id)
     {
         User? user = _DBContext.UserTable.Find(id);
         if (user != null)
         {
-            _DBContext.UserTable.Remove(user);
-            _DBContext.SaveChanges();
-            return user;
+            throw new NullReferenceException("User not found");
         }
-
-        throw new NullReferenceException("User not found");
+        _DBContext.UserTable.Remove(user);
+        int change = _DBContext.SaveChanges();
+        
+        if (change == 0)
+        {
+            throw new NullReferenceException("User not found");
+        }
+        return true;
     }
 
     public User Single(long id)
