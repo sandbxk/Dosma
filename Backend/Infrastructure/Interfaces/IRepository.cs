@@ -6,7 +6,7 @@ public interface IRepository<T>
     T Create(T t);
     T Delete(int id);
     T Single(long id);
-    T Update(long id, T model);
+    T Update(T model);
 }
 public interface IDatabase
 {

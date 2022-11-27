@@ -39,6 +39,11 @@ public class ItemRepository : IRepository<Item>
         throw new NotImplementedException();
     }
 
+    public Item Update(Item model)
+    {
+        throw new NotImplementedException();
+    }
+
     public Item Update(long id, Item model)
     {
         throw new NotImplementedException();
