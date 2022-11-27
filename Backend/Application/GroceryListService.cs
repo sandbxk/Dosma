@@ -61,8 +61,6 @@ public class GroceryListService : IGroceryListService
 
     public GroceryList UpdateList(int id, GroceryList groceryList)
     {
-        if (id != groceryList.Id)
-            throw new ValidationException("ID in body does not match route.");
         var validation = _validator.Validate(groceryList);
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());

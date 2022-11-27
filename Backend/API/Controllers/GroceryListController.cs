@@ -55,6 +55,11 @@ public class GroceryListController : ControllerBase
     [Route("{id}")]
     public ActionResult<GroceryList> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList)
     {
+        if (id != groceryList.Id)
+        {
+            throw new ValidationException("List ID does not match ID in URL.");
+        }
+        
         try
         {
             return Ok(_groceryListService.UpdateList(id, groceryList));

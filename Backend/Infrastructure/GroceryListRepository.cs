@@ -43,7 +43,6 @@ public class GroceryListRepository : IRepository<GroceryList>
 
     public GroceryList Update(GroceryList model)
     {
-        
         _dbContext.GroceryListsTable.Update(model);
         _dbContext.SaveChanges();
         return model;
