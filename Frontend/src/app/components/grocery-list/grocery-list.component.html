@@ -17,7 +17,21 @@
 
 
 <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-  <div class="example-box" *ngFor="let item of groceryList.items" cdkDrag>{{item}}</div>
+  <div class="example-box" *ngFor="let item of groceryList.items" cdkDrag>
+    <div style="display: flex">
+      <p class="quantityIndicator" *ngIf="item.quantity > 1; else standardQuantity">{{item.quantity}}</p>
+      <ng-template #standardQuantity>
+        <p class="quantityIndicatorSingle" *ngIf="item.quantity == 1;"></p>
+      </ng-template>
+      <mat-label>{{item.title}}</mat-label>
+      <!-- Category -->
+    </div>
+    <!-- checkbox -->
+    <!-- Button MatMenu -->
+  </div>
+
+
+
 </div>
 
 

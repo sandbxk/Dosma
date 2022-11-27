@@ -12,10 +12,11 @@ import {HttpGroceryListService} from "../../../services/httpGroceryList.service"
 })
 export class GroceryListComponent implements OnInit {
 
-  constructor(private currentRoute: ActivatedRoute,
-              private router: Router,
-              private dataService: DataService,
-              private httpService: HttpGroceryListService
+  constructor(
+    private currentRoute: ActivatedRoute,
+    private router: Router,
+    private dataService: DataService,
+    private httpService: HttpGroceryListService
   ) { }
 
   groceryList: GroceryList = {
@@ -27,11 +28,15 @@ export class GroceryListComponent implements OnInit {
   routeId: any = {};
 
   ngOnInit(): void {
+    // Get the id from the route
     this.routeId = this.currentRoute.snapshot.paramMap.get('id');
+
+    // Get the grocery list from the data service, passed from the previous page
     this.dataService.currentListStageObject.subscribe(list => {
       this.groceryList = list;
     }).unsubscribe();
 
+    // If the id is 0, the data service did not pass a list, so we need to get it from the server
     if (this.groceryList.id === 0) {
       this.httpService.getListById(this.routeId).then((list: GroceryList) => {
         this.groceryList = list;
