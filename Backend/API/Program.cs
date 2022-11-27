@@ -22,23 +22,13 @@ ApplicationDependencies.RegisterSecurityLayer(builder.Services, Encoding.ASCII.G
 
 InfrastructureDependencies.RegisterInfrastructureLayer(builder.Services);
 
-var mapper = new MapperConfiguration(config =>
-{
+var mapper = new MapperConfiguration(config => {
     config.CreateMap<GroceryListDTO, GroceryList>();
     config.CreateMap<ItemDTO, Item>();
 }).CreateMapper();
 
+
 builder.Services.AddSingleton(mapper);
-
-Application.Dependencies
-    .DependencyResolverService
-    .RegisterApplicationLayer(builder.Services);
-
-Infrastructure.Dependencies
-    .DependencyResolverService
-    .RegisterInfrastructureLayer(builder.Services);
-
-
 builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
