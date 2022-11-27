@@ -4,5 +4,5 @@ namespace Application.DTOs;
 
 public class GroceryListDTO
 {
-    public string Title { get; set; } = string.Empty;
+    public string Title { get; set; }
 }
