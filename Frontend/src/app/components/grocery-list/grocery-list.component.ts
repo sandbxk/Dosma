@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {GroceryList} from "../../interfaces/GroceryList";
+import {DataService} from "../../../services/data.service";
+import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 
 @Component({
   selector: 'app-grocery-list',
@@ -11,7 +13,10 @@ import {GroceryList} from "../../interfaces/GroceryList";
 export class GroceryListComponent implements OnInit {
 
   constructor(private currentRoute: ActivatedRoute,
-              private router: Router) { }
+              private router: Router,
+              private dataService: DataService,
+              private httpService: HttpGroceryListService
+  ) { }
 
   groceryList: GroceryList = {
     id: 0,
@@ -23,10 +28,16 @@ export class GroceryListComponent implements OnInit {
 
   ngOnInit(): void {
     this.routeId = this.currentRoute.snapshot.paramMap.get('id');
-    const nav = this.router.getCurrentNavigation();
-    if (nav?.extras.state) {
-      this.groceryList = nav.extras.state as GroceryList;
+    this.dataService.currentListStageObject.subscribe(list => {
+      this.groceryList = list;
+    }).unsubscribe();
+
+    if (this.groceryList.id === 0) {
+      this.httpService.getListById(this.routeId).then((list: GroceryList) => {
+        this.groceryList = list;
+      });
     }
+
   }
 
   drop(event: CdkDragDrop<string[]>) {

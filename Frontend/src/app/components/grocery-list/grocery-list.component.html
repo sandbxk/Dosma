@@ -1,18 +1,24 @@
+<div class="centered">
 
-<div>
-  <h2 style="color: #2c2c2c">{{groceryList.title}}</h2>
 
-  <button [disabled] mat-icon-button class="menuButton"  aria-label="Grocery list menu">
+<div class="titleContainer">
+  <h2 class="title">{{groceryList.title}}</h2>
+
+  <button [disabled] mat-icon-button class="shareButton"  aria-label="Grocery list menu">
     <mat-icon>share</mat-icon>
   </button>
 
-  <button  mat-icon-button class="menuButton" aria-label="Grocery list menu">
+  <button  mat-icon-button class="deleteButton" aria-label="Grocery list menu">
     <mat-icon>delete</mat-icon>
   </button>
-<hr>
 </div>
+  <hr class="lineSeparator">
+
 
 
 <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
   <div class="example-box" *ngFor="let item of groceryList.items" cdkDrag>{{item}}</div>
+</div>
+
+
 </div>

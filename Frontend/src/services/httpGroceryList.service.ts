@@ -78,4 +78,27 @@ export class HttpGroceryListService {
     return httpsResult.data;
   }
 
+  async getListById(routeId: number) {
+    //TODO
+    return {
+      id: 1,
+      title: "Test List 1",
+      items: [
+        {
+          id: 1,
+          title: "Test Item 1",
+          quantity: 1,
+          groceryListId: 1,
+          status: 1
+        },
+        {
+          id: 2,
+          title: "Test Item 2",
+          quantity: 2,
+          groceryListId: 1,
+          status: 1
+        }
+      ]
+    };
+  }
 }

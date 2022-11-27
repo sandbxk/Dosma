@@ -193,3 +193,8 @@ button.mat-menu-item:hover {
   overflow-y:scroll;
   max-height: 100%;
 }
+
+.deleteLbl {
+  color: map.get($warn-colors, "main");
+  font-weight: 500;
+}

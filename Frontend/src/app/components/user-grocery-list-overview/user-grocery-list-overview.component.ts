@@ -8,6 +8,8 @@ import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 import {Item} from "../../interfaces/Item";
 import {ActivatedRoute, NavigationExtras, Router, RouterLink, RouterModule} from "@angular/router";
+import {MockLists} from "./mockLists";
+import {DataService} from "../../../services/data.service";
 
 @Component({
   selector: 'app-user-grocery-list-overview',
@@ -50,13 +52,19 @@ export class UserGroceryListOverviewComponent implements OnInit {
   constructor(
     private dialogue: MatDialog,
     private httpService: HttpGroceryListService,
-    private router: Router
+    private router: Router,
+    private dataService: DataService
   ) { }
 
   ngOnInit(): void {
     this.httpService.getAllLists().then(lists => {
       this.groceryLists = lists;
     });
+
+
+    //TODO TEMP
+    this.groceryLists = MockLists;
+
   }
 
 //TODO redo colours, routing, menu styling
@@ -79,8 +87,8 @@ export class UserGroceryListOverviewComponent implements OnInit {
   }
 
   selectList(list: GroceryList) {
-    const listData: NavigationExtras = {state: {data: list}};
-    this.router.navigate([`grocery-list/${list.id}`], listData);
+    this.dataService.updateListObject(list);
+    this.router.navigate([`grocery-list/${list.id}`]);
   }
 
   editList(list: GroceryList) {
