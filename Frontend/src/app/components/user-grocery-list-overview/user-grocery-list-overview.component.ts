@@ -10,9 +10,9 @@ import {Item} from "../../interfaces/Item";
 import {ActivatedRoute, NavigationExtras, Router, RouterLink, RouterModule} from "@angular/router";
 
 @Component({
-  selector: 'app-user-grocery-lists',
-  templateUrl: './user-grocery-lists.component.html',
-  styleUrls: ['./user-grocery-lists.component.scss'],
+  selector: 'app-user-grocery-list-overview',
+  templateUrl: './user-grocery-list-overview.component.html',
+  styleUrls: ['./user-grocery-list-overview.component.scss'],
   animations: [  // This is the animation for the items, triggered upon adding and removing items
     trigger("inOutAnimation", [
       state("in", style({ opacity: 1 })),
@@ -43,7 +43,7 @@ import {ActivatedRoute, NavigationExtras, Router, RouterLink, RouterModule} from
     ])
   ]
 })
-export class UserGroceryListsComponent implements OnInit {
+export class UserGroceryListOverviewComponent implements OnInit {
 
   groceryLists: GroceryList[] = [];
 
