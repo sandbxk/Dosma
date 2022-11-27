@@ -10,7 +10,7 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class GroceryListController : ControllerBase
 {
-    private IGroceryListService _groceryListService;
+    private readonly IGroceryListService _groceryListService;
     
     public GroceryListController(IGroceryListService groceryListService)
     {
@@ -34,7 +34,7 @@ public class GroceryListController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<GroceryListController> CreateGroceryList(GroceryListDTO dto)
+    public ActionResult<GroceryList> CreateGroceryList(GroceryListDTO dto)
     {
         try
         {
