@@ -67,7 +67,7 @@ export class HttpGroceryListService {
     return httpsResult.data;
   }
 
-  async updateList(editedList: any) {
+  async updateList(editedList: GroceryList) {
     //TODO
     return editedList;
   }
