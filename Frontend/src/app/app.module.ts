@@ -23,6 +23,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { EditListDialogComponent } from './dialogs/edit-list-dialog/edit-list-dialog.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import {PendingChangesGuard} from "../services/PendingChanges.guard";
 
 
 @NgModule({
@@ -54,7 +55,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
         ReactiveFormsModule,
         DragDropModule,
     ],
-  providers: [MatSnackBar],
+  providers: [MatSnackBar, PendingChangesGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
