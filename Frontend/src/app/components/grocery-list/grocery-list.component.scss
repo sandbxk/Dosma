@@ -1,14 +1,25 @@
 @use "sass:map";
 @import "src/assets/themeVariables.scss";
 
+$width: 50em;
+
 .itemDnDContainer {
-  width: 50em;
+  width: $width;
   max-width: 100%;
   border: none;
-  min-height: 60px;
+  min-height: 200px;
+  align-content: center;
+  justify-content: center;
   display: block;
   background: transparent;
   overflow: hidden;
+  position: absolute;
+  top: 175px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  height: available;
+  z-index: 1;
+  padding-bottom: 50px;
 }
 
 .itemBox {
@@ -16,6 +27,7 @@
   border-bottom: solid 2px map.get($accent-colors, "lighter");
   color: $dark-primary-text;
   display: flex;
+  width: 100%;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -57,10 +69,37 @@
 
 }
 
+.parentContainer {
+  overflow-y: scroll;
+  width: $width;
+}
+
 .titleContainer {
   display: inline-block;
-  justify-content: space-between;
-  width: 100%;
+  position: fixed;
+  width: $width;
+  height: available;
+  padding-top: 100px;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 100;
+  padding-bottom: 2px;
+  border-bottom: 5px solid map.get($primary-colors, "main");
+  background-color: $light-background;
+}
+
+.lineSeparator {
+  position: fixed;
+  margin-top: 0;
+  padding-top: 0;
+  border: 0;
+  border-top: 5px solid map.get($primary-colors, "main");
+  width: $width;
+  margin-bottom: 30px;;
+  top: 145px;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
 
 .title {
@@ -70,7 +109,7 @@
   padding: 0;
   font-size: 1.5em;
   float: left;
-  top: 0.3em;
+  translate: 0 7px;
 }
 
 .listActionsContainer {
@@ -113,9 +152,15 @@
   color: map.get($primary-colors, "darker");
 }
 
+.shareButton:disabled {
+  color: $dark-disabled-text;
+}
+
 .backButton {
-  position: relative;
-  float: left;
+  position: fixed;
+  top: 110px;
+  left: 50%;
+  transform: translate(-500px, 0);
   margin: 0;
   padding: 0;
   background-color: map.get($primary-colors, "main");
@@ -129,25 +174,7 @@
   background-color: map.get($primary-colors, "lighter");
 }
 
-.lineSeparator {
-  margin-top: 0;
-  padding-top: 0;
-  border: 0;
-  border-top: 5px solid map.get($primary-colors, "main");
-  width: 100%;
 
-  margin-bottom: 30px;;
-}
-
-.centered {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  overflow: auto;
-  overflow-y:scroll;
-  max-height: 100%;
-}
 
 
 
@@ -169,4 +196,21 @@
 
 .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.testBox {
+  background-color: map.get($accent-colors, "lighter");
+  width: $width;
+  height: 150px;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  font-weight: 500;
+  color: $dark-primary-text;
 }

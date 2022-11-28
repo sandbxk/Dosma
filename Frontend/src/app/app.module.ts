@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GroceryListComponent } from './components/grocery-list/grocery-list.component';
-import { ListItemComponent } from './components/list-item/list-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import { CreateListDialogComponent } from './dialogs/create-list-dialog/create-list-dialog.component';
@@ -24,18 +23,19 @@ import {MatInputModule} from "@angular/material/input";
 import { EditListDialogComponent } from './dialogs/edit-list-dialog/edit-list-dialog.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {PendingChangesGuard} from "../services/PendingChanges.guard";
+import { ItemCreatorComponent } from './components/item-creator/item-creator.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     GroceryListComponent,
-    ListItemComponent,
     CreateListDialogComponent,
     UserGroceryListOverviewComponent,
     TruncatePipe,
     ConfirmationDialogComponent,
-    EditListDialogComponent
+    EditListDialogComponent,
+    ItemCreatorComponent
   ],
     imports: [
         BrowserModule,

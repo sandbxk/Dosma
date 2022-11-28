@@ -1,12 +1,10 @@
 
 <button mat-button class="backButton" (click)="navigateBack()">Back</button>
-<div class="centered">
-
-
+<div class="parentContainer">
 <div class="titleContainer">
   <h2 class="title">{{groceryList.title}}</h2>
   <div class="listActionsContainer">
-    <button [disabled] mat-icon-button class="shareButton"  aria-label="Grocery list menu">
+    <button [disabled]="true" mat-icon-button class="shareButton"  aria-label="Grocery list menu">
       <mat-icon>share</mat-icon>
     </button>
 
@@ -15,7 +13,6 @@
     </button>
   </div>
 </div>
-  <hr class="lineSeparator">
 
 
 
@@ -32,10 +29,7 @@
     <!-- checkbox -->
     <!-- Button MatMenu -->
   </div>
-
-
-
 </div>
-
-
+  <app-item-creator class="testBox">
+  </app-item-creator>
 </div>
