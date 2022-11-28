@@ -40,7 +40,7 @@ public class ItemController : ControllerBase
     
     [HttpDelete]
     [Route("{id}")]
-    public ActionResult<Item> DeleteItem([FromRoute] int id, [FromBody] Item item)
+    public ActionResult DeleteItem([FromRoute] int id, [FromBody] Item item)
     {
         if (id != item.Id)
             throw new ValidationException("List ID does not match ID in URL.");
