@@ -1,25 +1,26 @@
 
-<button mat-button (click)="navigateBack()">Back</button>
+<button mat-button class="backButton" (click)="navigateBack()">Back</button>
 <div class="centered">
 
 
 <div class="titleContainer">
   <h2 class="title">{{groceryList.title}}</h2>
+  <div class="listActionsContainer">
+    <button [disabled] mat-icon-button class="shareButton"  aria-label="Grocery list menu">
+      <mat-icon>share</mat-icon>
+    </button>
 
-  <button [disabled] mat-icon-button class="shareButton"  aria-label="Grocery list menu">
-    <mat-icon>share</mat-icon>
-  </button>
-
-  <button  mat-icon-button class="deleteButton" aria-label="Grocery list menu">
-    <mat-icon>delete</mat-icon>
-  </button>
+    <button  mat-icon-button class="deleteButton" aria-label="Grocery list menu">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
 </div>
   <hr class="lineSeparator">
 
 
 
-<div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-  <div class="example-box" *ngFor="let item of groceryList.items" cdkDrag>
+<div cdkDropList class="itemDnDContainer" (cdkDropListDropped)="drop($event)">
+  <div class="itemBox" *ngFor="let item of groceryList.items" cdkDrag>
     <div style="display: flex">
       <p class="quantityIndicator" *ngIf="item.quantity > 1; else standardQuantity">{{item.quantity}}</p>
       <ng-template #standardQuantity>

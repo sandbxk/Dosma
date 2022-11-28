@@ -14,7 +14,7 @@
     <mat-card (click)="selectList(list)" class="listCard">
       <mat-card-header>
         <div id="cardBtn" class="listCardTitle">
-          <h2>{{list.title | truncate:26 }}</h2>
+          <h2>{{list.title | truncate:19 }}</h2>
           <button (click)="$event.stopPropagation();" mat-icon-button [matMenuTriggerFor]="menu"
                   class="menuButton" #t="matMenuTrigger" [class.opened]="t.menuOpen" aria-label="Grocery list menu">
             <!--Stop Propagation stops the event chain at the button, meaning the (click) event defined for the parent (card) will not be called-->

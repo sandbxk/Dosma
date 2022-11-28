@@ -45,6 +45,30 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
       });
     }
   }
+
+  //TODO:
+  // 1. Add a new item to the list -> ItemCreatorComponent
+  // 2. Edit an item in the list -> ItemEditorComponent
+  // 3. Delete an item from the list and the list itself
+  // 4. Mark an item as purchased -> ItemStatusComponent
+  // 5. Mark an item as skipped -> ItemStatusComponent
+  // 5. Mark all items as purchased -> ItemStatusComponent
+  // 6. Delete all items from the list?
+  // 7. Sync on timer -> SyncService?
+  // 8. Sync on button press -> SyncService?
+
+  //TODO Layout
+  // Change back button location
+  // truncate long titles
+  // truncate long item titles
+  // limit quantity to 2 digits
+  // Make list title static, and have the list be scrollable
+  // Create menu for list options
+  // Create menu for item options
+  // Align item.title and item.quantity
+
+
+
   @HostListener('window:beforeunload', ['$event'])
   canDeactivate(): boolean | Observable<boolean> {
     // insert logic to check if there are pending changes here;
