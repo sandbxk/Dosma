@@ -12,7 +12,7 @@ public static class TokenGenerator
         List<Claim> claims = new()
         {
             new Claim("id", user.Id.ToString()),
-            new Claim("name", user.DisplayName),
+            new Claim("name", user.DisplayName ?? user.Username),
             new Claim("username", user.Username),
         };
 

@@ -6,6 +6,7 @@ using Application.Helpers;
 using AutoMapper;
 using FluentValidation;
 using Application.DTOs;
+using Backend.Application.Helpers;
 
 namespace Backend.Application
 {
@@ -22,7 +23,7 @@ namespace Backend.Application
             * 
             * @return True if the login credentials are valid, false otherwise.
         */
-        public bool ValidateLogin(LoginRequestDTO login, out string result)
+        public bool Login(LoginRequestDTO login, out string result)
         {
             try
             {
@@ -33,7 +34,7 @@ namespace Backend.Application
 
                 User user = FindUser(login.Username); 
 
-                if (HashGenerator.Validate(login.Password ?? "", user.Salt, user.HashedPassword))
+                if (HashGenerator.Validate(login.Password, user.Salt, user.HashedPassword))
                 {
                     result = TokenGenerator.GenerateToken(user, _secret);
                     return true;
@@ -44,6 +45,10 @@ namespace Backend.Application
                 result = "User could not be authenticated";
                 return false;
             }
+            catch (ArgumentOutOfRangeException ae)
+            {
+                throw new InvalidProgramException("JWT Generation error", ae);
+            }
             catch (System.Exception e)
             {
                 result = e.Message;
@@ -51,11 +56,11 @@ namespace Backend.Application
             }
         }
 
-        public bool ValidateRegister(RegisterRequestDTO registration, out string result)
+        public bool Register(RegisterRequestDTO registration, out string result)
         {
             throw new NotImplementedException();
         }
-        
+
         private User FindUser(string username)
         {
             #region DEBUG
@@ -66,23 +71,15 @@ namespace Backend.Application
 
             if (username == "debug")
             {
-                (var salt, var hash) = HashGenerator.Generate("debug");
-
-                return new User
+                return ObjectGenerator.GenerateUser(new RegisterRequestDTO
                 {
                     Username = "debug",
                     DisplayName = "Debug User",
-                    HashedPassword = hash,
-                    Salt = salt
-                };
-            }
-            else
-            {
-                return _userRepository.Find(username);
+                    Password = "debug"
+                });
             }
 
             #endif
-            #pragma warning disable CS0162
             #endregion
 
             return _userRepository.Find(username);
