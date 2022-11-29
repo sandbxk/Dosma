@@ -1,19 +1,14 @@
-
-
-
 using Moq;
-using Application.Interfaces;
 using Application;
-using Backend.Application;
+using Application.Interfaces;
+using Application.Validators;
+using Application.Helpers;
 using Application.DTOs;
 using Infrastructure.Interfaces;
 using Domain;
-using Backend.Application.Helpers;
-using FluentValidation;
 using AutoMapper;
+
 using System.Text;
-using Application.Validators;
-using FluentValidation.Results;
 
 namespace Backend.Tests;
 
@@ -29,8 +24,7 @@ public class AuthenticationTests
         user_repo.Setup(x => x.All()).Returns(db_users);
         user_repo.Setup(x => x.Single(It.IsAny<int>())).Returns((int id) => db_users.FirstOrDefault(x => x.Id == id) ?? throw new Exception("User not found"));
 
-        var mapper = new MapperConfiguration(config => {
-        }).CreateMapper();;
+        var mapper = new MapperConfiguration(config => {}).CreateMapper();;
         
         return new AuthenticationService(user_repo.Object, mapper, new LoginValidator(), new UserValidator(), Encoding.ASCII.GetBytes("This is not a secret"));
     }
@@ -81,23 +75,46 @@ public class AuthenticationTests
         Assert.Equal(expected, actual);
     }
 
-    [Fact]
-    public void RegisterNewUser()
+    [Theory]
+    [InlineData("New user", "user100", "user100", true)]
+    [InlineData("Already Exists", "user1", "user1", false)]
+    [InlineData("Invalid User", "user101", "", false)]        
+    public void ValidateRegister(string dn, string un, string pw, bool expected)
     {
         // Arrange
         IAuthenticationService service = GetMockAuthenticationService(existing_user_database);
 
         var registerData = new RegisterRequestDTO {
-            DisplayName = "John Doe",
-            Username = "user100",
-            Password = "user100",
+            DisplayName = dn,
+            Username = un,
+            Password = pw,
+        };
+
+        // Act
+        bool actual = service.Register(registerData, out string token);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void RegisterUserNoDisplayName()
+    {
+        // Arrange
+        IAuthenticationService service = GetMockAuthenticationService(existing_user_database);
+
+        var registerData = new RegisterRequestDTO {
+            Username = "user102",
+            Password = "user102",
         };
 
         // Act
         bool actual = service.Register(registerData, out _);
 
         // Assert
-        Assert.Equal(true, actual);
-    }
+        Assert.Equal(true, actual); // No display name should be allowed
 
+        // Check that the display name is the same as the username
+        Assert.Equal(registerData.Username, existing_user_database.Find(x => x.Username == registerData.Username)?.DisplayName);
+    }
 }

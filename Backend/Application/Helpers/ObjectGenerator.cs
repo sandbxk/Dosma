@@ -3,7 +3,7 @@ using Application.DTOs;
 using Application.Helpers;
 using Domain;
 
-namespace Backend.Application.Helpers;
+namespace Application.Helpers;
 
 public static class ObjectGenerator
 {

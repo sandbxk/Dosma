@@ -1,7 +1,6 @@
 using Application.DTOs;
 using Application.Interfaces;
 using AutoMapper;
-using Backend.Application;
 using Domain;
 using FluentValidation;
 using Infrastructure.Interfaces;
