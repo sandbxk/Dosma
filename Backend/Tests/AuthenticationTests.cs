@@ -17,16 +17,42 @@ public class AuthenticationTests
     private IAuthenticationService GetMockAuthenticationService(List<User> db_users)
     {
         Mock<IUserRepository> user_repo = new Mock<IUserRepository>();
-        user_repo.Setup(x => x.Find(It.IsAny<string>())).Returns((string username) => db_users.FirstOrDefault(x => x.Username == username) ?? throw new Exception("User not found"));
-        user_repo.Setup(x => x.Create(It.IsAny<User>())).Callback((User user) => db_users.Add(user));
-        user_repo.Setup(x => x.Update(It.IsAny<User>())).Callback((User user) => db_users[db_users.FindIndex(x => x.Username == user.Username)] = user);
-        user_repo.Setup(x => x.Delete(It.IsAny<int>())).Callback((int id) => db_users.RemoveAt(db_users.FindIndex(x => x.Id == id)));
+
+        user_repo.Setup(x => x.Find(It.IsAny<string>())).Returns((string username) => {
+            return db_users.FirstOrDefault(x => x.Username == username) ?? throw new NullReferenceException("User not found");
+        });
+
+        user_repo.Setup(x => x.Create(It.IsAny<User>())).Returns((User user) => {
+            db_users.Add(user);
+            return user;
+        });
+
+        user_repo.Setup(x => x.Update(It.IsAny<User>())).Returns((User user) => {
+            db_users[db_users.FindIndex(x => x.Username == user.Username)] = user;
+            return user;
+        });
+
+        user_repo.Setup(x => x.Delete(It.IsAny<int>())).Returns((int id) => {
+            var user = db_users.FirstOrDefault(x => x.Id == id);
+            if (user == null)
+                return false;
+            db_users.Remove(user);
+            return true;
+        });
+          
         user_repo.Setup(x => x.All()).Returns(db_users);
-        user_repo.Setup(x => x.Single(It.IsAny<int>())).Returns((int id) => db_users.FirstOrDefault(x => x.Id == id) ?? throw new Exception("User not found"));
+        user_repo.Setup(x => x.Single(It.IsAny<int>())).Returns((int id) => db_users.FirstOrDefault(x => x.Id == id) ?? throw new NullReferenceException("User not found"));
 
         var mapper = new MapperConfiguration(config => {}).CreateMapper();;
         
-        return new AuthenticationService(user_repo.Object, mapper, new LoginValidator(), new UserValidator(), Encoding.ASCII.GetBytes("This is not a secret"));
+        return new AuthenticationService(
+            user_repo.Object, 
+            mapper, 
+            new LoginValidator(),
+            new RegisterValidator(), 
+            new UserValidator(), 
+            Encoding.ASCII.GetBytes("This is not a secret")
+        );
     }
     
     List<User> existing_user_database = new List<User>();
@@ -34,17 +60,17 @@ public class AuthenticationTests
     public AuthenticationTests()
     {
        existing_user_database = new List<User>() {
-         ObjectGenerator.GenerateUser(new RegisterRequestDTO {
+         ObjectGenerator.GenerateUser(new RegisterRequest {
             Username = "user1",
             DisplayName = "User 1",
             Password = "user1",
          }),
-         ObjectGenerator.GenerateUser(new RegisterRequestDTO {
+         ObjectGenerator.GenerateUser(new RegisterRequest {
             Username = "user2",
             DisplayName = "user 2",
             Password = "user2",
          }),
-         ObjectGenerator.GenerateUser(new RegisterRequestDTO {
+         ObjectGenerator.GenerateUser(new RegisterRequest {
             Username = "user3",
             DisplayName = "user 3",
             Password = "user2",
@@ -63,7 +89,7 @@ public class AuthenticationTests
         // Arrange
         IAuthenticationService service = GetMockAuthenticationService(existing_user_database);
 
-        var loginData = new LoginRequestDTO {
+        var loginData = new LoginRequest {
             Username = username,
             Password = password,
         };
@@ -84,7 +110,7 @@ public class AuthenticationTests
         // Arrange
         IAuthenticationService service = GetMockAuthenticationService(existing_user_database);
 
-        var registerData = new RegisterRequestDTO {
+        var registerData = new RegisterRequest {
             DisplayName = dn,
             Username = un,
             Password = pw,
@@ -103,7 +129,7 @@ public class AuthenticationTests
         // Arrange
         IAuthenticationService service = GetMockAuthenticationService(existing_user_database);
 
-        var registerData = new RegisterRequestDTO {
+        var registerData = new RegisterRequest {
             Username = "user102",
             Password = "user102",
         };

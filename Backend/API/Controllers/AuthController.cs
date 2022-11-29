@@ -22,7 +22,7 @@ public class AuthController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("login")]
-    public ActionResult Login([FromBody] LoginRequestDTO loginInfo)
+    public ActionResult Login([FromBody] LoginRequest loginInfo)
     {
         if (loginInfo == null)
             return BadRequest("No login information provided.");
@@ -39,7 +39,7 @@ public class AuthController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("register")]
-    public ActionResult Register([FromBody] RegisterRequestDTO registrationInfo)
+    public ActionResult Register([FromBody] RegisterRequest registrationInfo)
     {
         if (registrationInfo == null)
             return BadRequest("No registration information provided.");

@@ -27,24 +27,23 @@ public class UserRepository : IUserRepository
 
     public bool Delete(int id)
     {
-        User? user = _DBContext.UserTable.Find(id);
-        if (user != null)
-        {
-            throw new NullReferenceException("User not found");
-        }
+        User user = _DBContext.UserTable.Find(id) ?? throw new NullReferenceException("User not found");
+
         _DBContext.UserTable.Remove(user);
         int change = _DBContext.SaveChanges();
         
         if (change == 0)
         {
-            throw new NullReferenceException("User not found");
+            // todo: why do we not return false here?
+            throw new InvalidOperationException("User could not be deleted");
         }
+
         return true;
     }
 
     public User Single(long id)
     {
-        return _DBContext.UserTable.Find(id) ?? throw new NullReferenceException("User not found");
+        return _DBContext.UserTable.Find(id) ?? throw new NullReferenceException("User does not exist");
     }
 
     public User Find(string username)
@@ -54,22 +53,18 @@ public class UserRepository : IUserRepository
 
     public User Update(long id, User model)
     {
-        User? user = _DBContext.UserTable.Find(id);
-        if (user != null)
-        {
-            user.Username = model.Username;
-            user.HashedPassword = model.HashedPassword;
-            user.DisplayName = model.DisplayName;
-            user.GroceryLists = model.GroceryLists;
-            _DBContext.SaveChanges();
-            return user;
-        }
-
-        throw new NullReferenceException("User not found");
+        User user = _DBContext.UserTable.Find(id) ?? throw new NullReferenceException("User not found");
+        
+        user.Username = model.Username;
+        user.HashedPassword = model.HashedPassword;
+        user.DisplayName = model.DisplayName;
+        user.GroceryLists = model.GroceryLists;
+        _DBContext.SaveChanges();
+        return user;
     }
 
     public User Update(User model)
     {
-        throw new NotImplementedException();
+        return this.Update(model.Id, model);
     }
 }

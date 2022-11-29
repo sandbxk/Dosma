@@ -10,84 +10,168 @@ namespace Application;
 
 public class AuthenticationService : IAuthenticationService
 {
-    /*
-        * ValidateLogin
-        * 
-        * Validates the login credentials of a user.
-        * 
-        * @param username The username of the user.
-        * @param password The password of the user.
-        * @param result The token of the user if validated, otherwise an error message.
-        * 
-        * @return True if the login credentials are valid, false otherwise.
-    */
-    public bool Login(LoginRequestDTO login, out string result)
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     The method will never throw an exception.
+    ///     <list type="bullet">
+    ///         <item>
+    ///             <term>ERROR</term>
+    ///             <description>Error that may contain sensitive information that shouldn't be sent to the frontend</description>
+    ///         </item>
+    ///         <item>
+    ///             <term>WARNING</term>
+    ///             <description>Safe"" error messages that has a certain user mistake associated, and can therefore be shown to anyone</description>
+    ///         </item>
+    ///     </list>
+    /// </remarks>
+    public bool Login(LoginRequest request, out string token_result)
     {
         try
         {
-            _loginValidator.ValidateAndThrow(login);
-            #pragma warning disable CS8604  // Possible null reference argument.
-                                            // This is not possible because of the validation above.
-            User user = FindUser(login.Username); 
-            if (HashGenerator.Validate(login.Password, user.Salt, user.HashedPassword))
+            _loginValidator.ValidateAndThrow(request);
+
+            var user = FindUser(request.Username); 
+
+            if (user == null)
             {
-                result = TokenGenerator.GenerateToken(user, _secret);
+                token_result = "WARNING: User not found";
+                return false;
+            }
+
+            if (HashGenerator.Validate(request.Password, user.Salt, user.HashedPassword))
+            {
+                token_result = TokenGenerator.GenerateToken(user, _secret);
                 return true;
             }
-            #pragma warning restore CS8604
-            result = "User could not be authenticated";
+
+            token_result = "WARNING: User could not be authenticated";
             return false;
         }
         catch (ArgumentOutOfRangeException ae)
         {
-            throw new InvalidProgramException("JWT Generation error", ae);
+            token_result = "ERROR: JWT Generation error ->" + ae.Message;
+            return false;
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
-            result = e.Message;
+            token_result = "ERROR: " + e.Message;
             return false;
         }
     }
-    public bool Register(RegisterRequestDTO registration, out string result)
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     The method will never throw an exception.
+    ///     <list type="bullet">
+    ///         <item>
+    ///             <term>ERROR</term>
+    ///             <description>Error that may contain sensitive information that shouldn't be sent to the frontend</description>
+    ///         </item>
+    ///         <item>
+    ///             <term>WARNING</term>
+    ///             <description>Safe"" error messages that has a certain user mistake associated, and can therefore be shown to anyone</description>
+    ///         </item>
+    ///     </list>
+    /// </remarks>
+    public bool Register(RegisterRequest request, out string token_result)
     {
-        throw new NotImplementedException();
-    }
-    private User FindUser(string username)
-    {
-        #region DEBUG
-        /*
-            DEBUG is removed during RELEASE compilation, so this code will not be included in the release build.
-        */
-        #if DEBUG
-        if (username == "debug")
+        try
         {
-            return ObjectGenerator.GenerateUser(new RegisterRequestDTO
+            _registerValidator.ValidateAndThrow(request);
+
+            var user = FindUser(request.Username);
+
+            if (user != null)
             {
-                Username = "debug",
-                DisplayName = "Debug User",
-                Password = "debug"
-            });
+                token_result = "WARNING: User already exists";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(request.DisplayName))
+            {
+                request.DisplayName = request.Username;
+            }
+
+            user = _userRepository.Create(ObjectGenerator.GenerateUser(request));
+
+            token_result = TokenGenerator.GenerateToken(user, _secret);
+            return true;
         }
-        #endif
-        #endregion
-        return _userRepository.Find(username);
+        catch (ArgumentOutOfRangeException ae)
+        {
+            token_result = "ERROR: JWT Generation error ->" + ae.Message;
+            return false;
+        }
+        catch (Exception e)
+        {
+            token_result = "ERROR: " + e.Message;
+            return false;
+        }
     }
+
+    /// <summary>
+    ///     Finds a user by username.
+    /// </summary>
+    /// <param name="username">The username.</param>
+    /// <returns>The user or null if not found.</returns>
+    /// <remarks>
+    ///     This method is used by 
+    ///     <list>
+    ///         <item><see cref="Login"/></item>
+    ///         <item><see cref="Register"/></item>
+    ///     </list>
+    /// </remarks>
+    /// <completionlist cref="(User, ObjectGenerator, AuthenticationService)"/>
+    /// <author>
+    ///     <name>Mads Mandahl-Barth</name>
+    /// </author>
+    private User? FindUser(string username)
+    {
+        try
+        {
+            /*
+                'Debug' is removed during RELEASE compilation, so this code will not be included in the release build.
+            */
+            #if Debug
+            if (username == "debug")
+            {
+                return ObjectGenerator.GenerateUser(new RegisterRequestDTO
+                {
+                    Username = "debug",
+                    DisplayName = "Debug User",
+                    Password = "debug"
+                });
+            }
+            #else
+            return _userRepository.Find(username);
+            #endif
+        }
+        catch
+        {
+            return null;
+        }
+
+    }
+
     public AuthenticationService(
         IUserRepository userRepository, 
         IMapper mapper, 
-        IValidator<LoginRequestDTO> loginValidator, 
+        IValidator<LoginRequest> loginValidator, 
+        IValidator<RegisterRequest> registerValidator, 
         IValidator<User> userValidator, 
         byte[] secret)
     {
         _userRepository = userRepository;
         _mapper = mapper;
         _loginValidator = loginValidator;
+        _registerValidator = registerValidator;
         _validator = userValidator;
         _secret = secret;
     }
     private readonly byte[] _secret;
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
-    private readonly IValidator<LoginRequestDTO> _loginValidator;
+    private readonly IValidator<LoginRequest> _loginValidator;
+    private readonly IValidator<RegisterRequest> _registerValidator;
     private readonly IValidator<User> _validator;
 }

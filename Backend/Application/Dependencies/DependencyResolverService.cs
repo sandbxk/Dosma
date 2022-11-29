@@ -29,7 +29,8 @@ public class DependencyResolverService
         services.AddScoped<IAuthenticationService, AuthenticationService>(x => new AuthenticationService(
             x.GetService<IUserRepository>() ?? throw new Exception("User repository not found"),
             x.GetService<IMapper>() ?? throw new Exception("Mapper not found"),
-            x.GetService<IValidator<LoginRequestDTO>>() ?? throw new Exception("Login validator not found"),
+            x.GetService<IValidator<LoginRequest>>() ?? throw new Exception("Login validator not found"),
+            x.GetService<IValidator<RegisterRequest>>() ?? throw new Exception("Register validator not found"),
             x.GetService<IValidator<User>>() ?? throw new Exception("User validator not found"),
             serverSecret
         ));
