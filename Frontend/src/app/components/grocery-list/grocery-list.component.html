@@ -1,77 +1,63 @@
 
 <div class="parentContainer">
-  <button mat-button class="backButton" (click)="navigateBack()">Back</button>
+
+
   <div class="titleContainer">
-  <h2 class="title">
-    {{groceryList.title | truncate:64}}
-  </h2>
 
-  <div class="listActionsContainer">
-
-
-    <button [disabled]="true" mat-icon-button class="listActionBtn"  aria-label="Grocery list menu">
-      <mat-icon>share</mat-icon>
+    <button mat-icon-button class="backButton" (click)="navigateBack()">
+      <mat-icon class="back-icon"> arrow_back </mat-icon>
     </button>
 
-    <button mat-icon-button [matMenuTriggerFor]="listMenu"
-            class="listActionBtn"
-            #t="matMenuTrigger" [class.opened]="t.menuOpen" aria-label="Item menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #listMenu="matMenu">
-      <button mat-menu-item (click)="editListName()">
-        <mat-icon>edit</mat-icon>
-        <span>Edit name</span>
+    <h2 class="title">
+      {{groceryList.title}}
+    </h2>
+
+    <div class="listActionsContainer">
+
+      <button [disabled]="true" mat-icon-button class="listActionBtn"  aria-label="Grocery list menu">
+        <mat-icon>share</mat-icon>
       </button>
-      <button mat-menu-item (click)="deleteList()">
-        <mat-icon>delete</mat-icon>
-        <span class="deleteLbl">Delete</span>
+
+      <button mat-icon-button [matMenuTriggerFor]="listMenu"
+              class="listActionBtn"
+              #t="matMenuTrigger" [class.opened]="t.menuOpen" aria-label="Item menu">
+        <mat-icon>more_vert</mat-icon>
       </button>
-    </mat-menu>
 
-  </div>
-</div>
+      <mat-menu #listMenu="matMenu">
+        <button mat-menu-item (click)="editListName()">
+          <mat-icon>edit</mat-icon>
+          <span>Edit name</span>
+        </button>
+        <button mat-menu-item (click)="deleteList()">
+          <mat-icon>delete</mat-icon>
+          <span class="deleteLbl">Delete</span>
+        </button>
+      </mat-menu>
 
-
-
-<div cdkDropList class="itemDnDContainer" (cdkDropListDropped)="drop($event)">
-  <div class="itemBox" *ngFor="let item of groceryList.items" cdkDrag>
-    <div style="display: inline-flex; align-items: center">
-      <p class="quantityIndicator" *ngIf="item.quantity > 1; else standardQuantity">{{item.quantity}}</p>
-      <ng-template #standardQuantity>
-        <p class="quantityIndicatorSingle" *ngIf="item.quantity == 1;"></p>
-      </ng-template>
-      <mat-label>{{item.title | truncate: 60}}</mat-label>
-      <!-- Category -->
     </div>
-
-    <!-- MockCheckbox -->
-    <mat-checkbox class="mockCheckbox"> </mat-checkbox>
-
-<!--
-
-    <button (click)="$event.stopPropagation();" mat-icon-button [matMenuTriggerFor]="menu"
-             class="menuButton" #t="matMenuTrigger" [class.opened]="t.menuOpen" aria-label="Item menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="editItem(item)">
-        <mat-icon>edit</mat-icon>
-        <span>Edit name</span>
-      </button>
-      <button mat-menu-item (click)="duplicateItem(item)">
-        <mat-icon>content_copy</mat-icon>
-        <span>Duplicate</span>
-      </button>
-      <button mat-menu-item (click)="deleteItem(item)">
-        <mat-icon>delete</mat-icon>
-        <span class="deleteLbl">Delete</span>
-      </button>
-    </mat-menu>
-    -->
-
   </div>
-</div>
+
+
+
+  <div cdkDropList class="itemDnDContainer" (cdkDropListDropped)="drop($event)">
+    <div class="itemBox" *ngFor="let item of groceryList.items" cdkDrag>
+      <div style="display: inline-flex; align-items: center">
+        <p class="quantityIndicator" *ngIf="item.quantity > 1; else standardQuantity">{{item.quantity}}</p>
+        <ng-template #standardQuantity>
+          <p class="quantityIndicatorSingle" *ngIf="item.quantity == 1;"></p>
+        </ng-template>
+        <mat-label>{{item.title | truncate: 60}}</mat-label>
+        <!-- Category -->
+      </div>
+
+      <!-- MockCheckbox -->
+      <mat-checkbox class="mockCheckbox"> </mat-checkbox>
+    </div>
+  </div>
+
+
   <app-item-creator class="testBox">
   </app-item-creator>
+
 </div>

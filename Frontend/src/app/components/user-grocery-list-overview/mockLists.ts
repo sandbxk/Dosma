@@ -132,7 +132,54 @@ export const MockLists: GroceryList[] =
             status: 1
           }
         ]
-      }
-    ];
+      },
+      {
+        id: 3,
+        title: "Test List 3",
+        items: [
+          {
+            id: 5,
+            title: "Test Item 5",
+            quantity: 5,
+            groceryListId: 3,
+            status: 1
+},
+          {
+            id: 6,
+            title: "Test Item 6",
+            quantity: 6,
+            groceryListId: 3,
+            status: 1
+
+          }]
+      },
+      {
+        id: 4,
+        title: "Test List 4",
+        items: [
+          {
+            id: 7,
+            title: "Test Item 7",
+            quantity: 7,
+            groceryListId: 4,
+            status: 1
+          }]
+
+      },
+    {
+      id: 4,
+      title: "Test List 4",
+      items: [
+        {
+          id: 7,
+          title: "Test Item 7",
+          quantity: 7,
+          groceryListId: 4,
+          status: 1
+        }]
+
+    }
+
+  ];
 
 

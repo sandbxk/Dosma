@@ -67,7 +67,6 @@ export class UserGroceryListOverviewComponent implements OnInit {
 
   }
 
-//TODO redo colours, routing, menu styling
 
   newGroceryList() {
     let dialogueRef = this.dialog.open(CreateListDialogComponent);

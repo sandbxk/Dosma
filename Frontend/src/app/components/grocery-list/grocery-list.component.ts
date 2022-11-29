@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {GroceryList} from "../../interfaces/GroceryList";
@@ -56,16 +56,23 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
   // // Limit quantity to 2 digits
   // 2. Edit an item in the list -> ItemComponent
   // 3. Delete an item from the list
-  //        and the list itself
   // 4. Duplicate an item in the list
   //      Change mat menu for items to selected item options
+  //   ListMenu Options
+  //      Delete all items from the list?
+  //       Mark all items as purchased
+  //
+  // https://m2.material.io/components/buttons-floating-action-button
+  // Floating action button (as toggle for panel?) 
+  //
+  //
 
   //TODO: Item status
   // 4. Mark an item as purchased -> ItemStatusComponent
   // 5. Mark an item as skipped -> ItemStatusComponent
   // 5. Mark all items as purchased -> ItemStatusComponent
-  // 6. Delete all items from the list?
   //          ListMenu Options
+  // On check, opacity 0.7
 
 
   //TODO: Sync
@@ -74,8 +81,6 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
 
   //TODO Layout
   // Create menu for item options
-  // Fix back button disappearing on on resize
-  // Fix list title wrapping
 
 
 
@@ -141,4 +146,6 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
         }
       }).unsubscribe();
   }
+
+
 }

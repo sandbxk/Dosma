@@ -2,10 +2,11 @@
 @import "src/assets/themeVariables.scss";
 
 $width: 50em;
+$actionMenuHeight: 100px;
 
 .itemDnDContainer {
   width: $width;
-  max-width: 100%;
+  max-width: 95%;
   border: none;
   min-height: 200px;
   align-content: center;
@@ -18,8 +19,8 @@ $width: 50em;
   left: 50%;
   transform: translateX(-50%);
   height: available;
-  z-index: 1;
-  padding-bottom: 100px;
+  z-index: 2;
+  padding-bottom: $actionMenuHeight + 100px;
 }
 
 /*
@@ -74,11 +75,6 @@ Menu button on list item
   font-weight: 500;
 }
 
-.itemBox:hover > button
-{
-  opacity: 1;
-}
-
 .opened
 {
   opacity: 1;
@@ -111,9 +107,11 @@ Quantity box for indicating the quantity of an item
 .quantityIndicator{
   background: map.get($accent-colors, "main");
   color: $light-text;
-  border-radius: 10%;
+  border-radius: 3px;
   width: 23px;
   height: 23px;
+  min-width: 23px;
+  min-height: 23px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,13 +124,14 @@ Quantity box for indicating the quantity of an item
 
 .quantityIndicatorSingle{
   @extend .quantityIndicator;
-  border-radius: 50%;
+  border-radius: 30px;
   width: 23px;
   height: 23px;
 
 }
 
 .mockCheckbox {
+  padding-left: 20px;
   right: 15px;
   position: absolute;
 }
@@ -152,36 +151,42 @@ Quantity box for indicating the quantity of an item
   display: inline-block;
   position: fixed;
   width: $width;
-  max-width: 100%;
+  max-width: 95%;
   height: available;
-  padding-top: 100px;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 101;
-  padding-bottom: 2px;
+  z-index: 5;
   border-bottom: 5px solid map.get($primary-colors, "main");
   background-color: $light-background;
+  padding: 100px 0 2px;
+  margin-right: 0;
+  margin-left: 0;
+  white-space: initial;
+  text-overflow: ellipsis;
 }
 
 .title {
   position: absolute;
-  font-family: Roboto, serif;
-  margin-left: 10px;
-  padding: 0;
-  font-size: 1.5em;
   float: left;
+  left: 45px;
+  font-size: 1.5em;
+  font-family: Roboto, serif;
   translate: 0 7px;
-}
+  padding: 0;
+  display: inline;
 
+  max-width: 80%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 .listActionsContainer {
   display: flex;
   align-items: center;
   float: right;
   padding-right: 5px;
+  translate: 0 3px;
 }
-
 
 .listActionBtn {
   position: relative;
@@ -192,11 +197,11 @@ Quantity box for indicating the quantity of an item
 }
 
 .listActionBtn:hover {
-  color: map.get($primary-colors, "main");
+  color: map.get($primary-colors, "darker");
 }
 
 .listActionBtn:active {
-  color: map.get($primary-colors, "darker");
+  color: map.get($primary-colors, "main");
 }
 
 .listActionBtn:disabled {
@@ -205,19 +210,26 @@ Quantity box for indicating the quantity of an item
 
 .backButton {
   position: fixed;
-  top: 110px;
-  left: 50%;
-  transform: translate(-500px, 0);
-  margin: 0;
-  padding: 0;
-  background-color: map.get($primary-colors, "main");
+  background-color: transparent;
+  z-index: 110;
+  translate: 0 4px;
 }
 
-.backButton:hover {
+.back-icon {
+  height: 24px;
+  width: 24px;
+  font-size: 24px !important;
+  color: $light-primary-text;
+  background-color: map.get($primary-colors, "main");
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.back-icon:hover {
   background-color: map.get($primary-colors, "darker");
 }
 
-.backButton:active {
+.back-icon:active  {
   background-color: map.get($primary-colors, "lighter");
 }
 
@@ -246,18 +258,14 @@ Quantity box for indicating the quantity of an item
 }
 
 .testBox {
-  background-color: map.get($accent-colors, "lighter");
   width: $width;
-  height: 150px;
-  position: absolute;
+  max-width: 95%;
+  position: fixed;
   bottom: 0;
-  left: 50%;
-  transform: translate(-50%, 0);
   z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5em;
-  font-weight: 500;
-  color: $dark-primary-text;
+  margin: 0;
+  height: $actionMenuHeight;
+  background-color: map.get($accent-colors, "lighter");
+  border-top: 5px solid map.get($primary-colors, "main");
 }
+
