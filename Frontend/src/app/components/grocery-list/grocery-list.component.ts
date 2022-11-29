@@ -6,6 +6,10 @@ import {DataService} from "../../../services/data.service";
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 import {ComponentCanDeactivate} from "../../../services/PendingChanges.guard";
 import {Observable} from "rxjs";
+import {Item} from "../../interfaces/Item";
+import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
 
 @Component({
   selector: 'app-grocery-list',
@@ -26,7 +30,8 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
     private currentRoute: ActivatedRoute,
     private router: Router,
     private dataService: DataService,
-    private httpService: HttpGroceryListService
+    private httpService: HttpGroceryListService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -48,24 +53,29 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
 
   //TODO:
   // 1. Add a new item to the list -> ItemCreatorComponent
-  // 2. Edit an item in the list -> ItemEditorComponent
-  // 3. Delete an item from the list and the list itself
+  // // Limit quantity to 2 digits
+  // 2. Edit an item in the list -> ItemComponent
+  // 3. Delete an item from the list
+  //        and the list itself
+  // 4. Duplicate an item in the list
+  //      Change mat menu for items to selected item options
+
+  //TODO: Item status
   // 4. Mark an item as purchased -> ItemStatusComponent
   // 5. Mark an item as skipped -> ItemStatusComponent
   // 5. Mark all items as purchased -> ItemStatusComponent
   // 6. Delete all items from the list?
+  //          ListMenu Options
+
+
+  //TODO: Sync
   // 7. Sync on timer -> SyncService?
   // 8. Sync on button press -> SyncService?
 
   //TODO Layout
-  // Change back button location
-  // truncate long titles
-  // truncate long item titles
-  // limit quantity to 2 digits
-  // Make list title static, and have the list be scrollable
-  // Create menu for list options
   // Create menu for item options
-  // Align item.title and item.quantity
+  // Fix back button disappearing on on resize
+  // Fix list title wrapping
 
 
 
@@ -84,5 +94,51 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
 
   navigateBack() {
     this.router.navigate(['/dashboard']);
+  }
+
+  deleteList() {
+    let dialogueRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        title: 'Delete Grocery List',
+        message: "Are you sure you want to delete this grocery list?",
+      }
+    });
+
+    dialogueRef.afterClosed().subscribe(userSaidYes => {
+      if (userSaidYes) {
+        this.httpService.deleteList(this.groceryList).then(() => {
+          this.navigateBack();
+        })
+          .catch(err => {
+            console.error(err);
+          });
+      }
+    });
+  }
+
+  editItem(item: Item) {
+
+  }
+
+  duplicateItem(item: Item) {
+
+  }
+
+  deleteItem(item: Item) {
+
+  }
+
+  editListName() {
+      let dialogueRef = this.dialog.open(EditListDialogComponent, {
+        data: {
+          groceryList: this.groceryList
+        }
+      });
+
+      dialogueRef.afterClosed().subscribe(async editedList => {
+        if (editedList !== null) {
+          this.groceryList.title = editedList.title;
+        }
+      }).unsubscribe();
   }
 }

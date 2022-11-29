@@ -4,11 +4,11 @@ export const MockLists: GroceryList[] =
   [
       {
         id: 1,
-        title: "Test List 1 with a very very very veryveryvery very very long title",
+        title: "Test List 1 with a very very very veryveryvery very very long titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
         items: [
           {
             id: 1,
-            title: "Test Item 1",
+            title: "Test Item 1a very very very veryveryvery very very long titl",
             quantity: 1,
             groceryListId: 1,
             status: 1

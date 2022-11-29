@@ -50,7 +50,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
   groceryLists: GroceryList[] = [];
 
   constructor(
-    private dialogue: MatDialog,
+    private dialog: MatDialog,
     private httpService: HttpGroceryListService,
     private router: Router,
     private dataService: DataService
@@ -70,7 +70,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
 //TODO redo colours, routing, menu styling
 
   newGroceryList() {
-    let dialogueRef = this.dialogue.open(CreateListDialogComponent);
+    let dialogueRef = this.dialog.open(CreateListDialogComponent);
 
     dialogueRef.afterClosed().subscribe(async result => {
       if (result !== undefined && result !== null) {
@@ -82,7 +82,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
         const createdList = await this.httpService.createList(dto);
         this.groceryLists.splice(0, 0, createdList);
       }
-    });
+    }).unsubscribe();
 
   }
 
@@ -92,7 +92,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
   }
 
   editList(list: GroceryList) {
-    let dialogueRef = this.dialogue.open(EditListDialogComponent, {
+    let dialogueRef = this.dialog.open(EditListDialogComponent, {
       data: {
         groceryList: list
       }
@@ -105,11 +105,11 @@ export class UserGroceryListOverviewComponent implements OnInit {
         let index = this.groceryLists.findIndex(x => x.id === patchedList.id);
         this.groceryLists[index] = patchedList;
       }
-    });
+    }).unsubscribe();
   }
 
   deleteList(list: GroceryList) {
-    let dialogueRef = this.dialogue.open(ConfirmationDialogComponent, {
+    let dialogueRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Delete Grocery List',
         message: "Are you sure you want to delete this grocery list?",
@@ -125,7 +125,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
           console.error(err);
         });
       }
-    });
+    }).unsubscribe();
   }
 
 

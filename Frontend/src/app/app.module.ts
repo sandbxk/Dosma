@@ -24,6 +24,7 @@ import { EditListDialogComponent } from './dialogs/edit-list-dialog/edit-list-di
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {PendingChangesGuard} from "../services/PendingChanges.guard";
 import { ItemCreatorComponent } from './components/item-creator/item-creator.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { ItemCreatorComponent } from './components/item-creator/item-creator.com
         MatInputModule,
         ReactiveFormsModule,
         DragDropModule,
+        MatCheckboxModule,
     ],
   providers: [MatSnackBar, PendingChangesGuard],
   bootstrap: [AppComponent]
