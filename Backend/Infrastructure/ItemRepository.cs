@@ -54,7 +54,12 @@ public class ItemRepository : IRepository<Item>
 
     public Item Update(Item model)
     {
-        _dbContext.ItemTable.Update(model);
+        var groceryList = _dbContext.GroceryListsTable
+            .Include(l => l.Items).ToList()
+            .Single(l => l.Id == model.GroceryListId) ?? throw new InvalidOperationException();
+
+        groceryList.Items.Find(i => i.Id == model.Id);
+        
         _dbContext.SaveChanges();
         return model;
     }

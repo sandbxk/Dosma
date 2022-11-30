@@ -36,12 +36,8 @@ public class ItemController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("{id}")]
-    public ActionResult<Item> UpdateItem([FromRoute] int id, [FromBody] Item item)
+    public ActionResult<Item> UpdateItem([FromBody] Item item)
     {
-        if (id != item.Id)
-            throw new ValidationException("List ID does not match ID in URL.");
-        
         try
         {
             var result = _itemService.UpdateItem(item);
