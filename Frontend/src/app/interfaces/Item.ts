@@ -3,7 +3,7 @@ export interface Item {
   title: string;
   quantity: number;
   groceryListId: number;
-  //TBA status: number;
+  status: number;
   //TBA category: string;
 
 }

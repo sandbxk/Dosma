@@ -4,6 +4,7 @@ import {environment} from "../environments/environment";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {catchError} from "rxjs";
 import {GroceryList} from "../app/interfaces/GroceryList";
+import {MockLists} from "../app/components/user-grocery-list-overview/mockLists";
 
 export const axiosInstance =
    axios.create({
@@ -25,9 +26,6 @@ export class HttpGroceryListService {
   }
 
   constructor(private matSnackbar: MatSnackBar) {
-    //axiosInstance.defaults.headers.common['Access-Control-Allow-Origin'] = `*`;
-    //axiosInstance.defaults.headers.post['Content-Type'] = `application/json`;
-
     axiosInstance.interceptors.response.use(
       response => {
         if(response.status==201) {
@@ -73,9 +71,12 @@ export class HttpGroceryListService {
   }
 
   async deleteList(groceryList: GroceryList) {
-    console.log(groceryList);
     const httpsResult = await axiosInstance.delete(`GroceryList/${groceryList.id}`, { data: groceryList });
     return httpsResult.data;
   }
 
+  async getListById(routeId: number) {
+    //TODO
+    return MockLists[0];
+  }
 }
