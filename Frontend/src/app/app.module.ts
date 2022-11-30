@@ -9,7 +9,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import { CreateListDialogComponent } from './dialogs/create-list-dialog/create-list-dialog.component';
 import { UserGroceryListOverviewComponent } from './components/user-grocery-list-overview/user-grocery-list-overview.component';
 import {MatDialogModule} from "@angular/material/dialog";
-import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
@@ -43,7 +42,6 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
         AppRoutingModule,
         BrowserAnimationsModule,
         MatDialogModule,
-        FlexLayoutModule,
         MatCardModule,
         MatButtonModule,
         MatIconModule,
