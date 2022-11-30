@@ -26,6 +26,11 @@ import { ItemCreatorComponent } from "./components/item-creator/item-creator.com
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { ContactUsComponent } from './components/contact-us/contact-us.component';
+import { AboutUsComponent } from './components/about-us/about-us.component';
+import { EditorProfileComponent } from './components/editor-profile/editor-profile.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +42,11 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     ConfirmationDialogComponent,
     EditListDialogComponent,
     ItemCreatorComponent,
+    LoginComponent,
+    RegisterComponent,
+    ContactUsComponent,
+    AboutUsComponent,
+    EditorProfileComponent,
   ],
   imports: [
     BrowserModule,
