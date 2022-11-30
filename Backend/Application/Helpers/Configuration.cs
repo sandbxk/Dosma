@@ -14,7 +14,7 @@ public static class Configuration
     /// <author>
     ///     <name>Mads Mandahl-Barth</name>
     /// </author>
-    public static bool isDebug {
+    public static bool IsDebug {
         get {
             #if DEBUG
                 return true;
@@ -33,7 +33,7 @@ public static class Configuration
     /// <author>
     ///     <name>Mads Mandahl-Barth</name>
     /// </author>
-    public static bool isRelease {
+    public static bool IsRelease {
         get {
             #if RELEASE
                 return true;

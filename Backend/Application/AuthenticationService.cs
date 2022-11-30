@@ -129,7 +129,7 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            if (Configuration.isDebug && username == "debug")
+            if (Configuration.IsDebug && username == "debug")
             {
                 return ObjectGenerator.GenerateUser(new RegisterRequest
                 {
