@@ -41,7 +41,7 @@ public class ItemService : IItemService
         return _itemRepository.Delete(item.Id);
     }
 
-    public Item UpdateItemInList(Item item)
+    public Item UpdateItem(Item item)
     {
         throw new NotImplementedException();
     }

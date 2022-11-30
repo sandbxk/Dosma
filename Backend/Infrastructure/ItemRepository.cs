@@ -54,11 +54,8 @@ public class ItemRepository : IRepository<Item>
 
     public Item Update(Item model)
     {
-        throw new NotImplementedException();
-    }
-
-    public Item Update(long id, Item model)
-    {
-        throw new NotImplementedException();
+        _dbContext.ItemTable.Update(model);
+        _dbContext.SaveChanges();
+        return model;
     }
 }
