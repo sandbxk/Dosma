@@ -22,12 +22,12 @@ public class AuthController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("login")]
-    public ActionResult Login([FromBody] LoginRequestDTO loginInfo)
+    public ActionResult Login([FromBody] LoginRequest loginInfo)
     {
         if (loginInfo == null)
             return BadRequest("No login information provided.");
 
-        if (_authenticationService.ValidateLogin(loginInfo, out string result))
+        if (_authenticationService.Login(loginInfo, out string result))
         {
             return Ok(new TokenResponseDTO { Token = result });
         }
@@ -39,12 +39,12 @@ public class AuthController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPost("register")]
-    public ActionResult Register([FromBody] RegisterRequestDTO registrationInfo)
+    public ActionResult Register([FromBody] RegisterRequest registrationInfo)
     {
         if (registrationInfo == null)
             return BadRequest("No registration information provided.");
 
-        if (_authenticationService.ValidateRegister(registrationInfo, out string result))
+        if (_authenticationService.Register(registrationInfo, out string result))
         {
             return Ok(new TokenResponseDTO { Token = result });
         }
