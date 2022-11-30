@@ -12,18 +12,42 @@ on:
 
 # setup
 jobs:
-  build:
+  dotnet-restore:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
+
+      - name: Cache nuget
+        id: nuget-cache
+        uses: actions/cache@v3
+        with: 
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6
-      - name: Install dependencies
+
+      - name: restore dependencies
+        if: jobs.dotnet-restore.steps.nuget-cache.outputs.cache-hit != 'true'
         run: dotnet restore Backend/
+
+  dotnet-build-test:
+    runs-on: ubuntu-latest
+    needs: [dotnet-restore]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6
+
       - name: Build
         run: dotnet build Backend/ --no-restore
+
       - name: Test
         run: dotnet test Backend/ --no-build
-    
