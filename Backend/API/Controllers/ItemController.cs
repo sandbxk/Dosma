@@ -18,7 +18,7 @@ public class ItemController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<Item> CreateItem(ItemDTO item)
+    public ActionResult<Item> CreateItem([FromBody] ItemDTO item)
     {
         try
         {

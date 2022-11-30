@@ -20,7 +20,10 @@ public class ItemRepository : IRepository<Item>
 
     public Item Create(Item t)
     {
-        GroceryList groceryList = _dbContext.GroceryListsTable.Include(l => l.Items).ToList().Find(l => l.Id == t.GroceryListId) ?? throw new InvalidOperationException();
+        GroceryList groceryList = _dbContext.GroceryListsTable
+            .Include(l => l.Items).ToList()
+            .Find(l => l.Id == t.GroceryListId) ?? throw new InvalidOperationException();
+
         groceryList.Items.Add(t);
         _dbContext.SaveChanges();
         return t;

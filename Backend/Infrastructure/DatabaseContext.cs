@@ -57,6 +57,15 @@ public class DatabaseContext : DbContext
             .IsRequired(true)
             .HasMaxLength(50);
 
+        modelBuilder.Entity<Item>()
+            .Property(i => i.Status)
+            .HasConversion(c => c.ToString(), c => (ListItemStatus)Enum.Parse(typeof(ListItemStatus), c));
+        
+        modelBuilder.Entity<Item>()
+            .Property(i => i.Category)
+            .HasConversion(c => c.ToString(), c => (ListItemCategory)Enum.Parse(typeof(ListItemCategory), c));
+    
+
         /**
          * One-To-Many Relationship
          */
