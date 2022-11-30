@@ -3,8 +3,11 @@
         "https://json.schemastore.org/github-action.json": "untitled:Untitled-1"
     },
     "cSpell.words": [
+        "completionlist",
+        "cref",
         "Dosma",
-        "HMACSHA"
+        "HMACSHA",
+        "Mandahl"
     ],
     "material-icon-theme.activeIconPack": "angular_ngrx"
 }
