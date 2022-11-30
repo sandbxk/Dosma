@@ -22,8 +22,11 @@ import {MatInputModule} from "@angular/material/input";
 import { EditListDialogComponent } from './dialogs/edit-list-dialog/edit-list-dialog.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {PendingChangesGuard} from "../services/PendingChanges.guard";
-import { ItemCreatorComponent } from './components/item-creator/item-creator.component';
+import { ItemActionsComponent } from './components/item-actions/item-actions.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatExpansionModule} from "@angular/material/expansion";
+import { NewItemComponent } from './components/new-item/new-item.component';
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 
 @NgModule({
@@ -35,7 +38,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     TruncatePipe,
     ConfirmationDialogComponent,
     EditListDialogComponent,
-    ItemCreatorComponent
+    ItemActionsComponent,
+    NewItemComponent
   ],
     imports: [
         BrowserModule,
@@ -54,6 +58,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
         ReactiveFormsModule,
         DragDropModule,
         MatCheckboxModule,
+        MatExpansionModule,
+        MatAutocompleteModule,
     ],
   providers: [MatSnackBar, PendingChangesGuard],
   bootstrap: [AppComponent]

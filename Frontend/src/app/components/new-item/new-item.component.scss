@@ -1,0 +1,38 @@
+@use "sass:map";
+@import "src/assets/themeVariables.scss";
+
+.quantityInput{
+  font-size: 1em;
+  font-weight: 500;
+  max-width: 80px;
+}
+
+
+.newItemContainer{
+  background-color: darken($light-background, 5%);
+  border-radius: 15px;
+  padding: 10px;
+  margin-top: 10px;
+  display: flex;
+}
+
+
+.titleInput {
+
+}
+
+.categoryInput {
+
+}
+
+.addButton {
+  float: right;
+  max-height: 32px;
+  bottom: 0;
+}
+
+.cancelButton {
+  bottom: 0;
+  float: right;
+  max-height: 32px;
+}

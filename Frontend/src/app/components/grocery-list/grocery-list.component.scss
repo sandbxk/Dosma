@@ -40,6 +40,7 @@ Item box
   cursor: grabbing; //Should be move per convention, but looks bad
   background: $light-background;
   font-size: 14px;
+  min-height: 50px;
 }
 
 .itemBox:hover {
@@ -173,6 +174,23 @@ Quantity box for indicating the quantity of an item
   translate: 0 7px;
   padding: 0;
   display: inline;
+  margin-bottom: 30px;
+
+
+  max-width: 80%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.category {
+  position: absolute;
+  right: 45px;
+  font-size: 1em;
+  font-family: Roboto, serif;
+  padding: 3px;
+  display: inline;
+  background-color: map.get($accent-colors, "lighter");
 
   max-width: 80%;
   overflow: hidden;

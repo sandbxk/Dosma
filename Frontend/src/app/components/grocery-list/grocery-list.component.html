@@ -12,6 +12,7 @@
       {{groceryList.title}}
     </h2>
 
+
     <div class="listActionsContainer">
 
       <button [disabled]="true" mat-icon-button class="listActionBtn"  aria-label="Grocery list menu">
@@ -48,16 +49,21 @@
           <p class="quantityIndicatorSingle" *ngIf="item.quantity == 1;"></p>
         </ng-template>
         <mat-label>{{item.title | truncate: 60}}</mat-label>
-        <!-- Category -->
+        <mat-label class="category" *ngIf="item.category">
+          <span>  {{item.category}} </span>
+        </mat-label>
+
       </div>
 
       <!-- MockCheckbox -->
       <mat-checkbox class="mockCheckbox"> </mat-checkbox>
     </div>
+
+    <app-new-item> </app-new-item>
   </div>
 
 
-  <app-item-creator class="testBox">
-  </app-item-creator>
+  <app-item-actions class="testBox">
+  </app-item-actions>
 
 </div>

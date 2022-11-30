@@ -1,0 +1,47 @@
+<div class="newItemContainer" cdkDrag cdkDragDisabled>
+
+  <mat-label>Add new item</mat-label>
+
+  <form style="display: block;" [formGroup]="formControlGroup">
+
+    <mat-form-field color="accent">
+      <mat-label class="quantityInput">Quantity</mat-label>
+      <input matInput type="number" placeholder="Ex. 3" formControlName="quantity" min="1" max="99">
+      <mat-error *ngIf="quantity > 99 || quantity < 1 ">Quantity must be between 1 and 99</mat-error>
+    </mat-form-field>
+
+    <mat-form-field color="accent">
+      <mat-label class="titleInput">Title</mat-label>
+      <input matInput
+             type="text"
+             [ngModel]="title"
+             placeholder="Ex. Apples"
+             formControlName="title"
+             required>
+
+      <mat-error *ngIf="title.length < 1">Title must be less than a one character</mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field color="accent">
+      <mat-label class="categoryInput">Category</mat-label>
+      <input matInput
+             type="text"
+             [ngModel]="category"
+             placeholder="Ex. Fruit"
+             formControlName="category"
+             required
+             [matAutocomplete]="auto">
+      <mat-error *ngIf="!categories.includes(category)">Not a valid category</mat-error>
+    </mat-form-field>
+
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let categoryOpt of categories" [value]="categoryOpt">
+        {{categoryOpt}}
+      </mat-option>
+    </mat-autocomplete>
+  </form>
+
+  <button mat-raised-button color="primary" class="addButton" (click)="addItem()">Add</button>
+  <button mat-raised-button color="accent" class="cancelButton" (click)="cancel()">Cancel</button>
+</div>

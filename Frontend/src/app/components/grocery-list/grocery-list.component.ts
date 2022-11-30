@@ -24,6 +24,8 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
     items: []
   };
 
+  categories: string[] = ['Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
+
   routeId: any = {};
 
   constructor(
@@ -52,7 +54,7 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
   }
 
   //TODO:
-  // 1. Add a new item to the list -> ItemCreatorComponent
+  // 1. Add a new item to the list -> ItemActionsComponent
   // // Limit quantity to 2 digits
   // 2. Edit an item in the list -> ItemComponent
   // 3. Delete an item from the list
@@ -63,7 +65,7 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
   //       Mark all items as purchased
   //
   // https://m2.material.io/components/buttons-floating-action-button
-  // Floating action button (as toggle for panel?) 
+  // Floating action button (as toggle for panel?)
   //
   //
 

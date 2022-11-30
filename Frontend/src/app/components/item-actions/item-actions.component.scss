@@ -10,6 +10,15 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  box-sizing: border-box;
   font-size: 14px;
+  max-height: 100px;
+}
+
+
+.mat-expansion-panel {
+  display: flex !important;
+  flex-direction: column;
+}
+.mat-expansion-panel-header {
+  order: 2;
 }
