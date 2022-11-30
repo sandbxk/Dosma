@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - dev*
+      - main
   pull_request:
    branches:
       - main
       - dev*
   
-
 jobs:
   Install-and-Build:
     runs-on: ubuntu-latest
@@ -24,11 +24,28 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 18.x.x
-
-    - name: Install dependencies
-      run: npm install
-      working-directory: ${{env.working-directory}} 
       
+    - name: Cache modules
+      id: npm-cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ./Frontend/node_modules
+        key: ${{ runner.os }}-frontend-packages-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{runner.os}}-frontend-packages
+        
+    - name: Cache dist
+      id: angular-cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          Frontend/dist
+        key: ${{ runner.os }}-frontend-dist-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{runner.os}}-frontend-dist
+
+    - name: Download npm packages
+      run: npm install
+      working-directory: ${{env.working-directory}}
       
     - name: Build
       run: npm run build Frontend
