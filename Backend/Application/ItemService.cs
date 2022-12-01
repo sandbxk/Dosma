@@ -41,8 +41,13 @@ public class ItemService : IItemService
         return _itemRepository.Delete(item.Id);
     }
 
-    public Item UpdateItemInList(Item item)
+    public Item UpdateItem(Item item)
     {
-        throw new NotImplementedException();
+        var validation = _validator.Validate(item);
+
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
+        
+        return _itemRepository.Update(item);
     }
 }

@@ -5,6 +5,8 @@ using Domain;
 using FluentValidation;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Options;
 using ApplicationDependencies = Application.Dependencies.DependencyResolverService;
 using InfrastructureDependencies = Infrastructure.Dependencies.DependencyResolverService;
 
@@ -13,9 +15,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlite(
-    "Data Source=db.db"
-));
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseSqlite(
+        "Data Source=db.db"
+    );
+    options.EnableSensitiveDataLogging();
+    options.EnableDetailedErrors();
+});
 
 ApplicationDependencies.RegisterApplicationLayer(builder.Services);
 ApplicationDependencies.RegisterSecurityLayer(builder.Services, Encoding.ASCII.GetBytes("This is a secret"));

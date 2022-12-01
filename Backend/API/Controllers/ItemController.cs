@@ -11,7 +11,7 @@ namespace API.Controllers;
 public class ItemController : ControllerBase
 {
     private readonly IItemService _itemService;
-    
+
     public ItemController(IItemService itemService)
     {
         _itemService = itemService;
@@ -34,8 +34,24 @@ public class ItemController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
-    //[HttpPatch] TODO
+
+    [HttpPatch]
+    public ActionResult<Item> UpdateItem([FromBody] Item item)
+    {
+        try
+        {
+            var result = _itemService.UpdateItem(item);
+            return Ok(result);
+        }
+        catch (ValidationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
     
     
     [HttpDelete]
