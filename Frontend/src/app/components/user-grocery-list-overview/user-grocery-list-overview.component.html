@@ -1,0 +1,59 @@
+<div class="centered">
+<div class="parentContainer">
+<div  class="flexContainer"> <!--flex Container-->
+
+
+  <mat-card (click)="newGroceryList()"  class="listCardButton"> <!--Card button for creating a new list-->
+    <mat-icon>
+      add
+    </mat-icon>
+  </mat-card>
+
+
+  <div [@inOutAnimation]="'in'" *ngFor="let list of groceryLists"> <!--Card for each list-->
+    <mat-card (click)="selectList(list)" class="listCard">
+      <mat-card-header>
+        <div id="cardBtn" class="listCardTitle">
+          <h2>{{list.title | truncate:19 }}</h2>
+          <button (click)="$event.stopPropagation();" mat-icon-button [matMenuTriggerFor]="menu"
+                  class="menuButton" #t="matMenuTrigger" [class.opened]="t.menuOpen" aria-label="Grocery list menu">
+            <!--Stop Propagation stops the event chain at the button, meaning the (click) event defined for the parent (card) will not be called-->
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editList(list)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit name</span>
+            </button>
+            <button mat-menu-item (click)="duplicateList(list)">
+              <mat-icon>content_copy</mat-icon>
+              <span>Duplicate</span>
+            </button>
+            <button mat-menu-item (click)="deleteList(list)">
+              <mat-icon>delete</mat-icon>
+              <span class="deleteLbl">Delete</span>
+            </button>
+          </mat-menu>
+        </div>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <ul *ngIf="list.items.length > 0; else emptyList">
+          <li *ngFor="let item of list.items | slice:0:10; let i=index">
+            {{item.title | truncate:38}}
+          </li>
+          <!-- Make a list of the first 10 items in the list and
+          Truncate the item titles to 38 characters-->
+        </ul>
+        <ng-template #emptyList>
+          <p class="emptyListText">No items in list</p>
+        </ng-template>
+      </mat-card-content>
+      <mat-card-footer>
+        <span>{{list.items.length}} items</span>
+      </mat-card-footer>
+    </mat-card>
+  </div>
+</div>
+</div>
+</div>

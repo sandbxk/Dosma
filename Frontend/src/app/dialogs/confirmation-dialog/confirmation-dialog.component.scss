@@ -1,0 +1,26 @@
+@use "sass:map";
+@import "src/assets/themeVariables.scss";
+
+.noButton {
+  background-color: transparent;
+}
+
+.noButton:hover {
+  background-color: map.get($accent-colors, "lighter");
+}
+
+.noButton:active {
+  background-color: map.get($accent-colors, "main");
+}
+
+.yesButton {
+  background-color: map.get($primary-colors, "main");
+}
+
+.yesButton:hover {
+  background-color: map.get($primary-colors, "darker");
+}
+
+.yesButton:active {
+  background-color: map.get($accent-colors, "darker");
+}

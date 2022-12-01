@@ -1,0 +1,60 @@
+@use "sass:map";
+
+$dark-text: #000000;
+$dark-primary-text: rgba($dark-text, 0.87);
+$dark-accent-text: rgba($dark-primary-text, 0.54);
+$dark-disabled-text: rgba($dark-primary-text, 0.38);
+$dark-dividers: rgba($dark-primary-text, 0.12);
+$dark-focused: rgba($dark-primary-text, 0.12);
+
+$light-text: #ffffff;
+$light-primary-text: $light-text;
+$light-accent-text: rgba($light-primary-text, 0.7);
+$light-disabled-text: rgba($light-primary-text, 0.5);
+$light-dividers: rgba($light-primary-text, 0.12);
+$light-focused: rgba($light-primary-text, 0.12);
+
+
+// Background config
+// Light bg
+$light-background:    #fdfdfd;
+$light-bg-darker-5:   darken($light-background, 5%);
+$light-bg-darker-10:  darken($light-background, 10%);
+$light-bg-darker-20:  darken($light-background, 20%);
+$light-bg-darker-30:  darken($light-background, 30%);
+$light-bg-lighter-5:  lighten($light-background, 5%);
+$dark-bg-tooltip:     lighten(#2c2c2c, 20%);
+$dark-bg-alpha-4:     rgba(#2c2c2c, 0.04);
+$dark-bg-alpha-12:    rgba(#2c2c2c, 0.12);
+
+
+// Dark bg
+$dark-background:     #2c2c2c;
+$dark-bg-lighter-5:   lighten($dark-background, 5%);
+$dark-bg-lighter-10:  lighten($dark-background, 10%);
+$dark-bg-lighter-20:  lighten($dark-background, 20%);
+$dark-bg-lighter-30:  lighten($dark-background, 30%);
+$light-bg-alpha-4:    rgba(#fdfdfd, 0.04);
+$light-bg-alpha-12:   rgba(#fdfdfd, 0.12);
+
+
+$primary-colors: (
+  "main": #91e1c5,
+  "lighter": #def6ee,
+  "darker": #74d5b0,
+  200: #91e1c5 // For slide toggle
+);
+
+$accent-colors: (
+  "main": #67a185,
+  "lighter": #d1e3da,
+  "darker": #4a8568,
+  200: #67a185
+);
+
+$warn-colors: (
+  "main": #e06453,
+  "lighter": #f6d1cb,
+  "darker": #d34839,
+  200: #f44336
+);
