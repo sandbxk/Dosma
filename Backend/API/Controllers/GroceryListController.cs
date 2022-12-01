@@ -1,3 +1,4 @@
+using System.Data;
 using Application.DTOs;
 using Application.Interfaces;
 using Domain;
@@ -78,9 +79,13 @@ public class GroceryListController : ControllerBase
     [Route("{id}")]
     public ActionResult DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList)
     {
+        if (id != groceryList.Id)
+        {
+            throw new ValidationException("List ID does not match ID in URL.");
+        }
         try
         {
-            return Ok(_groceryListService.DeleteList(id, groceryList));
+            return Ok(_groceryListService.DeleteList(groceryList));
         }
         catch (ValidationException e)
         {
