@@ -1,31 +1,25 @@
-export interface JWTUser {
+export class User {
 
-  header: string;
+  id: number = 0;
+  name: string = '';
+  username: string = '';
 
-  id: number;
-  name: string;
-  username: string;
-
-  //TBA created: Date;
-  //TBA modified: Date;
-
-  signature: string;
+  token: string = '';
 }
 
-export interface TokenResponse {
-  status: number;
-  error_message: string;
-  token: string;
+export class TokenResponse {
+  status: number = 0;
+  error_message: string = '';
+  token: string = '';
 }
 
-export interface LoginRequest {
-  username: string;
-  password: string;
+export class LoginRequest {
+  username: string = '';
+  password: string = '';
 }
 
-export interface RegisterRequest {
-  name: string;
-  username: string;
-  password: string;
-  passwordConfirm: string;
+export class RegisterRequest {
+  displayName: string = '';
+  username: string = '';
+  password: string = '';
 }

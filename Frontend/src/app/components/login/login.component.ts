@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginRequest } from 'src/app/interfaces/User';
+import { Router } from '@angular/router';
+import { LoginRequest, User } from 'src/app/interfaces/User';
+import { ObjectGenerator } from 'src/app/util/ObjectGenerator';
 import { AuthenticationService } from 'src/services/authentication.service';
 
 @Component({
@@ -8,24 +10,27 @@ import { AuthenticationService } from 'src/services/authentication.service';
 })
 export class LoginComponent implements OnInit {
 
-  username: string = '';
-  password: string = '';
+  loginRequest : LoginRequest = new LoginRequest();
 
   login() {
     console.log('login called');
-    let loginRequest : LoginRequest = {
-      username: this.username,
-      password: this.password
-    };
 
-    this.authService.login(loginRequest).then((result) => {
-      console.log(result);
+    this.authService.login(this.loginRequest).then((result) => {
+      localStorage.setItem('user', JSON.stringify(ObjectGenerator.userFromToken(result.token)));
+      this.router.navigate(['/dashboard']);
     });
   }
 
-  constructor(private authService: AuthenticationService) { }
+  constructor(private authService: AuthenticationService, private router : Router) {}
 
   ngOnInit(): void {
-  }
 
+    let user : User | null = JSON.parse(localStorage.getItem('user') || '{}');
+
+    if (user) {
+      console.log('token found in local storage');
+      // TODO: check if token is valid
+      // navigate to dashboard
+    }
+  }
 }
