@@ -11,20 +11,6 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //One-To-Many Relationship
-        //Many-To-Many Relationship
-        
-        //GroceryList-Users Relationship
-        modelBuilder.Entity<UserList>()
-            .HasKey(ul => new { ul.UserID, ul.GroceryListID });
-        modelBuilder.Entity<UserList>()
-            .HasOne(ul => ul.GroceryList)
-            .WithMany(ul => ul.Users)
-            .HasForeignKey(ul => ul.GroceryListID);
-        modelBuilder.Entity<UserList>()
-            .HasOne(ul => ul.User)
-            .WithMany(ul => ul.GroceryLists);
-
         //Setting Primary Keys
         modelBuilder.Entity<Item>()
             .HasKey(i => i.Id)
@@ -78,6 +64,15 @@ public class DatabaseContext : DbContext
          * Many-To-Many Relationship
          */
         //GroceryList-User
+        modelBuilder.Entity<UserList>()
+            .HasKey(ul => new { ul.UserID, ul.GroceryListID });
+        modelBuilder.Entity<UserList>()
+            .HasOne(ul => ul.GroceryList)
+            .WithMany(ul => ul.Users)
+            .HasForeignKey(ul => ul.GroceryListID);
+        modelBuilder.Entity<UserList>()
+            .HasOne(ul => ul.User)
+            .WithMany(ul => ul.GroceryLists);
 
     }
     
