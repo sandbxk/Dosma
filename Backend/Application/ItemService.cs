@@ -48,6 +48,6 @@ public class ItemService : IItemService
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
         
-        return _itemRepository.Create(item);
+        return _itemRepository.Update(item);
     }
 }
