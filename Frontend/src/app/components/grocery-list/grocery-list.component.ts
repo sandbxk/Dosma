@@ -25,8 +25,9 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
   };
 
   categories: string[] = ['Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
-
   routeId: any = {};
+
+  creatingItem: boolean = false;
 
   constructor(
     private currentRoute: ActivatedRoute,
@@ -121,6 +122,14 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
           });
       }
     });
+  }
+
+  addItem($event: Item) {
+    this.groceryList.items.push($event);
+  }
+
+  hideNewItemPanel(boolean: boolean) {
+    this.creatingItem = !boolean;
   }
 
   editItem(item: Item) {

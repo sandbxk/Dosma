@@ -1,30 +1,32 @@
 <div class="newItemContainer" cdkDrag cdkDragDisabled>
+  <form class="formContainer" [formGroup]="formControlGroup">
 
-  <mat-label>Add new item</mat-label>
 
-  <form style="display: block;" [formGroup]="formControlGroup">
+    <div style="display: inline-flex">
 
-    <mat-form-field color="accent">
-      <mat-label class="quantityInput">Quantity</mat-label>
-      <input matInput type="number" placeholder="Ex. 3" formControlName="quantity" min="1" max="99">
-      <mat-error *ngIf="quantity > 99 || quantity < 1 ">Quantity must be between 1 and 99</mat-error>
+    <mat-form-field class="quantityInput">
+      <mat-label>Quantity</mat-label>
+      <input [ngModel]="quantity" matInput type="number" placeholder="Ex. 3" formControlName="quantity" min="1" max="99">
+      <mat-error *ngIf="quantity < 1 ">Quantity must be between 1 and 99</mat-error>
+      <mat-error *ngIf="quantity > 99">Quantity must be between 1 and 99</mat-error>
     </mat-form-field>
 
-    <mat-form-field color="accent">
-      <mat-label class="titleInput">Title</mat-label>
+    <mat-form-field class="titleInput" color="accent">
+      <mat-label>Title</mat-label>
       <input matInput
              type="text"
              [ngModel]="title"
-             placeholder="Ex. Apples"
+             placeholder="New item"
              formControlName="title"
              required>
 
-      <mat-error *ngIf="title.length < 1">Title must be less than a one character</mat-error>
+      <mat-error *ngIf="title.length < 1">Title must be longer than one character</mat-error>
     </mat-form-field>
 
+    </div>
 
-    <mat-form-field color="accent">
-      <mat-label class="categoryInput">Category</mat-label>
+    <mat-form-field class="categoryInput" color="accent">
+      <mat-label>Category</mat-label>
       <input matInput
              type="text"
              [ngModel]="category"
@@ -40,8 +42,10 @@
         {{categoryOpt}}
       </mat-option>
     </mat-autocomplete>
-  </form>
 
+  </form>
+</div>
+<div class="buttonContainer">
+  <button mat-raised-button color="primary" class="cancelButton" (click)="cancel()">Cancel</button>
   <button mat-raised-button color="primary" class="addButton" (click)="addItem()">Add</button>
-  <button mat-raised-button color="accent" class="cancelButton" (click)="cancel()">Cancel</button>
 </div>

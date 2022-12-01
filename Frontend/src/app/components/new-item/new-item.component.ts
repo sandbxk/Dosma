@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {map, Observable, startWith} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Item} from "../../interfaces/Item";
+import {DataService} from "../../../services/data.service";
 
 @Component({
   selector: 'app-new-item',
@@ -9,6 +11,8 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class NewItemComponent implements OnInit {
 
+  @Output() newItemEvent = new EventEmitter<Item>();
+  @Output() creatingItemEvent = new EventEmitter<boolean>();
 
   formControlGroup: FormGroup = new FormGroup({});
 
@@ -17,9 +21,12 @@ export class NewItemComponent implements OnInit {
   categories: string[] = ['None', 'Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
   filteredCategories: Observable<string[]> = new Observable<string[]>();
   category: string = 'None';
+  groceryListId: number = 0;
 
 
-  constructor() { }
+  constructor(
+    private dataService: DataService
+  ) { }
 
   ngOnInit(): void {
     this.formControlGroup = new FormGroup({
@@ -29,6 +36,10 @@ export class NewItemComponent implements OnInit {
         Validators.required]),
       category: new FormControl()
     });
+
+    this.dataService.currentListStageObject.subscribe(list => {
+      this.groceryListId = list.id
+    }).unsubscribe();
 /*
     this.filteredCategories = this.formControlGroup.get('category')?.valueChanges.pipe(
       startWith(''),
@@ -52,10 +63,24 @@ export class NewItemComponent implements OnInit {
   }
 
   addItem() {
+    const newItem: Item = {
+      id: 0,
+      title: this.getTitle(),
+      quantity: this.getQuantity(),
+      groceryListId: this.groceryListId,
+      status: 0,
+      category: this.category
+    }
 
+    this.newItemEvent.emit(newItem);
+    this.creatingItemEvent.emit(false);
   }
 
   cancel() {
+    this.creatingItemEvent.emit(false);
+  }
+
+  close() {
 
   }
 }

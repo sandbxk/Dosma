@@ -34,6 +34,12 @@
           <mat-icon>delete</mat-icon>
           <span class="deleteLbl">Delete</span>
         </button>
+
+        <!-- TEMP -->
+        <button mat-button (click)="hideNewItemPanel(false)">
+          <mat-icon>add</mat-icon>
+        </button>
+
       </mat-menu>
 
     </div>
@@ -59,11 +65,13 @@
       <mat-checkbox class="mockCheckbox"> </mat-checkbox>
     </div>
 
-    <app-new-item> </app-new-item>
+     <div *ngIf="creatingItem">
+      <app-new-item (newItemEvent)="addItem($event)" (creatingItemEvent)="hideNewItemPanel($event)"> </app-new-item>
+    </div>
   </div>
+
 
 
   <app-item-actions class="testBox">
   </app-item-actions>
-
 </div>
