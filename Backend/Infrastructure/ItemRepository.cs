@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using System.Reflection;
+using Domain;
 using Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,8 +55,26 @@ public class ItemRepository : IRepository<Item>
 
     public Item Update(Item model)
     {
-        _dbContext.Update(model);
-        _dbContext.SaveChanges();
+        var existingItem = _dbContext.ItemTable.Find(model.Id) ?? throw new NullReferenceException("Item not found.");
+
+        foreach (PropertyInfo prop in existingItem.GetType().GetProperties())
+        {
+            var PropertyName = prop.Name;
+            var value = prop.GetValue(model);
+            
+            if (value != null)
+            {
+                existingItem.GetType().GetProperty(PropertyName).SetValue(existingItem, value);
+            }
+        }
+        
+        _dbContext.Update(existingItem);
+        int change = _dbContext.SaveChanges();
+
+        if (change == 0)
+        {
+            throw new NullReferenceException("Unable to update item.");
+        }
         return model;
     }
 }

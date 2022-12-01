@@ -401,3 +401,7 @@ FodyWeavers.xsd
 .idea/.idea.Dosma.dir/.idea/workspace.xml
 Backend/API/db.db-shm
 Backend/API/db.db-wal
+Backend/API/packages.lock.json
+Backend/Domain/packages.lock.json
+Backend/Tests/packages.lock.json
+Backend/Infrastructure/packages.lock.json
