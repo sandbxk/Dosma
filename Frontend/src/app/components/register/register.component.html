@@ -1,1 +1,25 @@
 <p>register works!</p>
+
+<form>
+  <mat-form-field appearance="fill">
+    <mat-label>Display name</mat-label>
+    <input matInput type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.request.displayName" (keyup.enter)="register()">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Username</mat-label>
+    <input matInput type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.request.username" required (keyup.enter)="register()">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Password</mat-label>
+    <input matInput type="password" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.request.password" required (keyup.enter)="register()">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Confirm Password</mat-label>
+    <input matInput type="password" [ngModelOptions]="{standalone: true}" [(ngModel)]="confirm_password" required (keyup.enter)="register()">
+  </mat-form-field>
+
+  <button type="submit" mat-raised-button color="primary" (click)="register()">Register</button>
+</form>

@@ -18,10 +18,7 @@ export class AuthenticationService {
   constructor(private matSnackbar: MatSnackBar) { }
 
   async login(req : LoginRequest) {
-    console.log('login');
-    console.log(req);
     const httpResult = await axiosInstance.post('api/auth/login', req);
-    console.log(httpResult.data);
     return httpResult.data as TokenResponse;
   }
 
