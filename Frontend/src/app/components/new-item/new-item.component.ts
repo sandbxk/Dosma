@@ -3,6 +3,7 @@ import {map, Observable, startWith} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Item} from "../../interfaces/Item";
 import {DataService} from "../../../services/data.service";
+import {FormCustomValidators} from "../../util/autoComplete.validator";
 
 @Component({
   selector: 'app-new-item',
@@ -12,7 +13,7 @@ import {DataService} from "../../../services/data.service";
 export class NewItemComponent implements OnInit {
 
   @Output() newItemEvent = new EventEmitter<Item>();
-  @Output() creatingItemEvent = new EventEmitter<boolean>();
+  @Output() cancelItemCreationEvent = new EventEmitter<boolean>();
 
   formControlGroup: FormGroup = new FormGroup({});
 
@@ -34,24 +35,13 @@ export class NewItemComponent implements OnInit {
         Validators.required]),
       quantity: new FormControl(this.quantity, [
         Validators.required]),
-      category: new FormControl()
+      category: new FormControl(this.category, {validators: [Validators.required, FormCustomValidators.valueSelected(this.categories)]})
     });
+
 
     this.dataService.currentListStageObject.subscribe(list => {
       this.groceryListId = list.id
     }).unsubscribe();
-/*
-    this.filteredCategories = this.formControlGroup.get('category')?.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || ''))
-    );
-
- */
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.categories.filter(categories => categories.toLowerCase().includes(filterValue));
   }
 
   getTitle(): string {
@@ -62,25 +52,37 @@ export class NewItemComponent implements OnInit {
     return this.formControlGroup.get('quantity')?.value;
   }
 
+  getCategory(): string {
+    return this.formControlGroup.get('category')?.value;
+  }
+
   addItem() {
-    const newItem: Item = {
-      id: 0,
-      title: this.getTitle(),
-      quantity: this.getQuantity(),
-      groceryListId: this.groceryListId,
-      status: 0,
-      category: this.category
+    if (this.formControlGroup.valid) {
+      const newItem: Item = {
+        id: 0,
+        title: this.capitalize(this.getTitle()),
+        quantity: this.getQuantity(),
+        groceryListId: this.groceryListId,
+        status: 0,
+        category: this.getCategory()
+      }
+
+      this.newItemEvent.emit(newItem);
     }
 
-    this.newItemEvent.emit(newItem);
-    this.creatingItemEvent.emit(false);
   }
 
-  cancel() {
-    this.creatingItemEvent.emit(false);
-  }
+  //TODO:
+  // scroll to
+  // add new item db
+  // finalize validation
+      // force to choose input from autocomplete
 
   close() {
+    this.cancelItemCreationEvent.emit(false);
+  }
 
+  private capitalize(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 }

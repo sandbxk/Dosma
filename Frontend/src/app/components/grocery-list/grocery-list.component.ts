@@ -10,6 +10,7 @@ import {Item} from "../../interfaces/Item";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
+import {NewItemComponent} from "../new-item/new-item.component";
 
 @Component({
   selector: 'app-grocery-list',
@@ -128,8 +129,8 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
     this.groceryList.items.push($event);
   }
 
-  hideNewItemPanel(boolean: boolean) {
-    this.creatingItem = !boolean;
+  showNewItemPanel(boolean: boolean) {
+    this.creatingItem = boolean;
   }
 
   editItem(item: Item) {
@@ -157,6 +158,7 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
         }
       }).unsubscribe();
   }
+
 
 
 }

@@ -36,7 +36,7 @@
         </button>
 
         <!-- TEMP -->
-        <button mat-button (click)="hideNewItemPanel(false)">
+        <button mat-button (click)="showNewItemPanel(true)">
           <mat-icon>add</mat-icon>
         </button>
 
@@ -66,10 +66,9 @@
     </div>
 
      <div *ngIf="creatingItem">
-      <app-new-item (newItemEvent)="addItem($event)" (creatingItemEvent)="hideNewItemPanel($event)"> </app-new-item>
+      <app-new-item id="new-item-panel" (newItemEvent)="addItem($event)" (cancelItemCreationEvent)="showNewItemPanel($event)"> </app-new-item>
     </div>
   </div>
-
 
 
   <app-item-actions class="testBox">

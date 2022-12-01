@@ -2,7 +2,7 @@
 @import "src/assets/themeVariables.scss";
 
 $width: 50em;
-$actionMenuHeight: 100px;
+$actionMenuHeight: 50px;
 
 .itemDnDContainer {
   width: $width;
@@ -287,3 +287,11 @@ Quantity box for indicating the quantity of an item
   border-top: 5px solid map.get($primary-colors, "main");
 }
 
+.dockToBottom {
+  width: $width;
+  max-width: 95%;
+  position: absolute;
+  bottom: 0;
+  z-index: 110;
+  margin: 0;
+}
