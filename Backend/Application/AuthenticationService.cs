@@ -129,28 +129,22 @@ public class AuthenticationService : IAuthenticationService
     {
         try
         {
-            /*
-                'Debug' is removed during RELEASE compilation, so this code will not be included in the release build.
-            */
-            #if Debug
-            if (username == "debug")
+            if (Configuration.IsDebug && username == "debug")
             {
-                return ObjectGenerator.GenerateUser(new RegisterRequestDTO
+                return ObjectGenerator.GenerateUser(new RegisterRequest
                 {
                     Username = "debug",
                     DisplayName = "Debug User",
                     Password = "debug"
                 });
             }
-            #else
+
             return _userRepository.Find(username);
-            #endif
         }
         catch
         {
             return null;
         }
-
     }
 
     public AuthenticationService(

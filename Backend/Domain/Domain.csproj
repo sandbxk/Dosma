@@ -6,5 +6,20 @@
         <Nullable>enable</Nullable>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+      </PropertyGroup>
+      <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <DefineConstants>TRACE; RELEASE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+      </PropertyGroup>
 
 </Project>
