@@ -48,7 +48,7 @@ public class GroceryListService : IGroceryListService
         return _groceryListRepository.All();
     }
 
-    public GroceryList DeleteList(GroceryList groceryList)
+    public bool DeleteList(GroceryList groceryList)
     {
         var validation = _validator.Validate(groceryList);
         if (!validation.IsValid)
