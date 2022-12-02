@@ -43,7 +43,7 @@ public class ItemRepository : IRepository<Item>
         
         if (change == 0)
         {
-            throw new NullReferenceException("Item not found.");
+            return false;
         }
         return true;
     }
@@ -59,12 +59,16 @@ public class ItemRepository : IRepository<Item>
 
         foreach (PropertyInfo prop in existingItem.GetType().GetProperties())
         {
-            var PropertyName = prop.Name;
+            var propertyName = prop.Name;
             var value = prop.GetValue(model);
             
             if (value != null)
             {
-                existingItem.GetType().GetProperty(PropertyName).SetValue(existingItem, value);
+                var field = existingItem.GetType().GetProperty(propertyName);
+                if (field != null)
+                {
+                    field.SetValue(existingItem, value);
+                }
             }
         }
         
