@@ -36,8 +36,12 @@ public class ItemController : ControllerBase
     }
 
     [HttpPatch]
-    public ActionResult<Item> UpdateItem([FromBody] Item item)
+    [Route("{id}")]
+    public ActionResult<Item> UpdateItem([FromRoute] int id, [FromBody] Item item)
     {
+        if (id != item.Id)
+            throw new ValidationException("Item ID does not match ID in URL.");
+        
         try
         {
             var result = _itemService.UpdateItem(item);
@@ -46,7 +50,7 @@ public class ItemController : ControllerBase
             {
                 return NotFound();
             }
-            return Ok(result.Title + " has been updated.");
+            return Ok("Item has been updated.");
         }
         catch (ValidationException e)
         {
@@ -64,7 +68,7 @@ public class ItemController : ControllerBase
     public ActionResult DeleteItem([FromRoute] int id, [FromBody] Item item)
     {
         if (id != item.Id)
-            throw new ValidationException("List ID does not match ID in URL.");
+            throw new ValidationException("Item ID does not match ID in URL.");
         try
         {
             var result = _itemService.DeleteItem(item);
