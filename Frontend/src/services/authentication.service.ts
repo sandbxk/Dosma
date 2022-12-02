@@ -26,4 +26,14 @@ export class AuthenticationService {
     const httpResult = await axiosInstance.post('api/auth/register', req);
     return httpResult.data as TokenResponse;
   }
+
+  async refreshToken() {
+    throw new Error('Not implemented in backend');
+    const httpResult = await axiosInstance.post('api/auth/refresh');
+    return httpResult.data as TokenResponse;
+  }
+
+  async logout() {
+    localStorage.removeItem('user');
+  }
 }
