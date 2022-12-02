@@ -295,3 +295,9 @@ Quantity box for indicating the quantity of an item
   z-index: 110;
   margin: 0;
 }
+
+.hidden {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+}

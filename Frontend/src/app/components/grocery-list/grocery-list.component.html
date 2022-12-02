@@ -65,7 +65,7 @@
       <mat-checkbox class="mockCheckbox"> </mat-checkbox>
     </div>
 
-     <div *ngIf="creatingItem">
+     <div id="item-creation-panel" [class.hidden]="!creatingItem" >
       <app-new-item id="new-item-panel" (newItemEvent)="addItem($event)" (cancelItemCreationEvent)="showNewItemPanel($event)"> </app-new-item>
     </div>
   </div>

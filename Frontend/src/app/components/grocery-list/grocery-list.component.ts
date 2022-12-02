@@ -131,6 +131,15 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
 
   showNewItemPanel(boolean: boolean) {
     this.creatingItem = boolean;
+
+    if (boolean){
+      const element: HTMLElement = document.getElementById("item-creation-panel")!
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest"
+        });
+    }
   }
 
   editItem(item: Item) {
