@@ -18,18 +18,18 @@ export class AuthenticationService {
   constructor(private matSnackbar: MatSnackBar) { }
 
   async login(req : LoginRequest) {
-    const httpResult = await axiosInstance.post('api/auth/login', req);
+    const httpResult = await axiosInstance.post('auth/login', req);
     return httpResult.data as TokenResponse;
   }
 
   async register(req : RegisterRequest) {
-    const httpResult = await axiosInstance.post('api/auth/register', req);
+    const httpResult = await axiosInstance.post('auth/register', req);
     return httpResult.data as TokenResponse;
   }
 
   async refreshToken() {
     throw new Error('Not implemented in backend');
-    const httpResult = await axiosInstance.post('api/auth/refresh');
+    const httpResult = await axiosInstance.post('auth/refresh');
     return httpResult.data as TokenResponse;
   }
 
