@@ -3,8 +3,15 @@ export class User {
   id: number = 0;
   name: string = '';
   username: string = '';
+  access_claims: AccessObject[] = [];
   expire_at: string = '';
   token: string = '';
+}
+
+export class AccessObject {
+  access: ("READ" | "WRITE" | "DELETE")[]  = [];
+  resource: string = '';
+  values : string[] = [];
 }
 
 export class TokenResponse {
