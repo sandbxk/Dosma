@@ -21,12 +21,8 @@ public class ItemService : IItemService
         _itemDTOValidator = dtoValidator;
         _mapper = mapper;
     }
-    public List<Item> GetItemsByList()
-    {
-        throw new NotImplementedException();
-    }
 
-    public Item AddItemToList(ItemDTO itemDTO)
+    public Item AddItem(ItemDTO itemDTO)
     {
         var validation = _itemDTOValidator.Validate(itemDTO);
 
@@ -36,8 +32,13 @@ public class ItemService : IItemService
         return _itemRepository.Create(_mapper.Map<Item>(itemDTO));
     }
 
-    public bool DeleteItemFromList(int id, Item item)
+    public bool DeleteItem(Item item)
     {
+        var validation = _validator.Validate(item);
+        
+        if (!validation.IsValid)
+            throw new ValidationException(validation.ToString());
+        
         return _itemRepository.Delete(item.Id);
     }
 

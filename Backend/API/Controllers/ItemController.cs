@@ -22,7 +22,7 @@ public class ItemController : ControllerBase
     {
         try
         {
-            var result = _itemService.AddItemToList(item);
+            var result = _itemService.AddItem(item);
             return Created("Item/" + result.Id, result);
         }
         catch (ValidationException e)
@@ -41,7 +41,12 @@ public class ItemController : ControllerBase
         try
         {
             var result = _itemService.UpdateItem(item);
-            return Ok(result);
+            
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result.Title + " has been updated.");
         }
         catch (ValidationException e)
         {
@@ -62,8 +67,12 @@ public class ItemController : ControllerBase
             throw new ValidationException("List ID does not match ID in URL.");
         try
         {
-            var result = _itemService.DeleteItemFromList(id, item);
-            return Ok(item.Title + " has been deleted.");
+            var result = _itemService.DeleteItem(item);
+            
+            if (result)
+                return Ok(item.Title + " has been deleted.");
+            else
+                return StatusCode(304, "Item could not be deleted.");
         }
         catch (ValidationException e)
         {
