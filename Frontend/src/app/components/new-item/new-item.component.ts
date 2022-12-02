@@ -17,11 +17,8 @@ export class NewItemComponent implements OnInit {
 
   formControlGroup: FormGroup = new FormGroup({});
 
-  title: string = '';
-  quantity: number = 1;
+
   categories: string[] = ['None', 'Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
-  filteredCategories: Observable<string[]> = new Observable<string[]>();
-  category: string = 'None';
   groceryListId: number = 0;
 
 
@@ -31,11 +28,11 @@ export class NewItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.formControlGroup = new FormGroup({
-      title: new FormControl(this.title, [
+      title: new FormControl('', [
         Validators.required]),
-      quantity: new FormControl(this.quantity, [
-        Validators.required]),
-      category: new FormControl(this.category, {validators: [Validators.required, FormCustomValidators.valueSelected(this.categories)]})
+      quantity: new FormControl(1, [
+        Validators.required, Validators.min(1), Validators.max(99)]),
+      category: new FormControl('None', [FormCustomValidators.autocompleteStringValidator(this.categories)])
     });
 
 
@@ -44,27 +41,32 @@ export class NewItemComponent implements OnInit {
     }).unsubscribe();
   }
 
-  getTitle(): string {
-    return this.formControlGroup.get('title')?.value;
+  get title() {
+    return this.formControlGroup.get('title');
   }
 
-  getQuantity(): number {
-    return this.formControlGroup.get('quantity')?.value;
+  get quantity() {
+    return this.formControlGroup.get('quantity');
   }
 
-  getCategory(): string {
-    return this.formControlGroup.get('category')?.value;
+  get category() {
+    return this.formControlGroup.get('category');
   }
 
   addItem() {
+    if (this.category?.errors) {
+      this.category?.setValue('None');
+    }
+
     if (this.formControlGroup.valid) {
+
       const newItem: Item = {
         id: 0,
-        title: this.capitalize(this.getTitle()),
-        quantity: this.getQuantity(),
+        title: this.capitalize(this.title?.value),
+        quantity: this.quantity?.value,
         groceryListId: this.groceryListId,
         status: 0,
-        category: this.getCategory()
+        category: this.category?.value
       }
 
       this.newItemEvent.emit(newItem);
@@ -75,8 +77,6 @@ export class NewItemComponent implements OnInit {
   //TODO:
   // scroll to
   // add new item db
-  // finalize validation
-      // force to choose input from autocomplete
 
   close() {
     this.cancelItemCreationEvent.emit(false);
