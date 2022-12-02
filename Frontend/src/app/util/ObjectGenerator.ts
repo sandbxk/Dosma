@@ -16,8 +16,6 @@ export class ObjectGenerator {
     user.expire_at = payload.exp;
     user.access_claims = JSON.parse(payload.access_claims);
 
-    // parse JWT token
-    console.log(payload);
     return user;
   }
 }
