@@ -5,7 +5,7 @@ import {GroceryList} from "../../interfaces/GroceryList";
 import {DataService} from "../../../services/data.service";
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 import {IComponentCanDeactivate} from "../../../services/PendingChanges.guard";
-import {Observable} from "rxjs";
+import {Observable, timeout} from "rxjs";
 import {Item} from "../../interfaces/Item";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -149,6 +149,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   addItem($event: Item) {
     this.groceryList.items.push($event);
+    const scrollToItem = () => this.scrollToItemCreationPanel()
+    setTimeout(scrollToItem, 250); // Timeout is required as an additional element comes into view when the panel is shown, changing the scroll position
   }
 
   /**
@@ -156,18 +158,26 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    * If the panel is to be made visible, the panel will be scrolled into view
    * @param boolean
    */
-  showNewItemPanel(boolean: boolean) {
-    this.creatingItem = boolean;
+  showNewItemPanel(showing: boolean) {
+    this.creatingItem = showing;
 
-    if (boolean){
-      const element: HTMLElement = document.getElementById("item-creation-panel")!
-        element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "nearest"
-        });
+    if (showing) {
+      const scrollToItem = () => this.scrollToItemCreationPanel()
+      setTimeout(scrollToItem, 250); // Timeout is required as an additional element comes into view when the panel is shown, changing the scroll position
     }
   }
+
+  scrollToItemCreationPanel() {
+     const element: HTMLElement = document.getElementById("item-creation-panel")!
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest"
+      });
+
+     return element;
+  }
+
 
   editItem(item: Item) {
 

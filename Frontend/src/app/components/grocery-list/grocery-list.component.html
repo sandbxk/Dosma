@@ -56,6 +56,7 @@
   <!-- ITEMS -->
   <div cdkDropList class="itemDnDContainer" (cdkDropListDropped)="drop($event)">  <!-- Drag and Drop container -->
     <div class="itemBox" *ngFor="let item of groceryList.items" cdkDrag>  <!-- Individual items -->
+
       <div style="display: inline-flex; align-items: center">
         <p class="quantityIndicator" *ngIf="item.quantity > 1; else standardQuantity">{{item.quantity}}</p> <!-- Quantity indicator -->
         <ng-template #standardQuantity>  <!-- Standard quantity indicator with numbers -->
@@ -65,9 +66,7 @@
         <mat-label class="category" *ngIf="item.category && item.category != 'None'"> <!-- Item category -->
           <span>  {{item.category}} </span>
         </mat-label>
-
       </div>
-
       <!-- MockCheckbox -->
       <mat-checkbox class="mockCheckbox"> </mat-checkbox>
     </div>
