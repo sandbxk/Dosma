@@ -20,9 +20,6 @@ export class DataService {
 
   currentListStageObject = this.listStageObject.asObservable();
 
-  constructor() {
-
-  }
   updateListObject(list: GroceryList) {
     this.listStageObject.next(list);
   }

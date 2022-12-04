@@ -4,7 +4,7 @@ import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {GroceryList} from "../../interfaces/GroceryList";
 import {DataService} from "../../../services/data.service";
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
-import {ComponentCanDeactivate} from "../../../services/PendingChanges.guard";
+import {IComponentCanDeactivate} from "../../../services/PendingChanges.guard";
 import {Observable} from "rxjs";
 import {Item} from "../../interfaces/Item";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
@@ -17,17 +17,21 @@ import {NewItemComponent} from "../new-item/new-item.component";
   templateUrl: './grocery-list.component.html',
   styleUrls: ['./grocery-list.component.scss']
 })
-export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
+export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
+  // Grocery list variable for the list the user currently has open
   groceryList: GroceryList = {
     id: 0,
     title: '',
     items: []
   };
 
+  // Valid categories for items
   categories: string[] = ['Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
+  // The ID of the list we are currently viewing
   routeId: any = {};
 
+  // Controls the visibility of the item creation panel
   creatingItem: boolean = false;
 
   constructor(
@@ -39,7 +43,7 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
   ) { }
 
   ngOnInit(): void {
-    // Get the id from the route
+    // Get the id from the route.
     this.routeId = this.currentRoute.snapshot.paramMap.get('id');
 
     // Get the grocery list from the data service, passed from the previous page
@@ -57,7 +61,6 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
 
   //TODO:
   // 1. Add a new item to the list -> ItemActionsComponent
-  // // Limit quantity to 2 digits
   // 2. Edit an item in the list -> ItemComponent
   // 3. Delete an item from the list
   // 4. Duplicate an item in the list
@@ -87,7 +90,11 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
   // Create menu for item options
 
 
-
+  /**
+   * From IComponentCanDeactivate
+   * Will prevent the user from navigating away from the page if there are unsaved changes
+   * To be used for SyncService
+   */
   @HostListener('window:beforeunload', ['$event'])
   canDeactivate(): boolean | Observable<boolean> {
     // insert logic to check if there are pending changes here;
@@ -96,15 +103,26 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
     return false;
   }
 
+  /**
+   * Called when the user drops an item in the list
+   * @param event
+   */
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.groceryList.items, event.previousIndex, event.currentIndex);
   }
 
-
+ /**
+  * Navigates back to the dashboard with all the users grocery lists
+  */
   navigateBack() {
     this.router.navigate(['/dashboard']);
   }
 
+  /**
+   * Deletes the current list
+   * Will display a dialog to confirm the deletion.
+   * If the user confirms, the list will be deleted from the server and the user will be navigated back to the dashboard
+   */
   deleteList() {
     let dialogueRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
@@ -125,10 +143,19 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
     });
   }
 
+  /**
+   * Used on the item creation panel to create a new item
+   * @param $event The item to be added to the list, emitted from the new-item component
+   */
   addItem($event: Item) {
     this.groceryList.items.push($event);
   }
 
+  /**
+   * Will toggle the visibility of the item creation panel
+   * If the panel is to be made visible, the panel will be scrolled into view
+   * @param boolean
+   */
   showNewItemPanel(boolean: boolean) {
     this.creatingItem = boolean;
 
@@ -154,6 +181,9 @@ export class GroceryListComponent implements OnInit, ComponentCanDeactivate {
 
   }
 
+  /**
+   * Will open a dialog to edit the list title
+   */
   editListName() {
       let dialogueRef = this.dialog.open(EditListDialogComponent, {
         data: {

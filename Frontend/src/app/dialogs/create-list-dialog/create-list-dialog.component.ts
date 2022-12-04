@@ -28,6 +28,11 @@ export class CreateListDialogComponent implements OnInit {
     this.dialogRef.close(this.createListObj())
   }
 
+  /**
+   * Create a new GroceryList object
+   * If the title is empty, generate a random title
+   * @private
+   */
   private createListObj() {
     let postTitle = this.title.trim();
 
