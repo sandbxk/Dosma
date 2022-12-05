@@ -9,10 +9,11 @@ export class User {
 }
 
 export type AccessLevel = "READ" | "WRITE" | "DELETE";
+export type AccessResources = "LIST" | undefined;
 
 export class AccessObject {
   access: AccessLevel[]  = [];
-  resource: string = '';
+  resource: AccessResources;
   values : string[] = [];
 }
 
