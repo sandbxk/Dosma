@@ -22,11 +22,11 @@ import {MatInputModule} from "@angular/material/input";
 import { EditListDialogComponent } from './dialogs/edit-list-dialog/edit-list-dialog.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {PendingChangesGuard} from "../services/PendingChanges.guard";
-import { ItemActionsComponent } from './components/item-actions/item-actions.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatExpansionModule} from "@angular/material/expansion";
 import { NewItemComponent } from './components/new-item/new-item.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import { EditItemComponent } from './components/edit-item/edit-item.component';
 
 
 @NgModule({
@@ -38,8 +38,8 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
     TruncatePipe,
     ConfirmationDialogComponent,
     EditListDialogComponent,
-    ItemActionsComponent,
-    NewItemComponent
+    NewItemComponent,
+    EditItemComponent
   ],
     imports: [
         BrowserModule,

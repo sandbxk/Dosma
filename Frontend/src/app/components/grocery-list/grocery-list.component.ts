@@ -11,6 +11,7 @@ import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/con
 import {MatDialog} from "@angular/material/dialog";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
 import {NewItemComponent} from "../new-item/new-item.component";
+import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-grocery-list',
@@ -34,7 +35,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   // Controls the visibility of the item creation panel
   creatingItem: boolean = false;
 
-  selectedItem: Item = {} as Item;
+  selectedItems: Item[] = [];
+  editingItem: Item = {} as Item;
 
   constructor(
     private currentRoute: ActivatedRoute,
@@ -148,11 +150,11 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    * @param item
    */
   selectItem(item: Item) {
-    if (this.selectedItem === item)
-      this.selectedItem = {} as Item;
+    if (this.selectedItems.includes(item))
+      this.selectedItems.splice(this.selectedItems.indexOf(item), 1);
 
     else
-      this.selectedItem = item;
+      this.selectedItems.push(item);
   }
 
   /**
@@ -192,7 +194,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
 
   editItem(item: Item) {
-
+    this.editingItem = item;
   }
 
   duplicateItem(item: Item) {

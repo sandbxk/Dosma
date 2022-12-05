@@ -316,6 +316,15 @@ Quantity box for indicating the quantity of an item
   margin: 0 8px;
 }
 
+.crudActionsContainer {
+  display: inline-flex;
+  flex-direction: row-reverse;
+}
+
+.crudActionsContainer > * {
+  margin: 0 8px;
+}
+
 .matFabAddBtn {
   position: relative;
   vertical-align: center;
@@ -370,9 +379,32 @@ Quantity box for indicating the quantity of an item
   color: map.get($warn-colors, "darker");
 }
 
+@keyframes leaveToBottom {
+  from { transform: translate(0); }
+  to { transform: translateY(50%) }
+}
+
+@keyframes returnFromBottom {
+  from { transform: translateY(50%); }
+  to { transform: translateY(0) }
+}
+
+
+.animateOutOfFrame {
+  animation: leaveToBottom 0.5s ease-in-out;
+  transition: 0.5s;
+  opacity: 0;
+}
+
+.animateIntoFrame {
+  animation: returnFromBottom 0.5s ease-in-out;
+  transition: 0.5s;
+  opacity: 1;
+}
 
 .hidden {
   display: none;
   visibility: hidden;
   opacity: 0;
+  transition: 0.3s;
 }

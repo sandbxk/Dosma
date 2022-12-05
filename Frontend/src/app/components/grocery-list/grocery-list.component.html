@@ -1,5 +1,5 @@
 
-<div class="parentContainer">
+<div  class="parentContainer">
 
   <!-- Container for the GroceryList header, containing the title and other actions -->
   <div class="titleContainer">
@@ -42,11 +42,6 @@
           <span class="deleteLbl">Delete</span>
         </button>
 
-        <!-- TEMP -->
-        <button mat-button (click)="showNewItemPanel(true)">
-          <mat-icon>add</mat-icon>
-        </button>
-
       </mat-menu>
 
     </div>
@@ -56,7 +51,7 @@
   <!-- ITEMS -->
   <div cdkDropList class="itemDnDContainer" (cdkDropListDropped)="drop($event)">  <!-- Drag and Drop container -->
     <div  *ngFor="let item of groceryList.items"
-          class="itemBox" [ngClass]="item === selectedItem ? 'itemBoxSelected' : 'itemBox'"
+          class="itemBox" [ngClass]="selectedItems.includes(item) ? 'itemBoxSelected' : 'itemBox'"
           (click)="selectItem(item)" cdkDrag>  <!-- Individual items |
           ngClass will apply the itemBoxSelected class if the item is selected -->
 
@@ -71,7 +66,7 @@
         </mat-label>
       </div>
       <!-- MockCheckbox -->
-      <mat-checkbox class="mockCheckbox"> </mat-checkbox>
+      <mat-checkbox (click)="$event.stopPropagation()" class="mockCheckbox"> </mat-checkbox>
     </div>
 
     <!-- item creation panel, using the new-item component -->
@@ -83,11 +78,15 @@
 
   <!-- Anchored bottom panel for list actions -->
   <div class="dockToBottom">
+
     <button (click)="showNewItemPanel(true)" mat-fab class="matFabAddBtn" style="margin-left: 12px">
       <mat-icon class="icon-display">add</mat-icon>
     </button>
 
-    <button mat-mini-fab class="matFabEditBtn">
+  <div class="crudActionsContainer" [ngClass]="selectedItems.length > 0 ? 'animateIntoFrame' : 'animateOutOfFrame'">
+
+    <button  [ngClass]="selectedItems.length === 1 ? 'animateIntoFrame' : 'animateOutOfFrame'"
+             mat-mini-fab class="matFabEditBtn">
       <mat-icon>edit</mat-icon>
     </button>
 
@@ -95,9 +94,10 @@
       <mat-icon>delete</mat-icon>
     </button>
 
+    <button mat-mini-fab (click)="selectedItems = []" class="matFabEditBtn">
+      <mat-icon>clear</mat-icon>
+    </button>
   </div>
-  <!--
-  <app-item-actions class="testBox">
-  </app-item-actions>
-  -->
+
+  </div>
 </div>
