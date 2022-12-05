@@ -1,0 +1,80 @@
+@use "sass:map";
+@import "src/assets/themeVariables.scss";
+
+.quantityInput{
+  font-size: 1em;
+  font-weight: 500;
+  max-width: 80px;
+  width: 60px;
+  padding: 0.5em 0.5em 0 0.5em;
+
+}
+
+.quantityInput > input {
+  background: map.get($accent-colors, "main");
+  color: $light-text;
+  border-radius: 3px;
+  width: 23px;
+  height: 23px;
+
+}
+
+.buttonContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  padding: 0.2em;
+  float: right;
+}
+
+
+
+.newItemContainer{
+  background-color: darken($light-background, 5%);
+  border-radius: 15px;
+  padding: 10px 10px 0 10px;
+  margin-top: 10px;
+  display: flex;
+  min-height: 80px;
+}
+
+.formContainer{
+  display: inline-block;
+  flex-direction: row;
+  width: 100%;
+}
+
+.titleInput {
+  font-size: 1em;
+  font-weight: 500;
+  padding: 0.5em;
+  width: 300px;
+  min-width: 100px;
+}
+
+.categoryInput {
+  font-size: 1em;
+  font-weight: 500;
+  padding: 0.5em;
+  float: right;
+  max-width: 150px;
+}
+
+.addButton {
+  position: relative;
+  float: right;
+  max-height: 32px;
+  left: 0;
+  bottom: 0;
+}
+
+.addButton {
+  margin-right: 5px;
+  max-height: 32px;
+}
+
+.cancelButton {
+  margin-right: 10px;
+  max-height: 32px;
+  background-color: darken($light-disabled-text, 30%);
+}

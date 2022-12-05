@@ -4,6 +4,6 @@ export interface Item {
   quantity: number;
   groceryListId: number;
   status: number;
-  //TBA category: string;
+  category: string;
 
 }

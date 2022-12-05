@@ -2,15 +2,25 @@ import { CanDeactivate } from '@angular/router';
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 
-
-export interface ComponentCanDeactivate {
+/**
+ * Interface that a class can implement to be a guard deciding if a route can be deactivated.
+ * If all guards return true, navigation continues.
+ * If any guard returns false, navigation is cancelled.
+ * If any guard returns a UrlTree, current navigation is cancelled
+ * and a new navigation begins to the UrlTree returned from the guard.
+ */
+export interface IComponentCanDeactivate {
   canDeactivate: () => boolean | Observable<boolean>;
 }
 
-
+/**
+ * A guard that can be used to check if a component can be deactivated.
+ *  If all guards return true, navigation continues.
+ *  If any guard returns false, navigation is cancelled and a confirmation dialog is shown.
+ */
 @Injectable()
-export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate> {
-  canDeactivate(component: ComponentCanDeactivate): boolean | Observable<boolean> {
+export class PendingChangesGuard implements CanDeactivate<IComponentCanDeactivate> {
+  canDeactivate(component: IComponentCanDeactivate): boolean | Observable<boolean> {
     // if there are no pending changes, just allow deactivation; else confirm first
     return component.canDeactivate() ?
       true :
