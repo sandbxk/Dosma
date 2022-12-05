@@ -34,6 +34,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   // Controls the visibility of the item creation panel
   creatingItem: boolean = false;
 
+  selectedItem: Item = {} as Item;
+
   constructor(
     private currentRoute: ActivatedRoute,
     private router: Router,
@@ -60,10 +62,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   }
 
   //TODO:
-  // 1. Add a new item to the list -> ItemActionsComponent
   // 2. Edit an item in the list -> ItemComponent
   // 3. Delete an item from the list
-  // 4. Duplicate an item in the list
   //      Change mat menu for items to selected item options
   //   ListMenu Options
   //      Delete all items from the list?
@@ -100,7 +100,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     // insert logic to check if there are pending changes here;
     // returning true will navigate without confirmation
     // returning false will show a confirm dialog before navigating away
-    return false;
+    return true;
   }
 
   /**
@@ -141,6 +141,18 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
           });
       }
     });
+  }
+
+  /**
+   * sets the item to the selected item, which will apply the selected class to the item
+   * @param item
+   */
+  selectItem(item: Item) {
+    if (this.selectedItem === item)
+      this.selectedItem = {} as Item;
+
+    else
+      this.selectedItem = item;
   }
 
   /**
