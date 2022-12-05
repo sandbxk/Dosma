@@ -12,8 +12,6 @@ import { EditorProfileComponent } from './components/editor-profile/editor-profi
 const routes: Routes = [
   { path: 'dashboard', component: UserGroceryListOverviewComponent },
   { path: 'grocery-list/:id', component: GroceryListComponent, canDeactivate: [PendingChangesGuard] },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
   { path: 'about', component: AboutUsComponent },
   { path: 'contact', component: ContactUsComponent },
   { path: 'account', component: EditorProfileComponent },

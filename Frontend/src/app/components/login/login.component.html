@@ -1,16 +1,15 @@
-<p>login works!</p>
+  <div mat-dialog-content>
+    <form >
+      <mat-form-field appearance="fill">
+        <mat-label>Username</mat-label>
+        <input required="true" matInput type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.loginRequest.username" name="username" (keyup.enter)="login()">
+      </mat-form-field>
 
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input required="true" matInput type="password" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.loginRequest.password" name="password" (keyup.enter)="login()">
+      </mat-form-field>
 
-<form>
- <mat-form-field appearance="fill">
-   <mat-label>Username</mat-label>
-   <input required="true" matInput type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.loginRequest.username" name="username" (keyup.enter)="login()">
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-   <mat-label>Password</mat-label>
-   <input required="true" matInput type="password" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.loginRequest.password" name="password" (keyup.enter)="login()">
-  </mat-form-field>
-
-  <button type="submit" mat-raised-button color="primary" (click)="login()">Login</button>
-</form>
+      <button type="submit" mat-raised-button color="primary" (click)="login()">Login</button>
+    </form>
+  </div>

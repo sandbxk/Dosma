@@ -7,6 +7,8 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
-  image = '../assets/Logo.png';
   title = 'Dosma';
+
+  constructor() {}
+
 }

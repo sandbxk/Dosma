@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { LoginRequest, User } from 'src/app/interfaces/User';
 import { ObjectGenerator } from 'src/app/util/ObjectGenerator';
@@ -19,9 +20,11 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('user', JSON.stringify(ObjectGenerator.userFromToken(result.token)));
       this.router.navigate(['/dashboard']);
     });
+
+    this.popup.close();
   }
 
-  constructor(private authService: AuthenticationService, private router : Router) {}
+  constructor(private authService: AuthenticationService, private router : Router, public popup: MatDialogRef<LoginComponent>) {}
 
   ngOnInit(): void {
 
@@ -30,7 +33,11 @@ export class LoginComponent implements OnInit {
     if (user) {
       console.log('token found in local storage');
       // TODO: check if token is valid
-      // navigate to dashboard
+        // true -> TODO: auto login & navigate to dashboard
+        // false -> TODO: remove token from local storage
+      return;
     }
+
+    console.log('no token found in local storage');
   }
 }

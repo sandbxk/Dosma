@@ -8,8 +8,10 @@ export class User {
   token: string = '';
 }
 
+export type AccessLevel = "READ" | "WRITE" | "DELETE";
+
 export class AccessObject {
-  access: ("READ" | "WRITE" | "DELETE")[]  = [];
+  access: AccessLevel[]  = [];
   resource: string = '';
   values : string[] = [];
 }

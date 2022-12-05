@@ -31,6 +31,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
 import { EditorProfileComponent } from './components/editor-profile/editor-profile.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { EditorProfileComponent } from './components/editor-profile/editor-profi
     ContactUsComponent,
     AboutUsComponent,
     EditorProfileComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
