@@ -1,0 +1,23 @@
+.state-checkbox {
+  .mat-checkbox {
+    &.skipped {
+      .mat-checkbox-inner-container:before {
+        content: 'X';
+        color: red;
+      }
+    }
+
+    &.done {
+      .mat-checkbox-inner-container:before {
+        content: '\2713';
+        color: green;
+      }
+    }
+
+    &.unchecked {
+      .mat-checkbox-inner-container:before {
+        content: '';
+      }
+    }
+  }
+}

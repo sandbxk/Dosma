@@ -27,6 +27,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import { NewItemComponent } from './components/new-item/new-item.component';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import { EditItemComponent } from './components/edit-item/edit-item.component';
+import { TriStateCheckboxComponent } from './components/tri-state-checkbox/tri-state-checkbox.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { EditItemComponent } from './components/edit-item/edit-item.component';
     ConfirmationDialogComponent,
     EditListDialogComponent,
     NewItemComponent,
-    EditItemComponent
+    EditItemComponent,
+    TriStateCheckboxComponent
   ],
     imports: [
         BrowserModule,
