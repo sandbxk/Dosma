@@ -22,7 +22,7 @@ public class ItemController : ControllerBase
     {
         try
         {
-            var result = _itemService.AddItemToList(item);
+            var result = _itemService.AddItem(item);
             return Created("Item/" + result.Id, result);
         }
         catch (ValidationException e)
@@ -36,12 +36,21 @@ public class ItemController : ControllerBase
     }
 
     [HttpPatch]
-    public ActionResult<Item> UpdateItem([FromBody] Item item)
+    [Route("{id}")]
+    public ActionResult<Item> UpdateItem([FromRoute] int id, [FromBody] Item item)
     {
+        if (id != item.Id)
+            throw new ValidationException("Item ID does not match ID in URL.");
+        
         try
         {
             var result = _itemService.UpdateItem(item);
-            return Ok(result);
+            
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok("Item has been updated.");
         }
         catch (ValidationException e)
         {
@@ -59,11 +68,15 @@ public class ItemController : ControllerBase
     public ActionResult DeleteItem([FromRoute] int id, [FromBody] Item item)
     {
         if (id != item.Id)
-            throw new ValidationException("List ID does not match ID in URL.");
+            throw new ValidationException("Item ID does not match ID in URL.");
         try
         {
-            var result = _itemService.DeleteItemFromList(id, item);
-            return Ok(item.Title + " has been deleted.");
+            var result = _itemService.DeleteItem(item);
+            
+            if (result)
+                return Ok(item.Title + " has been deleted.");
+            else
+                return StatusCode(304, "Item could not be deleted.");
         }
         catch (ValidationException e)
         {

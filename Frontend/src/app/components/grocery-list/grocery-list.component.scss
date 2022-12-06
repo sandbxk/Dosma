@@ -2,7 +2,7 @@
 @import "src/assets/themeVariables.scss";
 
 $width: 50em;
-$actionMenuHeight: 100px;
+$actionMenuHeight: 80px;
 
 .itemDnDContainer {
   width: $width;
@@ -40,10 +40,33 @@ Item box
   cursor: grabbing; //Should be move per convention, but looks bad
   background: $light-background;
   font-size: 14px;
+  min-height: 50px;
 }
 
 .itemBox:hover {
   background: map.get($accent-colors, "lighter");
+  transition: 0.3s;
+}
+
+.itemBoxSelected {
+  @extend .itemBox;
+  background: map.get($primary-colors, "main");
+
+}
+
+.itemBoxSelected:hover {
+  background: map.get($primary-colors, "lighter");
+  transition: 0.3s;
+}
+
+.editingItemBox {
+  @extend .itemBox;
+  background: darken($light-background, 5%);
+  cursor: default;
+}
+
+.editingItemBox:hover {
+  background: mix(darken($light-background, 5%), map.get($accent-colors, "lighter"), 80%);
   transition: 0.3s;
 }
 
@@ -137,7 +160,7 @@ Quantity box for indicating the quantity of an item
 }
 
 .parentContainer {
-  overflow-y: scroll;
+  //overflow-y: scroll;
   max-width: 100%;
   height: 100%;
   position: relative;
@@ -173,6 +196,23 @@ Quantity box for indicating the quantity of an item
   translate: 0 7px;
   padding: 0;
   display: inline;
+  margin-bottom: 30px;
+
+
+  max-width: 80%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.category {
+  position: absolute;
+  right: 45px;
+  font-size: 1em;
+  font-family: Roboto, serif;
+  padding: 3px;
+  display: inline;
+  background-color: map.get($accent-colors, "lighter");
 
   max-width: 80%;
   overflow: hidden;
@@ -257,7 +297,7 @@ Quantity box for indicating the quantity of an item
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.testBox {
+.testBox {  //TEMP
   width: $width;
   max-width: 95%;
   position: fixed;
@@ -269,3 +309,113 @@ Quantity box for indicating the quantity of an item
   border-top: 5px solid map.get($primary-colors, "main");
 }
 
+.dockToBottom {
+  width: $width;
+  max-width: 95%;
+  position: fixed;
+  display: inline-flex;
+  flex-direction: row-reverse;
+  justify-content: right;
+  align-items: center;
+  bottom: 0;
+  z-index: 110;
+  margin: 0;
+  height: $actionMenuHeight;
+}
+
+.dockToBottom > * {
+  margin: 0 8px;
+}
+
+.crudActionsContainer {
+  display: inline-flex;
+  flex-direction: row-reverse;
+}
+
+.crudActionsContainer > * {
+  margin: 0 8px;
+}
+
+.matFabAddBtn {
+  position: relative;
+  vertical-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  right: 0;
+  background-color: map.get($primary-colors, "darker");
+  color: map.get($primary-colors, "lighter");
+  transition: 0.3s;
+}
+
+.icon-display {
+  transform: scale(1.5);
+}
+
+.matFabAddBtn:hover {
+  background-color: map.get($primary-colors, "main");
+}
+
+.matFabAddBtn:active {
+  background-color: map.get($primary-colors, "lighter");
+  color: map.get($primary-colors, "darker");
+}
+
+
+.matFabMiniBtn {
+  @extend .matFabAddBtn;
+  background-color: map.get($grey-colors, "lighter");
+  color: $dark-primary-text;
+}
+
+.matFabMiniBtn:hover {
+  background-color: map.get($grey-colors, "main");
+}
+
+.matFabMiniBtn:active {
+  background-color: map.get($accent-colors, "lighter");
+}
+
+.matFabDeleteBtn {
+  @extend .matFabMiniBtn;
+}
+
+.matFabDeleteBtn:hover {
+  background-color: map.get($warn-colors, "main");
+  color: $light-text;
+}
+
+.matFabDeleteBtn:active {
+  background-color: map.get($warn-colors, "lighter");
+  color: map.get($warn-colors, "darker");
+}
+
+@keyframes leaveToBottom {
+  from { transform: translate(0); }
+  to { transform: translateY(50%) }
+}
+
+@keyframes returnFromBottom {
+  from { transform: translateY(50%); }
+  to { transform: translateY(0) }
+}
+
+
+.animateOutOfFrame {
+  animation: leaveToBottom 0.5s ease-in-out;
+  transition: 0.5s;
+  opacity: 0;
+}
+
+.animateIntoFrame {
+  animation: returnFromBottom 0.5s ease-in-out;
+  transition: 0.5s;
+  opacity: 1;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+}

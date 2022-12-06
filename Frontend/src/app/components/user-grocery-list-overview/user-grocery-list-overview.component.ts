@@ -57,7 +57,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.httpService.getAllLists().then(lists => {
+    this.httpService.getAllLists().then(lists => { //Get all the users lists
       this.groceryLists = lists;
     });
 
@@ -67,49 +67,59 @@ export class UserGroceryListOverviewComponent implements OnInit {
 
   }
 
-
+  /**
+   * Opens the create list dialog. If the user creates a list, it is added to the list of groceryLists and posted to the server
+   */
   newGroceryList() {
-    let dialogueRef = this.dialog.open(CreateListDialogComponent);
+    let dialogueRef = this.dialog.open(CreateListDialogComponent); // Open the create list dialog
 
-    dialogueRef.afterClosed().subscribe(async result => {
-      if (result !== undefined && result !== null) {
+    dialogueRef.afterClosed().subscribe(async result => { // Subscribe to the observable returned by the dialog
+      if (result !== undefined && result !== null) { // If the user created a list
 
         let dto = {
           title: result
         }
 
         const createdList = await this.httpService.createList(dto);
-        this.groceryLists.splice(0, 0, createdList);
+        this.groceryLists.splice(0, 0, createdList); // Add the created list to the list of groceryLists
       }
-    }).unsubscribe();
+    }).unsubscribe(); // Unsubscribe from the observable to prevent memory leaks
 
   }
 
+  /**
+   * Opens the selected grocery list by navigating to the list page, which uses the grocery-list component
+   * @param list
+   */
   selectList(list: GroceryList) {
-    this.dataService.updateListObject(list);
+    this.dataService.updateListObject(list); //Update the list object in the data service so that it can be accessed by other components
     this.router.navigate([`grocery-list/${list.id}`]);
   }
 
+  /**
+   * Opens the edit list dialog. If the user edits the list name, the list is updated in the list of groceryLists and posted to the server
+   * @param list
+   */
   editList(list: GroceryList) {
     let dialogueRef = this.dialog.open(EditListDialogComponent, {
-      data: {
+      data: { // Pass the list to the dialog so that it can be edited
         groceryList: list
       }
     });
 
     dialogueRef.afterClosed().subscribe(async editedList => {
       if (editedList !== null) {
-        const patchedList = await this.httpService.updateList(editedList);
+        const patchedList = await this.httpService.updateList(editedList); // Update the edited list on the server
 
-        let index = this.groceryLists.findIndex(x => x.id === patchedList.id);
-        this.groceryLists[index] = patchedList;
+        let index = this.groceryLists.findIndex(x => x.id === patchedList.id); // Find the index of the list in the list of groceryLists
+        this.groceryLists[index] = patchedList; // Update the list in the list of groceryLists
       }
-    }).unsubscribe();
+    }).unsubscribe(); // Unsubscribe from the observable to prevent memory leaks
   }
 
   deleteList(list: GroceryList) {
-    let dialogueRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
+    let dialogueRef = this.dialog.open(ConfirmationDialogComponent, { // Open the confirmation dialog
+      data: { // The message to be displayed in the dialog
         title: 'Delete Grocery List',
         message: "Are you sure you want to delete this grocery list?",
       }
@@ -117,14 +127,14 @@ export class UserGroceryListOverviewComponent implements OnInit {
 
     dialogueRef.afterClosed().subscribe(userSaidYes => {
       if (userSaidYes) {
-        this.httpService.deleteList(list).then(() => {
-          this.groceryLists.splice(this.groceryLists.indexOf(list), 1);
+        this.httpService.deleteList(list).then(() => { // Delete the list from the server
+          this.groceryLists.splice(this.groceryLists.indexOf(list), 1); // Remove the list from the list of groceryLists
         })
           .catch(err => {
           console.error(err);
         });
       }
-    }).unsubscribe();
+    }).unsubscribe(); // Unsubscribe from the observable to prevent memory leaks
   }
 
 

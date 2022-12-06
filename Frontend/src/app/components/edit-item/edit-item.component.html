@@ -1,0 +1,64 @@
+<div>
+  <div class="editItemContainer">
+    <form class="formContainer" [formGroup]="formControlGroup">
+
+
+      <div style="display: inline-flex">
+
+        <!-- Quantity input -->
+        <mat-form-field class="quantityInput">
+          <mat-label>Quantity</mat-label>
+          <input matInput
+                 type="number"
+                 placeholder="Ex. 3"
+                 formControlName="quantity"
+                 required
+                 min="1" max="99">
+
+        </mat-form-field>
+
+        <!-- Title input -->
+        <mat-form-field class="titleInput" color="accent">
+          <mat-label>Title</mat-label>
+          <input matInput
+                 type="text"
+                 placeholder="New item"
+                 formControlName="title"
+                 required>
+        </mat-form-field>
+
+        <!-- Category input -->
+      </div>
+      <mat-form-field class="categoryInput" color="accent">
+        <mat-label>Category</mat-label>
+        <input matInput
+               type="text"
+               placeholder="Ex. Fruit"
+               formControlName="category"
+               value="{{category?.value}}"
+               required
+               [matAutocomplete]="auto">
+      </mat-form-field>
+
+      <!-- The autocomplete options use for categories -->
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let categoryOpt of categories" [value]="categoryOpt">
+          {{categoryOpt}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <!-- Errors -->
+      <div style="transform: translateY(-5px);" >
+        <mat-error *ngIf="title?.errors?.['required']"> Title cannot be empty </mat-error>
+        <mat-error *ngIf="quantity?.errors"> Quantity must be between 1 and 99 </mat-error>
+        <mat-error *ngIf="category?.errors"> Not a valid category </mat-error>
+      </div>
+    </form>
+
+    <!-- Buttons -->
+    <div class="buttonContainer">
+      <button mat-raised-button color="primary" class="cancelButton" (click)="cancel()">Cancel</button>
+      <button mat-raised-button color="primary" class="saveButton" (click)="editItem()">Save</button>
+    </div>
+  </div>
+</div>

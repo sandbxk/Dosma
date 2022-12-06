@@ -5,7 +5,7 @@ namespace Application.Interfaces;
 
 public interface IItemService
 {
-    public Item AddItemToList(ItemDTO itemDTO);
-    public bool DeleteItemFromList(int id, Item item);
+    public Item AddItem(ItemDTO itemDTO);
+    public bool DeleteItem(Item item);
     public Item UpdateItem(Item item);
 }

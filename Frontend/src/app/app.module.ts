@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { GroceryListComponent } from "./components/grocery-list/grocery-list.component";
@@ -24,6 +23,10 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 import { PendingChangesGuard } from "../services/PendingChanges.guard";
 import { ItemCreatorComponent } from "./components/item-creator/item-creator.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatExpansionModule} from "@angular/material/expansion";
+import { NewItemComponent } from './components/new-item/new-item.component';
+import { MatAutocompleteModule} from "@angular/material/autocomplete";
+import { EditItemComponent } from './components/edit-item/edit-item.component';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { LoginComponent } from './components/login/login.component';
@@ -69,6 +72,10 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     MatCheckboxModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatExpansionModule,
+    MatAutocompleteModule,
+    NewItemComponent,
+    EditItemComponent
   ],
   providers: [MatSnackBar, PendingChangesGuard],
   bootstrap: [AppComponent]
