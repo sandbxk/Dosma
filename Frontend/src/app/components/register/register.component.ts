@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { RegisterRequest, User } from 'src/app/interfaces/User';
 import { ObjectGenerator } from 'src/app/util/ObjectGenerator';
 import { AuthenticationService } from 'src/services/authentication.service';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   templateUrl: './register.component.html',
@@ -11,7 +13,12 @@ import { AuthenticationService } from 'src/services/authentication.service';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private authService : AuthenticationService, private router: Router) { }
+  constructor(
+    private authService : AuthenticationService,
+    private router: Router,
+    public registerForm: MatDialogRef<RegisterComponent>,
+    private dialog: MatDialog
+    ) { }
 
   request : RegisterRequest = new RegisterRequest();
 
@@ -34,6 +41,15 @@ export class RegisterComponent implements OnInit {
       localStorage.setItem('user', JSON.stringify(ObjectGenerator.userFromToken(result.token)));
       this.router.navigate(['/login']);
     });
+  }
+
+  openLoginForm() {
+    this.registerForm.close();
+    this.dialog.open(LoginComponent);
+  }
+
+  cancel() {
+    this.registerForm.close();
   }
 
   ngOnInit(): void {

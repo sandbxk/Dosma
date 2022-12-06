@@ -1,4 +1,6 @@
-<p>register works!</p>
+<button mat-icon-button (click)="cancel()">
+  <mat-icon>close</mat-icon>
+</button>
 
 <form>
   <mat-form-field appearance="fill">
@@ -22,4 +24,6 @@
   </mat-form-field>
 
   <button type="submit" mat-raised-button color="primary" (click)="register()">Register</button>
+
+  <a mat-button (click)="openLoginForm()">Already a member</a>
 </form>

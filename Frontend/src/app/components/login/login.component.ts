@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { LoginRequest, User } from 'src/app/interfaces/User';
 import { ObjectGenerator } from 'src/app/util/ObjectGenerator';
 import { AuthenticationService } from 'src/services/authentication.service';
+import { RegisterComponent } from '../register/register.component';
 
 @Component({
   templateUrl: './login.component.html',
@@ -12,32 +13,84 @@ import { AuthenticationService } from 'src/services/authentication.service';
 export class LoginComponent implements OnInit {
 
   loginRequest : LoginRequest = new LoginRequest();
+  rememberMe: boolean = false;
+  error: string | any = '';
 
   login() {
-    console.log('login called');
-
     this.authService.login(this.loginRequest).then((result) => {
-      localStorage.setItem('user', JSON.stringify(ObjectGenerator.userFromToken(result.token)));
-      this.router.navigate(['/dashboard']);
-    });
-
-    this.popup.close();
+        // handle success
+        localStorage.setItem('user', JSON.stringify(ObjectGenerator.userFromToken(result.token)));
+        this.router.navigate(['/dashboard']);
+        this.loginForm.close();
+      }).catch((error) => {
+        // handle error
+        this.error = error;
+      }).finally(() => {
+        // save login data to local storage if remember me is checked regardless of login success
+        if (this.rememberMe) {
+          localStorage.setItem('rememberedLogin', JSON.stringify(this.loginRequest));
+        } else {
+          localStorage.removeItem('rememberedLogin');
+        }
+      }
+    );
   }
 
-  constructor(private authService: AuthenticationService, private router : Router, public popup: MatDialogRef<LoginComponent>) {}
+  cancel() {
+    this.loginForm.close();
+  }
 
-  ngOnInit(): void {
+  openRegisterForm() : void
+  {
+    this.loginForm.close();
+    this.dialog.open(RegisterComponent);
+  }
 
-    let user : User | null = JSON.parse(localStorage.getItem('user') || '{}');
+  openForgotPasswordForm() {
+    throw new Error('Method not implemented.');
+  }
+
+  toggleRememberMe() {
+    this.rememberMe = !this.rememberMe;
+  }
+
+  constructor(
+    private authService: AuthenticationService,
+    private router : Router,
+    public loginForm: MatDialogRef<LoginComponent>,
+    private dialog: MatDialog
+  ) {}
+
+  private loadRememberMe() : void{
+    let remembered : LoginRequest | null = JSON.parse(localStorage.getItem("rememberedLogin") as string);
+
+    if (remembered) {
+      this.loginRequest = remembered;
+      this.rememberMe = true;
+    } else {
+      this.rememberMe = false;
+    }
+  }
+
+  private loadSavedToken() : boolean {
+    let user : User | null = JSON.parse(localStorage.getItem('user') as string);
 
     if (user) {
       console.log('token found in local storage');
       // TODO: check if token is valid
-        // true -> TODO: auto login & navigate to dashboard
-        // false -> TODO: remove token from local storage
-      return;
+        // true -> TODO: auto login & navigate to dashboard & return true
+        // false -> TODO: remove token from local storage & return false
+      return false;
     }
 
-    console.log('no token found in local storage');
+    return false;
+  }
+
+  ngOnInit(): void {
+    if (this.loadSavedToken()) {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.loadRememberMe();
+    }
   }
 }

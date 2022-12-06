@@ -1,6 +1,6 @@
 
 <mat-toolbar color="primary">
-  <img [src]="image" alt="Logo" width="10%" />
+  <img [src]="image" alt="Logo" width="10%" (click)="goHome()"/>
   <span class="spacer"></span>
 
   <div>
@@ -9,7 +9,7 @@
       then hide them when the user logged in
     -->
     <button mat-button (click)="openLoginForm()">Login</button>
-    <button mat-button routerLink="/register">Register</button>
+    <button mat-button (click)="openRegisterForm()">Register</button>
     <!--
       if the user logged in drop down menu will be shown on the right side of the navigation bar
       when the user click on the drop down menu, the user can see the profile and logout button
