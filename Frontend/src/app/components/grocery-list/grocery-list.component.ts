@@ -1,17 +1,15 @@
-import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {GroceryList} from "../../interfaces/GroceryList";
 import {DataService} from "../../../services/data.service";
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 import {IComponentCanDeactivate} from "../../../services/PendingChanges.guard";
-import {Observable, timeout} from "rxjs";
+import {Observable} from "rxjs";
 import {Item} from "../../interfaces/Item";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
-import {NewItemComponent} from "../new-item/new-item.component";
-import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-grocery-list',
@@ -27,6 +25,16 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     items: []
   };
 
+  // Invalid item used to reset the editing item. Object.Freeze is used to prevent the object from being modified, making it immutable
+  placeholderItem: Item = Object.freeze({
+    id: 0,
+    title: "Placeholder",
+    quantity: 0,
+    category: "None",
+    status: 0,
+    groceryListId: 0
+  });
+
   // Valid categories for items
   categories: string[] = ['Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
   // The ID of the list we are currently viewing
@@ -36,7 +44,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   creatingItem: boolean = false;
 
   selectedItems: Item[] = [];
-  editingItem: Item = {} as Item;
+  editingItem: Item = this.placeholderItem;
+
 
   constructor(
     private currentRoute: ActivatedRoute,
@@ -64,32 +73,22 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   }
 
   //TODO:
-  // 2. Edit an item in the list -> ItemComponent
-  // 3. Delete an item from the list
-  //      Change mat menu for items to selected item options
-  //   ListMenu Options
-  //      Delete all items from the list?
-  //       Mark all items as purchased
-  //
-  // https://m2.material.io/components/buttons-floating-action-button
-  // Floating action button (as toggle for panel?)
-  //
-  //
+  // 1. Delete an item from the list
+  // 2. ListMenu Options
+  //    - Delete all items from the list?
+  //    - Mark all items as purchased
 
   //TODO: Item status
   // 4. Mark an item as purchased -> ItemStatusComponent
   // 5. Mark an item as skipped -> ItemStatusComponent
-  // 5. Mark all items as purchased -> ItemStatusComponent
-  //          ListMenu Options
-  // On check, opacity 0.7
+  // 5. Mark all items as purchased -> ListMenu Options
+  // On check, opacity 0.7 and strikethrough
+  // On skipped, color warn-light, opacity 0.7 and strikethrough
 
 
   //TODO: Sync
   // 7. Sync on timer -> SyncService?
   // 8. Sync on button press -> SyncService?
-
-  //TODO Layout
-  // Create menu for item options
 
 
   /**
@@ -109,7 +108,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    * Called when the user drops an item in the list
    * @param event
    */
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<Item>) {
     moveItemInArray(this.groceryList.items, event.previousIndex, event.currentIndex);
   }
 
@@ -170,17 +169,23 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   /**
    * Will toggle the visibility of the item creation panel
    * If the panel is to be made visible, the panel will be scrolled into view
-   * @param boolean
+   * @param showing
    */
   showNewItemPanel(showing: boolean) {
     this.creatingItem = showing;
 
     if (showing) {
+      this.cancelEditItem(true) // Cancel any item editing and close the editing panel
+
       const scrollToItem = () => this.scrollToItemCreationPanel()
       setTimeout(scrollToItem, 250); // Timeout is required as an additional element comes into view when the panel is shown, changing the scroll position
     }
+
   }
 
+  /**
+   * Scrolls the item creation panel into view
+   */
   scrollToItemCreationPanel() {
      const element: HTMLElement = document.getElementById("item-creation-panel")!
       element.scrollIntoView({
@@ -188,40 +193,80 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
         block: "start",
         inline: "nearest"
       });
-
-     return element;
   }
 
 
-  editItem(item: Item) {
-    this.editingItem = item;
+  /**
+   * Replaces the original item with the edited item emitted from the edit-item component
+   * @param $event
+   */
+  editItem($event: Item) {
+    let index = this.groceryList.items.indexOf(this.editingItem);
+    this.groceryList.items[index] = $event;
+    this.editingItem = this.placeholderItem;
   }
 
-  duplicateItem(item: Item) {
-
-  }
 
   deleteItem(item: Item) {
 
   }
 
   /**
+   * Clears the selected items array and closes the editing panel
+   */
+  clearSelectedItems() {
+    this.selectedItems = [];
+    this.cancelEditItem(true);
+  }
+
+  /**
+   * Cancels the editing of an item by setting it to the invalid placeholder item
+   * @param cancel
+   */
+  cancelEditItem(cancel: boolean) {
+    if (cancel)
+      this.editingItem = this.placeholderItem;
+  }
+
+  /**
    * Will open a dialog to edit the list title
    */
   editListName() {
+    // Open a dialog to edit the list name and pass the current grocery list
       let dialogueRef = this.dialog.open(EditListDialogComponent, {
         data: {
           groceryList: this.groceryList
         }
       });
 
+      //Set the new list name after the dialog closes
       dialogueRef.afterClosed().subscribe(async editedList => {
         if (editedList !== null) {
           this.groceryList.title = editedList.title;
         }
-      }).unsubscribe();
+      }).unsubscribe(); // Unsubscribe to prevent memory leaks
   }
 
+  /**
+   * Automatically disables drag and drop if the editing dialog or creation panel is open
+   * Does so through the cdkDropListDisabled directive
+   */
+  dragAndDropIsDisabled() {
+    if (this.editingItem.id !== 0) //If an item is being edited, disable drag and drop
+      return true;
+    if (this.creatingItem) //If the item creation panel is open, disable drag and drop
+      return true;
 
+    return false;
+  }
 
+  /**
+   * Will open a dialog to edit the selected item
+   */
+  startEditingItem() {
+    if (this.selectedItems.length === 1) {
+      this.editingItem = this.selectedItems[0];  // Set the item to be edited to the selected item
+      this.showNewItemPanel(false);  // Close the new item panel if it is open
+    }
+  }
 }

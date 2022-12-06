@@ -59,6 +59,17 @@ Item box
   transition: 0.3s;
 }
 
+.editingItemBox {
+  @extend .itemBox;
+  background: darken($light-background, 5%);
+  cursor: default;
+}
+
+.editingItemBox:hover {
+  background: mix(darken($light-background, 5%), map.get($accent-colors, "lighter"), 80%);
+  transition: 0.3s;
+}
+
 
 .itemBox:first-child {
   border-top: solid 2px map.get($accent-colors, "lighter");;
@@ -351,22 +362,22 @@ Quantity box for indicating the quantity of an item
 }
 
 
-.matFabEditBtn {
+.matFabMiniBtn {
   @extend .matFabAddBtn;
   background-color: map.get($grey-colors, "lighter");
   color: $dark-primary-text;
 }
 
-.matFabEditBtn:hover {
-  background-color: map.get($accent-colors, "main");
+.matFabMiniBtn:hover {
+  background-color: map.get($grey-colors, "main");
 }
 
-.matFabEditBtn:active {
+.matFabMiniBtn:active {
   background-color: map.get($accent-colors, "lighter");
 }
 
 .matFabDeleteBtn {
-  @extend .matFabEditBtn;
+  @extend .matFabMiniBtn;
 }
 
 .matFabDeleteBtn:hover {
