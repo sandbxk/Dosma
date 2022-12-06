@@ -22,7 +22,7 @@
 .buttonContainer{
   display: flex;
   flex-direction: row;
-  align-items: end;
+  align-items: flex-end;
   padding: 0.2em;
   float: right;
 }
@@ -34,7 +34,7 @@
   border-radius: 15px;
   padding: 10px 10px 0 10px;
   margin-top: 10px;
-  display: flex;
+  display: block;
   min-height: 80px;
 }
 
@@ -61,20 +61,33 @@
 }
 
 .addButton {
-  position: relative;
-  float: right;
-  max-height: 32px;
-  left: 0;
-  bottom: 0;
-}
-
-.addButton {
-  margin-right: 5px;
   max-height: 32px;
 }
 
-.cancelButton {
+.addButton:hover {
+  background-color: map.get($primary-colors, "darker");
+  color: $dark-primary-text !important;
+}
+
+.addButton:active {
+  background-color: map.get($primary-colors, "lighter");
+  color: $dark-primary-text !important;
+}
+
+.closeButton {
   margin-right: 10px;
   max-height: 32px;
-  background-color: darken($light-disabled-text, 30%);
+  background-color: map.get($grey-colors, "main");
 }
+
+.closeButton:hover {
+  background-color: map.get($grey-colors, "darker");
+  color: $light-text !important;
+}
+
+.closeButton:active {
+  background-color: map.get($grey-colors, "lighter");
+  color: $dark-text !important;
+}
+
+

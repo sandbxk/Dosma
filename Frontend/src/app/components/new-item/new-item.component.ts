@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {map, Observable, startWith} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Item} from "../../interfaces/Item";
@@ -14,19 +14,17 @@ export class NewItemComponent implements OnInit {
 
   // Event types for the parent component
   @Output() newItemEvent = new EventEmitter<Item>();
-  @Output() cancelItemCreationEvent = new EventEmitter<boolean>();
+  @Output() closeItemCreationEvent = new EventEmitter<boolean>();
 
   formControlGroup: FormGroup = new FormGroup({});
 
   // List of categories for the autocomplete
   categories: string[] = ['None', 'Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
   // ID for the grocery list. TODO: Get this from the parent component with @Input
-  groceryListId: number = 0;
+  @Input() groceryListId: number = 0;
 
 
-  constructor(
-    private dataService: DataService
-  ) { }
+  constructor() { }
 
   ngOnInit(): void {
     // Initialize the formGroup and its controls
@@ -39,10 +37,6 @@ export class NewItemComponent implements OnInit {
         [FormCustomValidators.autocompleteStringValidator(this.categories)]) //Use custom validator to check if the category is in the list
     });
 
-
-    this.dataService.currentListStageObject.subscribe(list => {
-      this.groceryListId = list.id
-    }).unsubscribe();
   }
 
   /**
@@ -94,14 +88,13 @@ export class NewItemComponent implements OnInit {
   }
 
   //TODO:
-  // scroll to
   // add new item db
 
   /**
    * Emits an event to the parent component to close the item creation panel
    */
   close() {
-    this.cancelItemCreationEvent.emit(false);
+    this.closeItemCreationEvent.emit(true);
   }
 
   /**
