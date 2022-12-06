@@ -54,12 +54,6 @@ app.UseCors(options =>
     options.SetIsOriginAllowed(origin => true)
         .AllowAnyMethod()
         .AllowAnyHeader()
-        .AllowAnyOrigin()
-        .WithOrigins(
-            "http://localhost:4200",
-            "https://dosma.mbarth.dk",
-            "https://mbarth.dk"
-        )
         .AllowCredentials();
 });
 

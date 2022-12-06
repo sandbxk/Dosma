@@ -18,7 +18,7 @@ export class UserService {
    * @see User
    */
   isLoggedIn() : boolean {
-    let user : User | null = JSON.parse(localStorage.getItem('user') || '{}');
+    let user : User | null = JSON.parse(localStorage.getItem('user') as string);
 
     if (user) {
       // TODO: check if time is expired
@@ -94,7 +94,7 @@ export class UserService {
    * @see AccessResources @see AccessLevel @see AccessObject @see User
    */
   private hasClaim(resource : AccessResources, level: LevelUndefined = undefined) : WrappedBool | AccessSingle | AccessList {
-    let user : User | null = JSON.parse(localStorage.getItem('user') || '{}');
+    let user : User | null = JSON.parse(localStorage.getItem('user') as string);
 
     if (user) {
 

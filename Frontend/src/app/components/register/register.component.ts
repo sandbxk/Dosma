@@ -25,8 +25,6 @@ export class RegisterComponent implements OnInit {
   confirm_password : string = '';
 
   register() {
-
-    console.log('request', this.request);
     if (this.request.username == '' || this.request.password == '') {
       alert('Please fill in all required (*) fields');
       return;

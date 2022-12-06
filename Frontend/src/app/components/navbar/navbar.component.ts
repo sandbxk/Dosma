@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {  Router } from '@angular/router';
+import { UserService } from 'src/services/user.service';
 import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
 
@@ -13,7 +14,12 @@ export class NavbarComponent implements OnInit {
 
   image = '../assets/Logo.png';
 
-  constructor(private dialog: MatDialog, private router: Router) { }
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    public user: UserService
+
+  ) { }
 
   openLoginForm() : void
   {
@@ -28,6 +34,10 @@ export class NavbarComponent implements OnInit {
   goHome() : void
   {
     this.router.navigate(['dashboard']);
+  }
+
+  logoutCurrentUser() {
+    localStorage.removeItem('user');
   }
 
   ngOnInit(): void {
