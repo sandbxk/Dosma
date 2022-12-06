@@ -10,11 +10,41 @@ import {Item} from "../../interfaces/Item";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
+import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-grocery-list',
   templateUrl: './grocery-list.component.html',
-  styleUrls: ['./grocery-list.component.scss']
+  styleUrls: ['./grocery-list.component.scss'],
+  animations: [  // This is the animation for the items, triggered upon adding and removing items
+    trigger("inOutAnimation", [
+      state("in", style({ opacity: 1 })),
+      transition(":enter", [
+        animate(
+          300,
+          keyframes([
+            style({ opacity: 0, offset: 0 }),
+            style({ opacity: 0.25, offset: 0.25 }),
+            style({ opacity: 0.5, offset: 0.5 }),
+            style({ opacity: 0.75, offset: 0.75 }),
+            style({ opacity: 1, offset: 1 }),
+          ])
+        )
+      ]),
+      transition(":leave", [
+        animate(
+          300,
+          keyframes([
+            style({ opacity: 1, offset: 0 }),
+            style({ opacity: 0.75, offset: 0.25 }),
+            style({ opacity: 0.5, offset: 0.5 }),
+            style({ opacity: 0.25, offset: 0.75 }),
+            style({ opacity: 0, offset: 1 }),
+          ])
+        )
+      ])
+    ])
+  ]
 })
 export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
@@ -207,8 +237,32 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   }
 
 
-  deleteItem(item: Item) {
+  deleteItems() {
+    const itemsToDelete = this.selectedItems;
 
+    let deleteMessage = "";
+
+    if (itemsToDelete.length === 1)
+      deleteMessage = "Are you sure you want to delete this item?";
+    else
+      deleteMessage = `Are you sure you want to delete these ${itemsToDelete.length} items?`;
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        title: 'Delete Items',
+        message: deleteMessage
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(userSaidYes => {
+      if (userSaidYes) {
+        const setOfItemsToDelete = new Set(itemsToDelete);
+        const newGroceryListItems = this.groceryList.items.filter((item) => {
+          return !setOfItemsToDelete.has(item);
+        });
+        this.groceryList.items = newGroceryListItems;
+      }
+    });
   }
 
   /**
@@ -269,4 +323,5 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
       this.showNewItemPanel(false);  // Close the new item panel if it is open
     }
   }
+
 }

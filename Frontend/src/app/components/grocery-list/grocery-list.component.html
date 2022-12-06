@@ -50,7 +50,7 @@
 
   <!-- ITEMS -->
   <div cdkDropList class="itemDnDContainer" (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="dragAndDropIsDisabled()"> <!-- Drag and Drop container -->
-    <div  *ngFor="let item of groceryList.items"
+    <div [@inOutAnimation]="'in'"  *ngFor="let item of groceryList.items"
           class="itemBox" [ngClass]="selectedItems.includes(item) ? 'itemBoxSelected' : 'itemBox'"
           (click)="selectItem(item)"
           cdkDrag [cdkDragData]="item">
@@ -64,7 +64,7 @@
           <p class="quantityIndicatorSingle" *ngIf="item.quantity == 1;"></p>  <!-- Single quantity indicator with only a circle -->
         </ng-template>
         <mat-label>{{item.title | truncate: 60}}</mat-label>  <!-- Item title truncated to 60 chars-->
-        <mat-label class="category" *ngIf="item.category && item.category != 'None'"> <!-- Item category | Not displated if the category is 'None'-->
+        <mat-label class="category" *ngIf="item.category && item.category != 'None'"> <!-- Item category | Not displayed if the category is 'None'-->
           <span>  {{item.category}} </span>
         </mat-label>
       </div>
@@ -87,7 +87,7 @@
     <!-- item creation panel, using the new-item component. NewItemEvent and CancelItemCreationEvent are @output events
      in the child component and will be emitted in addItem() and close(). The [groceryListId] sets the variable
      groceryListId in the child component to the chosen value, using @input -->
-     <div id="item-creation-panel" [class.hidden]="!creatingItem">
+     <div id="item-creation-panel" [ngClass]="creatingItem ? 'animateIntoFrame' : 'animateOutOfFrame'">
       <app-new-item
         id="new-item-panel" [groceryListId]="groceryList.id"
         (newItemEvent)="addItem($event)" (closeItemCreationEvent)="showNewItemPanel(!$event)">
@@ -111,7 +111,7 @@
       <mat-icon>edit</mat-icon>
     </button>
 
-    <button mat-mini-fab class="matFabDeleteBtn">
+    <button mat-mini-fab (click)="deleteItems()" class="matFabDeleteBtn">
       <mat-icon>delete</mat-icon>
     </button>
 
