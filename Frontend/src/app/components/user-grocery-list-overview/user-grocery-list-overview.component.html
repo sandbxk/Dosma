@@ -10,7 +10,7 @@
       </mat-card>
 
 
-      <div [@inOutAnimation]="'in'" *ngFor="let list of groceryLists"> <!--Card for each list-->
+      <div [@inOutAnimation] *ngFor="let list of groceryLists"> <!--Card for each list-->
         <mat-card (click)="selectList(list)" class="listCard">
           <mat-card-header> <!--Card header for the list name -->
             <div class="listCardTitle">

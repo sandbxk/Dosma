@@ -1,38 +1,68 @@
-::ng-deep {
-  .state-checkbox {
-    &.skipped {
-      // Style the checkbox with a red cross
-      &::before {
-        // Target the mat-checkbox-inner-container element
-        .mat-checkbox-inner-container {
-          // Use the ::before pseudo-element to insert the content
-          &::before {
-            content: "\2715" !important; // Unicode code for a cross symbol
-            color: red !important; // Use !important to make the style have a higher priority
-          }
-        }
-      }
-    }
+@use "sass:map";
+@import "src/assets/themeVariables.scss";
 
-    &.done {
-      // Style the checkbox with a green checkmark
-      &::before {
-        // Target the mat-checkbox-inner-container element
-        .mat-checkbox-inner-container {
-          // Use the ::before pseudo-element to insert the content
-          &::before {
-            content: "\2713" !important; // Unicode code for a checkmark symbol
-            color: green !important; // Use !important to make the style have a higher priority
-          }
-        }
-      }
-    }
+.state-checkbox {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid map.get($grey-colors, "darker");
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  vertical-align: middle;
+  margin-right: 5px;
+  margin-top: 2px;
 
-    &.unchecked {
-      // Style the checkbox as an empty box
-      // This could be done using the border and background-color properties, for example
-    }
+  &.skipped {
+    background-color: map.get($warn-colors, "main");
+    border: 2px solid map.get($warn-colors, "main");
+  }
+
+  &.done {
+    background-color: map.get($accent-colors, "main");
+    border: 2px solid map.get($accent-colors, "main");
+  }
+
+  &.unchecked {
+    background-color: transparent;
+    border: 2px solid map.get($grey-colors, "darker");
   }
 }
 
+@keyframes hide {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.show {
+  animation: show 0.3s ease-in-out;
+}
+
+.hide {
+  animation: hide 0.3s ease-in-out;
+}
+
+.icon {
+  vertical-align: center;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0%;
+  left: 18px;
+  transform: scale(0.9);
+  color: $light-background;
+}

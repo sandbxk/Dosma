@@ -1,8 +1,17 @@
-<mat-checkbox
-  class="state-checkbox"
-  [class.skipped]="status === 2"
-  [class.done]="status === 1"
-  [class.unchecked]="status === 0"
+<div> <!-- Glow -->
 
-  (change)="onChange()">
-</mat-checkbox>
+  <div class="state-checkbox"
+       (click)="onChange()"
+       [class.skipped]="status === statusEnum.Skipped"
+       [class.done]="status === statusEnum.Done"
+       [class.unchecked]="status === statusEnum.Unchecked"
+
+       (change)="onChange()"> <!-- Frame -->
+
+        <mat-icon [@inOutAnimation] class="icon" *ngIf="statusEnum.Done === status">done</mat-icon>
+
+        <mat-icon  [@inOutAnimation] class="icon" *ngIf="status === statusEnum.Skipped">clear</mat-icon>
+        <mat-icon  [@inOutAnimation] class="icon" *ngIf="status === statusEnum.Unchecked"></mat-icon>
+  </div>
+
+</div>
