@@ -5,6 +5,9 @@ using Application.Helpers;
 using AutoMapper;
 using FluentValidation;
 using Application.DTOs;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace Application;
 
@@ -31,7 +34,7 @@ public class AuthenticationService : IAuthenticationService
         {
             if (HashGenerator.Validate(request.Password, user.Salt, user.HashedPassword))
             {
-                token = TokenGenerator.GenerateToken(user, _secret);
+                token = GenerateToken(_mapper.Map<TokenUserDTO>(user), _secret);
                 return true;
             }
 
@@ -71,7 +74,7 @@ public class AuthenticationService : IAuthenticationService
         {
             user = _userRepository.Create(ObjectGenerator.GenerateUser(request));
 
-            token = TokenGenerator.GenerateToken(user, _secret);
+            token = GenerateToken(_mapper.Map<TokenUserDTO>(user), _secret);
             return true;
         }
         catch (Exception e)
@@ -84,9 +87,40 @@ public class AuthenticationService : IAuthenticationService
 
     public bool AuthenticateToken(string token)
     {
-        return TokenGenerator.ValidateToken(token, _secret);
+        var handler = new JwtSecurityTokenHandler();
+        var validationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(_secret),
+        };
+
+        try
+        {
+            handler.ValidateToken(token, validationParameters, out _);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
+    public User? GetUserFromToken(string token)
+    {
+        try
+        {
+            var payload = new JwtSecurityTokenHandler().ReadJwtToken(token);
+
+            return FindUser(payload.Claims.First(c => c.Type == "username").Value);
+        }
+        catch
+        {
+            return null;
+        }
+    }
 
     /// <summary>
     ///     Finds a user by username.
@@ -126,6 +160,38 @@ public class AuthenticationService : IAuthenticationService
         }
     }
 
+    /// <summary>
+    ///     Generates a JWT token
+    /// </summary>
+    /// <param name="user">The user object</param>
+    /// <param name="secret">The secret used to sign the token</param>
+    /// <returns>The generated token</returns>
+    /// <remarks>
+    ///     This method is used by
+    ///     <list>
+    ///         <item><see cref="AuthenticationService.Login"/></item>
+    ///         <item><see cref="AuthenticationService.Register"/></item>
+    ///     </list>
+    /// </remarks>
+    /// <completionlist cref="(User, AuthenticationService)"/>
+    /// <author>
+    ///     <name>Mads Mandahl-Barth</name>
+    /// </author>
+    public string GenerateToken(TokenUserDTO user, byte[] secret)
+    {
+        List<Claim> claims = new()
+        {
+            new Claim("id", user.Id.ToString()),
+            new Claim("name", user.DisplayName ?? user.Username),
+            new Claim("username", user.Username),
+        };
+
+        var payload = new JwtPayload(null, null, claims, DateTime.Now, DateTime.Now.AddMinutes(45));
+        var header = new JwtHeader(new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha512));
+        var token = new JwtSecurityToken(header, payload);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
 
     public AuthenticationService(
         IUserRepository userRepository, 

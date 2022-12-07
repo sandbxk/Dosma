@@ -1,4 +1,5 @@
 using Application.DTOs;
+using Domain;
 
 namespace Application.Interfaces;
 
@@ -58,4 +59,6 @@ public interface IAuthenticationService
     public bool Register(RegisterRequest request, out string token);
 
     public bool AuthenticateToken(string token);
+
+    public User? GetUserFromToken(string token);
 }
