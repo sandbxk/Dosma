@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using Domain;
 using Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 
-public class GroceryListRepository : IRepository<GroceryList>
+public class GroceryListRepository : IGroceryListRepository
 {
     private DatabaseContext _dbContext;
     
@@ -59,8 +60,40 @@ public class GroceryListRepository : IRepository<GroceryList>
 
     public GroceryList Update(GroceryList model)
     {
-        _dbContext.GroceryListsTable.Update(model);
-        _dbContext.SaveChanges();
+        var existingList = _dbContext.GroceryListsTable.Find(model.Id) ?? throw new NullReferenceException("List not found.");
+
+        foreach (PropertyInfo prop in existingList.GetType().GetProperties())
+        {
+            var propertyName = prop.Name;
+            var value = prop.GetValue(model);
+            
+            if (value != null)
+            {
+                var field = existingList.GetType().GetProperty(propertyName);
+                if (field != null)
+                {
+                    field.SetValue(existingList, value);
+                }
+            }
+        }
+        
+        _dbContext.Update(existingList);
+        int change = _dbContext.SaveChanges();
+
+        if (change == 0)
+        {
+            throw new NullReferenceException("Unable to update list.");
+        }
         return model;
+    }
+
+    public List<UserList> AddUser(User user, GroceryList groceryList)
+    {
+        throw new NotImplementedException();
+    }
+
+    public List<UserList> RemoveUser(User user, GroceryList groceryList)
+    {
+        throw new NotImplementedException();
     }
 }
