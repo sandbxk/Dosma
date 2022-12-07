@@ -12,7 +12,7 @@ public interface IAuthenticationService
     ///     </para>
     /// </summary>
     /// <param name="request">The login request.</param>
-    /// <param name="token_result">The JWT token or error message.</param>
+    /// <param name="token">The JWT token</param>
     /// <returns>
     ///     <list type="bullet">
     ///         <item>
@@ -21,7 +21,7 @@ public interface IAuthenticationService
     ///         </item>
     ///         <item>
     ///             <term>False</term>
-    ///             <description>some error occured, see the info in <see cref="token_result"/></description>
+    ///             <description>wrong credentials</description>
     ///         </item>
     ///     </list>
     /// </returns>
@@ -29,7 +29,7 @@ public interface IAuthenticationService
     ///     <name>Mads Mandahl-Barth</name>
     /// </author>
     ///
-    public bool Login(LoginRequest request, out string token_result);
+    public bool Login(LoginRequest request, out string token);
 
     /// <summary>
     ///     Registers a new user and creates a JWT token.
@@ -39,7 +39,7 @@ public interface IAuthenticationService
     ///     </para>
     /// </summary>
     /// <param name="request">The registration request.</param>
-    /// <param name="token_result">The JWT token or error message.</param>
+    /// <param name="token">The JWT token</param>
     /// <returns>
     ///     <list type="bullet">
     ///         <item>
@@ -48,12 +48,14 @@ public interface IAuthenticationService
     ///         </item>
     ///         <item>
     ///             <term>False</term>
-    ///             <description>some error occured, see the info in <see cref="token_result"/></description>
+    ///             <description>some error - the user could not be created.</description>
     ///         </item>
     ///     </list>
     /// </returns>
     /// <author>
     ///     <name>Mads Mandahl-Barth</name>
     /// </author>
-    public bool Register(RegisterRequest request, out string token_result);
+    public bool Register(RegisterRequest request, out string token);
+
+    public bool AuthenticateToken(string token);
 }

@@ -11,103 +11,82 @@ namespace Application;
 public class AuthenticationService : IAuthenticationService
 {
     /// <inheritdoc/>
-    /// <remarks>
-    ///     The method will never throw an exception.
-    ///     <list type="bullet">
-    ///         <item>
-    ///             <term>ERROR</term>
-    ///             <description>Error that may contain sensitive information that shouldn't be sent to the frontend</description>
-    ///         </item>
-    ///         <item>
-    ///             <term>WARNING</term>
-    ///             <description>Safe"" error messages that has a certain user mistake associated, and can therefore be shown to anyone</description>
-    ///         </item>
-    ///     </list>
-    /// </remarks>
-    public bool Login(LoginRequest request, out string token_result)
+    public bool Login(LoginRequest request, out string token)
     {
+        if (!_loginValidator.Validate(request).IsValid)
+        {
+            throw new ArgumentException("Invalid login request");
+        }
+        
+        var user = FindUser(request.Username); 
+        
+        if (user == null)
+        {
+            throw new ArgumentException("User not found");
+        }
+
+        token = "";
+
         try
         {
-            _loginValidator.ValidateAndThrow(request);
-
-            var user = FindUser(request.Username); 
-
-            if (user == null)
-            {
-                token_result = "WARNING: User not found";
-                return false;
-            }
-
             if (HashGenerator.Validate(request.Password, user.Salt, user.HashedPassword))
             {
-                token_result = TokenGenerator.GenerateToken(user, _secret);
+                token = TokenGenerator.GenerateToken(user, _secret);
                 return true;
             }
 
-            token_result = "WARNING: User could not be authenticated";
-            return false;
-        }
-        catch (ArgumentOutOfRangeException ae)
-        {
-            token_result = "ERROR: JWT Generation error ->" + ae.Message;
             return false;
         }
         catch (Exception e)
         {
-            token_result = "ERROR: " + e.Message;
-            return false;
+            // server error - rethrow any as InvalidProgramException
+
+            throw new InvalidProgramException("JWT Generation error", e);
         }
     }
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     The method will never throw an exception.
-    ///     <list type="bullet">
-    ///         <item>
-    ///             <term>ERROR</term>
-    ///             <description>Error that may contain sensitive information that shouldn't be sent to the frontend</description>
-    ///         </item>
-    ///         <item>
-    ///             <term>WARNING</term>
-    ///             <description>Safe"" error messages that has a certain user mistake associated, and can therefore be shown to anyone</description>
-    ///         </item>
-    ///     </list>
-    /// </remarks>
-    public bool Register(RegisterRequest request, out string token_result)
-    {
+    public bool Register(RegisterRequest request, out string token)
+    { 
+        if (_registerValidator.Validate(request).IsValid)
+        {
+            throw new ArgumentException("Invalid registration request");
+        }
+
+        var user = FindUser(request.Username);
+        
+        if (user != null)
+        {
+            throw new ArgumentException("User already exists");
+        }
+        
+        if (string.IsNullOrWhiteSpace(request.DisplayName))
+        {
+            request.DisplayName = request.Username;
+        }
+
+        token = "";
+
         try
         {
-            _registerValidator.ValidateAndThrow(request);
-
-            var user = FindUser(request.Username);
-
-            if (user != null)
-            {
-                token_result = "WARNING: User already exists";
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(request.DisplayName))
-            {
-                request.DisplayName = request.Username;
-            }
-
             user = _userRepository.Create(ObjectGenerator.GenerateUser(request));
 
-            token_result = TokenGenerator.GenerateToken(user, _secret);
+            token = TokenGenerator.GenerateToken(user, _secret);
             return true;
-        }
-        catch (ArgumentOutOfRangeException ae)
-        {
-            token_result = "ERROR: JWT Generation error ->" + ae.Message;
-            return false;
         }
         catch (Exception e)
         {
-            token_result = "ERROR: " + e.Message;
-            return false;
+            // server error - rethrow any as InvalidProgramException
+
+            throw new InvalidProgramException("Error creating new user", e);
         }
     }
+
+    public bool AuthenticateToken(string token)
+    {
+        return TokenGenerator.ValidateToken(token, _secret);
+    }
+
 
     /// <summary>
     ///     Finds a user by username.
@@ -146,6 +125,7 @@ public class AuthenticationService : IAuthenticationService
             return null;
         }
     }
+
 
     public AuthenticationService(
         IUserRepository userRepository, 

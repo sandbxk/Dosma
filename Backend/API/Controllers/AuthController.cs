@@ -25,14 +25,30 @@ public class AuthController : ControllerBase
     public ActionResult Login([FromBody] LoginRequest loginInfo)
     {
         if (loginInfo == null)
-            return BadRequest("No login information provided.");
-
-        if (_authenticationService.Login(loginInfo, out string result))
         {
-            return Ok(new TokenResponseDTO { Token = result });
+            return BadRequest("No login information provided.");
         }
 
-        return BadRequest(new TokenResponseDTO { Status = 400, ErrorMessage = result });
+        try
+        {
+            if (_authenticationService.Login(loginInfo, out string result))
+            {
+                return Ok(new TokenDTO { Token = result });
+            }
+        }
+        catch (Exception e)
+        {
+            if (Application.Helpers.Configuration.IsDebug)
+            {
+                return StatusCode(500, e.Message);
+            }
+            else
+            {
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+
+        return BadRequest("Invalid username or password.");
     }
 
     [AllowAnonymous]
@@ -42,13 +58,29 @@ public class AuthController : ControllerBase
     public ActionResult Register([FromBody] RegisterRequest registrationInfo)
     {
         if (registrationInfo == null)
-            return BadRequest("No registration information provided.");
-
-        if (_authenticationService.Register(registrationInfo, out string result))
         {
-            return Ok(new TokenResponseDTO { Token = result });
+            return BadRequest("No registration information provided.");
         }
 
-        return BadRequest(new TokenResponseDTO { Status = 400, ErrorMessage = result });
+        try 
+        {
+            if (_authenticationService.Register(registrationInfo, out string result))
+            {
+                return Ok(new TokenDTO { Token = result });
+            }
+        }
+        catch (Exception e)
+        {
+            if (Application.Helpers.Configuration.IsDebug)
+            {
+                return StatusCode(500, e.Message);
+            }
+            else
+            {
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+
+        return BadRequest("User could not be registered.");
     }
 }
