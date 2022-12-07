@@ -19,6 +19,7 @@ public class GroceryListRepository : IGroceryListRepository
     {
         return _dbContext.GroceryListsTable
             .Include(l => l.Items)
+            .Include(l => l.Users)
             .ToList();
     }
 
@@ -30,7 +31,12 @@ public class GroceryListRepository : IGroceryListRepository
         }
         
         _dbContext.GroceryListsTable.Add(t);
-        _dbContext.SaveChanges();
+        int change = _dbContext.SaveChanges();
+
+        if (change == 0)
+        {
+            throw new Exception("Unable to create list");
+        }
         return t;
     }
 
