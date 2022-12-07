@@ -13,6 +13,7 @@ export class UserService {
 
   constructor() { }
 
+
   /**
    * @returns True if the user is logged in, false otherwise
    * @see User
