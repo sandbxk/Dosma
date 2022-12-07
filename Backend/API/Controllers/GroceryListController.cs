@@ -28,12 +28,6 @@ public class GroceryListController : ControllerBase
         return _groceryListService.GetAllLists();
     }
 
-    [HttpGet("{id}")]
-    public IEnumerable<GroceryList> GetListsByUser([FromBody] User user)
-    {
-        return _groceryListService.GetListsByUser(user);
-    }
-
     [HttpPost]
     public ActionResult<GroceryList> CreateGroceryList(GroceryListDTO dto)
     {
