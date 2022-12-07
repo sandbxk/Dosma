@@ -59,8 +59,19 @@ Item box
   transition: 0.3s;
 }
 
+@keyframes growToEditItemBoxHeight {
+  from {
+    height: 50px;
+  }
+  to {
+    height: 130px;
+  }
+}
+
 .editingItemBox {
   @extend .itemBox;
+  animation: growToEditItemBoxHeight 0.3s ease-in-out;
+  height: 130px;
   background: darken($light-background, 5%);
   cursor: default;
 }

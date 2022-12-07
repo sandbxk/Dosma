@@ -1,6 +1,7 @@
 @use "sass:map";
 @import "src/assets/themeVariables.scss";
 
+
 .quantityInput{
   font-size: 1em;
   font-weight: 500;
@@ -34,6 +35,7 @@
   display: block;
   min-height: 80px;
 }
+
 
 .formContainer{
   display: inline-block;

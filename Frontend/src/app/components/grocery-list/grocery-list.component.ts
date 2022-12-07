@@ -5,7 +5,7 @@ import {GroceryList} from "../../interfaces/GroceryList";
 import {DataService} from "../../../services/data.service";
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 import {IComponentCanDeactivate} from "../../../services/PendingChanges.guard";
-import {Observable} from "rxjs";
+import {Observable, timeout} from "rxjs";
 import {Item} from "../../interfaces/Item";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -233,6 +233,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   editItem($event: Item) {
     let index = this.groceryList.items.indexOf(this.editingItem);
     this.groceryList.items[index] = $event;
+
     this.editingItem = this.placeholderItem;
   }
 
@@ -278,8 +279,9 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    * @param cancel
    */
   cancelEditItem(cancel: boolean) {
-    if (cancel)
+    if (cancel) {
       this.editingItem = this.placeholderItem;
+    }
   }
 
   /**
