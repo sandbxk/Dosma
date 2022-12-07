@@ -1,9 +1,11 @@
+import {Status} from "./StatusEnum";
+
 export interface Item {
   id: number;
   title: string;
   quantity: number;
   groceryListId: number;
-  status: number;
+  status: Status;
   category: string;
 
 }

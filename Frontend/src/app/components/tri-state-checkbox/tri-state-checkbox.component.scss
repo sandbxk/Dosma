@@ -1,23 +1,38 @@
-.state-checkbox {
-  .mat-checkbox {
+::ng-deep {
+  .state-checkbox {
     &.skipped {
-      .mat-checkbox-inner-container:before {
-        content: 'X';
-        color: red;
+      // Style the checkbox with a red cross
+      &::before {
+        // Target the mat-checkbox-inner-container element
+        .mat-checkbox-inner-container {
+          // Use the ::before pseudo-element to insert the content
+          &::before {
+            content: "\2715" !important; // Unicode code for a cross symbol
+            color: red !important; // Use !important to make the style have a higher priority
+          }
+        }
       }
     }
 
     &.done {
-      .mat-checkbox-inner-container:before {
-        content: '\2713';
-        color: green;
+      // Style the checkbox with a green checkmark
+      &::before {
+        // Target the mat-checkbox-inner-container element
+        .mat-checkbox-inner-container {
+          // Use the ::before pseudo-element to insert the content
+          &::before {
+            content: "\2713" !important; // Unicode code for a checkmark symbol
+            color: green !important; // Use !important to make the style have a higher priority
+          }
+        }
       }
     }
 
     &.unchecked {
-      .mat-checkbox-inner-container:before {
-        content: '';
-      }
+      // Style the checkbox as an empty box
+      // This could be done using the border and background-color properties, for example
     }
   }
 }
+
+

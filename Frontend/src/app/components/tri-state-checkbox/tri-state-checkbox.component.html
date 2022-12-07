@@ -1,9 +1,8 @@
-<mat-checkbox class="state-checkbox" [class.skipped]="state === status.Skipped"
-              [class.done]="state === status.Done" [class.unchecked]="state === status.Unchecked"
-              (change)="onChange(status.Done)">Done</mat-checkbox>
-<mat-checkbox class="state-checkbox" [class.skipped]="state === status.Skipped"
-              [class.done]="state === status.Done" [class.unchecked]="state === status.Unchecked"
-              (change)="onChange(status.Skipped)">Skipped</mat-checkbox>
-<mat-checkbox class="state-checkbox" [class.skipped]="state === status.Skipped"
-              [class.done]="state === status.Done" [class.unchecked]="state === status.Unchecked"
-              (change)="onChange(status.Unchecked)">Unchecked</mat-checkbox>
+<mat-checkbox
+  class="state-checkbox"
+  [class.skipped]="status === 2"
+  [class.done]="status === 1"
+  [class.unchecked]="status === 0"
+
+  (change)="onChange()">
+</mat-checkbox>

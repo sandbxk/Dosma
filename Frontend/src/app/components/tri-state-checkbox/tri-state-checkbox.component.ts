@@ -1,8 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Status} from "../../interfaces/StatusEnum";
-
-
 
 
 /**
@@ -11,9 +8,8 @@ import {Status} from "../../interfaces/StatusEnum";
 @Component({
   selector: 'app-tri-state-checkbox',
   templateUrl: './tri-state-checkbox.component.html',
-  styles: [`
-    @import 'tri-state-checkbox.component.scss';
-  `]
+  styleUrls: ['tri-state-checkbox.component.scss']
+
 })
 export class TriStateCheckboxComponent {
 
@@ -22,20 +18,35 @@ export class TriStateCheckboxComponent {
   ngOnInit(): void {
   }
 
+  @Output() statusChangedEvent = new EventEmitter<Status>();
+
   /**
    * The state of the checkbox.
    */
-  @Input() state: Status = Status.Unchecked;
+  @Input() status: Status = Status.Unchecked;
 
   /**
    * Handles the change event and updates the state of the checkbox.
    * @param newState The new state of the checkbox.
    */
-  onChange(newState: Status) {
-    this.state = newState;
+  onChange() {
+
+    switch (this.status) {
+      case Status.Unchecked:
+        this.status = Status.Done;
+        break;
+      case Status.Done:
+        this.status = Status.Skipped;
+        break;
+      case Status.Skipped:
+        this.status = Status.Unchecked;
+        break;
+    }
+    console.log(this.status.toString());
+    this.statusChangedEvent.emit(this.status);
   }
 
-  public get status() {
+  public get statusEnum() {
     return Status;
   }
 

@@ -69,7 +69,13 @@
         </mat-label>
       </div>
       <!-- MockCheckbox -->
-      <mat-checkbox (click)="$event.stopPropagation()" class="mockCheckbox"> </mat-checkbox>
+      <app-tri-state-checkbox
+        (click)="$event.stopPropagation()"
+        [status]="item.status"
+        (statusChangedEvent)="item.status = $event"
+        class="mockCheckbox">
+
+      </app-tri-state-checkbox>
 
       </div>
 
