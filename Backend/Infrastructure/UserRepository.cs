@@ -13,11 +13,13 @@ public class UserRepository : IUserRepository
         _DBContext = DBContext;
     }
 
+    /// <inheritdoc />
     public List<User> All()
     {
         return _DBContext.UserTable.ToList();
     }
 
+    /// <inheritdoc />
     public User Create(User user)
     {
         _DBContext.UserTable.Add(user);
@@ -25,6 +27,7 @@ public class UserRepository : IUserRepository
         return user;
     }
 
+    /// <inheritdoc />
     public bool Delete(int id)
     {
         User user = _DBContext.UserTable.Find(id) ?? throw new NullReferenceException("User not found");
@@ -32,25 +35,27 @@ public class UserRepository : IUserRepository
         _DBContext.UserTable.Remove(user);
         int change = _DBContext.SaveChanges();
         
-        if (change == 0)
+        if (change <= 0)
         {
-            // todo: why do we not return false here?
-            throw new InvalidOperationException("User could not be deleted");
+            return false;
         }
 
         return true;
     }
 
+    /// <inheritdoc />
     public User Single(long id)
     {
         return _DBContext.UserTable.Find(id) ?? throw new NullReferenceException("User does not exist");
     }
 
+    /// <inheritdoc />
     public User Find(string username)
     {
         return _DBContext.UserTable.Where(u => u.Username == username).FirstOrDefault() ?? throw new NullReferenceException("User not found");
     }
 
+    /// <inheritdoc />
     public User Update(long id, User model)
     {
         User user = _DBContext.UserTable.Find(id) ?? throw new NullReferenceException("User not found");
@@ -63,6 +68,7 @@ public class UserRepository : IUserRepository
         return user;
     }
 
+    /// <inheritdoc />
     public User Update(User model)
     {
         return this.Update(model.Id, model);

@@ -116,7 +116,7 @@ public class ItemRepository : IItemRepository
     }
 
     /// <inheritdoc />
-    public Item Read(long id)
+    public Item Single(long id)
     {
         throw new NotImplementedException();
     }

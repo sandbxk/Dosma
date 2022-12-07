@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 
-public class GroceryListRepository : IRepository<GroceryList>
+public class GroceryListRepository : IGroceryListRepository
 {
     private DatabaseContext _dbContext;
     
@@ -14,6 +14,7 @@ public class GroceryListRepository : IRepository<GroceryList>
         _dbContext = dbContext;
     }
     
+    /// <inheritdoc />
     public List<GroceryList> All()
     {
         return _dbContext.GroceryListsTable
@@ -21,6 +22,7 @@ public class GroceryListRepository : IRepository<GroceryList>
             .ToList();
     }
 
+    /// <inheritdoc />
     public GroceryList Create(GroceryList t)
     {
         if (t.Items == null)
@@ -33,6 +35,7 @@ public class GroceryListRepository : IRepository<GroceryList>
         return t;
     }
 
+    /// <inheritdoc />
     public bool Delete(int id)
     {
         var groceryList = _dbContext.GroceryListsTable.Find(id);
@@ -52,11 +55,21 @@ public class GroceryListRepository : IRepository<GroceryList>
         return true;
     }
 
+    /// <inheritdoc />
+    public List<GroceryList> GetAllForUser(int id)
+    {
+        return _dbContext.GroceryListsTable
+            .Include(l => l.Items)
+            .ToList();
+    }
+
+    /// <inheritdoc />
     public GroceryList Single(long id)
     {
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc />
     public GroceryList Update(GroceryList model)
     {
         _dbContext.GroceryListsTable.Update(model);
