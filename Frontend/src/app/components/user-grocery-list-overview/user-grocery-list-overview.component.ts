@@ -81,6 +81,12 @@ export class UserGroceryListOverviewComponent implements OnInit {
         }
 
         const createdList = await this.httpService.createList(dto);
+
+        if (createdList === null) {
+          console.error("Could not create list");
+          return;
+        }
+
         this.groceryLists.splice(0, 0, createdList); // Add the created list to the list of groceryLists
       }
     }).unsubscribe(); // Unsubscribe from the observable to prevent memory leaks

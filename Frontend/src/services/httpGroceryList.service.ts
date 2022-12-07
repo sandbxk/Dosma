@@ -5,6 +5,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {catchError} from "rxjs";
 import {GroceryList} from "../app/interfaces/GroceryList";
 import {MockLists} from "../app/components/user-grocery-list-overview/mockLists";
+import { getToken } from 'src/app/util/storage';
 
 export const axiosInstance =
    axios.create({
@@ -20,7 +21,6 @@ export const axiosInstance =
  * Service for interacting with the backend
  */
 export class HttpGroceryListService {
-
 
   constructor(private matSnackbar: MatSnackBar) {
     axiosInstance.interceptors.response.use(
@@ -45,18 +45,42 @@ export class HttpGroceryListService {
   /**
    * Get all lists in the system -- Strictly for testing purposes
    */
-  async getAllLists() {
-    const httpResponse = await axiosInstance.get<any>('GroceryList');
-    return httpResponse.data as GroceryList[];
+  async getAllLists() : Promise<GroceryList[]>  {
+    return axiosInstance.request({
+      method: 'get',
+      url: 'GroceryList',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': getToken()
+      }
+    }).then((response) => {
+      return response.data as GroceryList[];
+    }).catch((error) => {
+      this.matSnackbar.open(error.response.data);
+      return [];
+    });
   }
 
   /**
    * Get the lists that the user has access to
    * @param userId
    */
-  async getUserLists(userId: number) {
-    const httpResponse = await axiosInstance.get<any>(`GroceryList/${userId})`);
-    return httpResponse.data as GroceryList[];
+  async getUserLists(userId: number) : Promise<GroceryList[]> {
+
+    throw new Error('Not fully implemented in backend');
+    return axiosInstance.request({
+      method: 'get',
+      url: 'GroceryList/' + userId,
+      headers: {
+        'Content-Type': 'application/json',
+        'token': getToken()
+      }
+    }).then((response) => {
+      return response.data as GroceryList[];
+    }).catch((error) => {
+      this.matSnackbar.open(error.response.data);
+      return [];
+    });
   }
 
   /**
@@ -64,9 +88,21 @@ export class HttpGroceryListService {
    * returns the new list with the correct id
    * @param dto
    */
-  async createList(dto: { title: string; }) {
-    const httpResult = await axiosInstance.post('GroceryList', dto);
-    return httpResult.data as GroceryList;
+  async createList(dto: { title: string; }) : Promise<GroceryList | null>{
+    return axiosInstance.request({
+      method: 'post',
+      url: 'GroceryList',
+      data: dto,
+      headers: {
+        'Content-Type': 'application/json',
+        'token': getToken()
+      }
+    }).then((response) => {
+      return response.data as GroceryList;
+    }).catch((error) => {
+      this.matSnackbar.open(error.response.data);
+      return null;
+    });
   }
 
   /**
@@ -76,6 +112,7 @@ export class HttpGroceryListService {
    */
   async duplicateList(groceryListId: number) {
     //TODO implement
+    throw new Error('Not implemented in backend');
     const httpsResult = await axiosInstance.post(`GroceryList/${groceryListId}`);
     return httpsResult.data;
   }
@@ -85,18 +122,42 @@ export class HttpGroceryListService {
    *
    * @param editedList
    */
-  async updateList(editedList: GroceryList) {
-    //TODO
-    return editedList;
+  async updateList(editedList: GroceryList) : Promise<GroceryList> {
+    return axiosInstance.request({
+      method: 'patch',
+      url: 'GroceryList/' + editedList.id,
+      data: editedList,
+      headers: {
+        'Content-Type': 'application/json',
+        'token': getToken()
+      }
+    }).then((response) => {
+      return response.data as GroceryList;
+    }).catch((error) => {
+      this.matSnackbar.open(error.response.data);
+      return editedList;
+    });
   }
 
   /**
    * Delete the list from the backend
    * @param groceryList
    */
-  async deleteList(groceryList: GroceryList) {
-    const httpsResult = await axiosInstance.delete(`GroceryList/${groceryList.id}`, { data: groceryList });
-    return httpsResult.data;
+  async deleteList(groceryList: GroceryList) : Promise<boolean> {
+    return axiosInstance.request({
+      method: 'delete',
+      url: 'GroceryList/' + groceryList.id,
+      data: groceryList,
+      headers: {
+        'Content-Type': 'application/json',
+        'token': getToken()
+      }
+    }).then((response) => {
+      return true;
+    }).catch((error) => {
+      this.matSnackbar.open(error.response.data);
+      return false;
+    });
   }
 
   /**
@@ -104,6 +165,8 @@ export class HttpGroceryListService {
    * @param routeId
    */
   async getListById(routeId: number) {
+
+    throw new Error('Not fully implemented in backend');
     //TODO
     return MockLists[0];
   }

@@ -40,13 +40,14 @@ public class GroceryListController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public ActionResult<IEnumerable<GroceryList>> GetListsByUser([FromBody] User user, [FromHeader] string token)
+    public ActionResult<IEnumerable<GroceryList>> GetListsByUser(int id, [FromBody] User user, [FromHeader] string token)
     {
         if (_authenticationService.AuthenticateToken(token))
         {
             // TODO: Check authorization
                 // Forbid();
 
+            //return Ok(_groceryListService.GetListsByUser(user));
             return Ok(_groceryListService.GetListsByUser(user));
         }
 

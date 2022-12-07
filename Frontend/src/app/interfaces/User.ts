@@ -18,8 +18,6 @@ export class AccessObject {
 }
 
 export class TokenResponse {
-  status: number = 0;
-  error_message: string = '';
   token: string = '';
 }
 
