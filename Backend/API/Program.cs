@@ -31,6 +31,7 @@ var mapper = new MapperConfiguration(config => {
     config.CreateMap<GroceryListDTO, GroceryList>();
     config.CreateMap<ItemDTO, Item>();
     config.CreateMap<TokenUserDTO, User>();
+    config.CreateMap<User, TokenUserDTO>();
 }).CreateMapper();
 
 
