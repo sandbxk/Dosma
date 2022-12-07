@@ -1,0 +1,24 @@
+
+<button mat-icon-button (click)="cancel()">
+    <mat-icon>close</mat-icon>
+</button>
+
+<div mat-dialog-content>
+  <form >
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input required="true" matInput type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.loginRequest.username" name="username" (keyup.enter)="login()">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input required="true" matInput type="password" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.loginRequest.password" name="password" (keyup.enter)="login()">
+    </mat-form-field>
+    <mat-checkbox (change)="toggleRememberMe()" [checked]="rememberMe" name="rememberMe">Remember me</mat-checkbox>
+    <div class="error" *ngIf="this.error">
+      {{this.error}}
+    </div>
+    <button type="submit" mat-raised-button color="primary" (click)="login()">Login</button>
+    <a mat-button (click)="openRegisterForm()">Register new account</a>
+    <a mat-button (click)="openForgotPasswordForm()">Forgot password</a>
+  </form>
+</div>

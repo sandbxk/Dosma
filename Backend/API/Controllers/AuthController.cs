@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Backend.API.Controllers;
 
 [ApiController]
-[Route("api/auth")]
+[Route("auth")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;
