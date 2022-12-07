@@ -39,12 +39,12 @@
   }
 }
 
-@keyframes show {
+@keyframes scale {
   0% {
-    opacity: 0;
+    transform: scale(0.3);
   }
   100% {
-    opacity: 1;
+    transform: scale(0.9);
   }
 }
 
@@ -61,8 +61,9 @@
   margin: 0;
   padding: 0;
   position: absolute;
-  top: 0%;
+  top: 0;
   left: 18px;
   transform: scale(0.9);
   color: $light-background;
+  animation: scale 0.2s ease-in-out;
 }
