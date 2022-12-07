@@ -33,6 +33,10 @@ public class GroceryListController : ControllerBase
             // TODO: Check authorization
                 // Forbid();
 
+            var user = _authenticationService.GetUserFromToken(token);
+
+            // return all lists for user 
+
             return Ok(_groceryListService.GetAllLists());
         }
 
@@ -40,13 +44,21 @@ public class GroceryListController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public ActionResult<IEnumerable<GroceryList>> GetListsByUser(int id, [FromBody] User user, [FromHeader] string token)
+    public ActionResult<IEnumerable<GroceryList>> GetListsByUser(int id, [FromHeader] string token)
     {
         if (_authenticationService.AuthenticateToken(token))
         {
             // TODO: Check authorization
+                // id matches a list that the user has access to
                 // Forbid();
 
+            var user = _authenticationService.GetUserFromToken(token);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            
             //return Ok(_groceryListService.GetListsByUser(user));
             return Ok(_groceryListService.GetListsByUser(user));
         }
@@ -63,6 +75,9 @@ public class GroceryListController : ControllerBase
             {
                 // TODO: Check authorization
                     // Forbid();
+
+                var user = _authenticationService.GetUserFromToken(token);
+                // TODO: bind user to list as owner
 
                 var result = _groceryListService.Create(dto);
                 return Created("product/" + result.Id, result);
@@ -94,6 +109,7 @@ public class GroceryListController : ControllerBase
                 }
 
                 // TODO: Check authorization
+                    // id matches a list that the user has access to and has permission to edit
                     // Forbid();
 
                 return Ok(_groceryListService.UpdateList(id, groceryList));
@@ -125,6 +141,7 @@ public class GroceryListController : ControllerBase
                 }
                 
                 // TODO: Check authorization
+                    // id matches a list that the user has access to and has permission to delete
                     // Forbid();
                     
                 return Ok(_groceryListService.DeleteList(groceryList));
