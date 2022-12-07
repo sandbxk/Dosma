@@ -10,6 +10,7 @@ import {Item} from "../../interfaces/Item";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
+import {Status} from "../../interfaces/StatusEnum";
 
 @Component({
   selector: 'app-grocery-list',
@@ -79,8 +80,6 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   //    - Mark all items as purchased
 
   //TODO: Item status
-  // 4. Mark an item as purchased -> ItemStatusComponent
-  // 5. Mark an item as skipped -> ItemStatusComponent
   // 5. Mark all items as purchased -> ListMenu Options
   // On check, opacity 0.7 and strikethrough
   // On skipped, color warn-light, opacity 0.7 and strikethrough
@@ -113,7 +112,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   }
 
  /**
-  * Navigates back to the dashboard with all the users grocery lists
+  * Navigates back to the dashboard with all the user's grocery lists
   */
   navigateBack() {
     this.router.navigate(['/dashboard']);
@@ -150,10 +149,10 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   selectItem(item: Item) {
     if (this.selectedItems.includes(item))
-      this.selectedItems.splice(this.selectedItems.indexOf(item), 1);
+      this.selectedItems.splice(this.selectedItems.indexOf(item), 1); // Remove the item from the array
 
     else
-      this.selectedItems.push(item);
+      this.selectedItems.push(item); // Add the item to the array
   }
 
   /**
@@ -269,4 +268,13 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
       this.showNewItemPanel(false);  // Close the new item panel if it is open
     }
   }
+
+  get statusEnum(){
+    return Status;
+  }
+
+
+
+
+
 }
