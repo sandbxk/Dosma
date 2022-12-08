@@ -34,6 +34,15 @@ InfrastructureDependencies.RegisterInfrastructureLayer(builder.Services);
 var mapper = new MapperConfiguration(config => {
     config.CreateMap<GroceryListDTO, GroceryList>();
     config.CreateMap<ItemDTO, Item>();
+
+    //config.CreateMap<GroceryList, GroceryListResponse>();
+    //config.CreateMap<List<GroceryList>, List<GroceryListResponse>>();
+    //
+    //config.CreateMap<Item, ItemResponse>();
+    //config.CreateMap<List<Item>, List<ItemResponse>>();
+    //
+    //config.CreateMap<User, UserResponse>();
+    //config.CreateMap<List<User>, List<UserResponse>>();
 }).CreateMapper();
 
 

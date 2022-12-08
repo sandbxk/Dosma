@@ -23,19 +23,19 @@ public class GroceryListController : ControllerBase
      * Get Lists by various methods
      */
     [HttpGet]
-    public IEnumerable<GroceryList> GetAllLists()
+    public IEnumerable<GroceryListResponse> GetAllLists()
     {
         return _groceryListService.GetAllLists();
     }
 
     [HttpGet("{id}")]
-    public IEnumerable<GroceryList> GetListsByUser([FromBody] User user)
+    public IEnumerable<GroceryListResponse> GetListsByUser([FromBody] User user)
     {
         return _groceryListService.GetListsByUser(user);
     }
 
     [HttpPost]
-    public ActionResult<GroceryList> CreateGroceryList(GroceryListDTO dto)
+    public ActionResult<GroceryListResponse> CreateGroceryList(GroceryListCreateRequest dto)
     {
         try
         {
@@ -54,7 +54,7 @@ public class GroceryListController : ControllerBase
 
     [HttpPatch]
     [Route("{id}")]
-    public ActionResult<GroceryList> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList)
+    public ActionResult<GroceryListResponse> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList)
     {
         if (id != groceryList.Id)
         {
@@ -74,7 +74,7 @@ public class GroceryListController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
+
     [HttpDelete]
     [Route("{id}")]
     public ActionResult DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList)
@@ -85,7 +85,7 @@ public class GroceryListController : ControllerBase
         }
         try
         {
-            return Ok(_groceryListService.DeleteList(groceryList));
+            return Ok(_groceryListService.DeleteList(groceryList.Id));
         }
         catch (ValidationException e)
         {

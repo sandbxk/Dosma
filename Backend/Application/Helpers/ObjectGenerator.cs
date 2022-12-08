@@ -5,7 +5,8 @@ using Domain;
 namespace Application.Helpers;
 
 /// <summary>
-///     helper class for generating objects
+///     helper class for generating objects.
+///     used for stuff that auto-mapper can't
 /// </summary>
 public static class ObjectGenerator
 {
@@ -35,5 +36,70 @@ public static class ObjectGenerator
             HashedPassword = hash,
             Salt = salt
         };
+    }
+
+    public static ItemResponse ToResponse(this Item item)
+    {
+        return new ItemResponse {
+            Id = item.Id,
+            Category = item.Category,
+            Quantity = item.Quantity,
+            Status = item.Status,
+            Title = item.Title
+        };
+    }
+
+    public static List<ItemResponse> ToResponse(this List<Item> items)
+    {
+        List<ItemResponse> result = new();
+
+        foreach (var item in items)
+        {
+            result.Add(item.ToResponse());
+        }
+
+        return result;
+    }
+
+    public static UserResponse ToResponse(this User user)
+    {
+        return new UserResponse {
+            Id = user.Id,
+            DisplayName = user.DisplayName
+        };
+    }
+
+    public static List<UserResponse> ToResponse(this List<User> users)
+    {
+        List<UserResponse> result = new();
+
+        foreach (var user in users)
+        {
+            result.Add(user.ToResponse());
+        }
+
+        return result;
+    }
+
+    public static GroceryListResponse ToResponse(this GroceryList groceryList)
+    {
+        return new GroceryListResponse {
+            Id = groceryList.Id,
+            Items = groceryList.Items.ToResponse(),
+            Title = groceryList.Title,
+            Users = groceryList.Users.ToResponse()
+        };
+    }
+
+    public static List<GroceryListResponse> ToResponse(this List<GroceryList> groceryLists)
+    {
+       List<GroceryListResponse> result = new();
+
+        foreach (var groceryList in groceryLists)
+        {
+            result.Add(groceryList.ToResponse());
+        }
+
+        return result;
     }
 }
