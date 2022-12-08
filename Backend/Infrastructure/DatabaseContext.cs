@@ -66,6 +66,15 @@ public class DatabaseContext : DbContext
         //GroceryList-User
         modelBuilder.Entity<UserList>()
             .HasKey(ul => new { ul.UserID, ul.GroceryListID });
+
+
+        modelBuilder.Entity<User>()
+            .HasMany(l => l.GroceryLists)
+            .WithOne(u => u.User);
+        modelBuilder.Entity<GroceryList>()
+            .HasMany(u => u.Users)
+            .WithOne(l => l.GroceryList);
+            
         modelBuilder.Entity<UserList>()
             .HasOne(ul => ul.GroceryList)
             .WithMany(ul => ul.Users)
@@ -73,6 +82,8 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<UserList>()
             .HasOne(ul => ul.User)
             .WithMany(ul => ul.GroceryLists);
+        
+
 
     }
     
