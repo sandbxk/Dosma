@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Domain;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace Application.Helpers;
 
@@ -34,8 +35,9 @@ public static class TokenGenerator
             new Claim("id", user.Id.ToString()),
             new Claim("name", user.DisplayName ?? user.Username),
             new Claim("username", user.Username),
+            new Claim("lists", JsonConvert.SerializeObject(user.GroceryLists.Select(x => new { id = x.Id })))
         };
-
+        
         var payload = new JwtPayload(null, null, claims, DateTime.Now, DateTime.Now.AddMinutes(45));
         var header = new JwtHeader(new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha512));
         var token = new JwtSecurityToken(header, payload);

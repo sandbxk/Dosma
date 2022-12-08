@@ -6,7 +6,7 @@ public class GroceryList
     public string Title { get; set; }
     
     public List<Item> Items { get; set; }
-    
-    public ICollection<UserList> Users { get; set; }
-    public List<User> SharedUsers { get; set; }
+
+    public List<User> Users { get; set; }
+
 }

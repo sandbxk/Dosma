@@ -15,21 +15,28 @@ public class UserRepository : IUserRepository
 
     public List<User> All()
     {
-        return _DBContext.UserTable.ToList();
+        var ul = _DBContext.Users.ToList();
+
+        foreach (var user in ul)
+        {
+            user.GroceryLists = _DBContext.UserGroceryLists.Where(u => u.UserID == user.Id).Select(u => u.GroceryList).ToList();
+        }
+
+        return ul;
     }
 
     public User Create(User user)
     {
-        _DBContext.UserTable.Add(user);
+        _DBContext.Users.Add(user);
         _DBContext.SaveChanges();
         return user;
     }
 
     public bool Delete(int id)
     {
-        User user = _DBContext.UserTable.Find(id) ?? throw new NullReferenceException("User not found");
+        User user = _DBContext.Users.Find(id) ?? throw new NullReferenceException("User not found");
 
-        _DBContext.UserTable.Remove(user);
+        _DBContext.Users.Remove(user);
         int change = _DBContext.SaveChanges();
         
         if (change == 0)
@@ -43,17 +50,25 @@ public class UserRepository : IUserRepository
 
     public User Single(long id)
     {
-        return _DBContext.UserTable.Find(id) ?? throw new NullReferenceException("User does not exist");
+        var user = _DBContext.Users.Find(id) ?? throw new NullReferenceException("User not found");
+
+        user.GroceryLists = _DBContext.UserGroceryLists.Where(u => u.UserID == id).Select(u => u.GroceryList).ToList();
+
+        return user;
     }
 
     public User Find(string username)
     {
-        return _DBContext.UserTable.Where(u => u.Username == username).FirstOrDefault() ?? throw new NullReferenceException("User not found");
+        var user = _DBContext.Users.Where(u => u.Username == username).FirstOrDefault() ?? throw new NullReferenceException("User not found");
+
+        user.GroceryLists = _DBContext.UserGroceryLists.Where(u => u.UserID == user.Id).Select(u => u.GroceryList).ToList();
+        
+        return user;
     }
 
     public User Update(long id, User model)
     {
-        User user = _DBContext.UserTable.Find(id) ?? throw new NullReferenceException("User not found");
+        User user = _DBContext.Users.Find(id) ?? throw new NullReferenceException("User not found");
         
         user.Username = model.Username;
         user.HashedPassword = model.HashedPassword;

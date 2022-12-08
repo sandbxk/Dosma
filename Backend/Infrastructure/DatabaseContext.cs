@@ -64,30 +64,31 @@ public class DatabaseContext : DbContext
          * Many-To-Many Relationship
          */
         //GroceryList-User
-        modelBuilder.Entity<UserList>()
+        modelBuilder.Entity<UserGroceryList>()
             .HasKey(ul => new { ul.UserID, ul.GroceryListID });
 
 
+        // Joined to User
+        modelBuilder.Entity<UserGroceryList>()
+            .HasOne(ul => ul.User);
+
+        // Joined to GroceryList
+        modelBuilder.Entity<UserGroceryList>()
+            .HasOne(ul => ul.GroceryList);
+
+        // User to Joined
         modelBuilder.Entity<User>()
-            .HasMany(l => l.GroceryLists)
-            .WithOne(u => u.User);
+            .HasMany(u => u.GroceryLists);
+
+        // GroceryList to Joined
         modelBuilder.Entity<GroceryList>()
-            .HasMany(u => u.Users)
-            .WithOne(l => l.GroceryList);
-            
-        modelBuilder.Entity<UserList>()
-            .HasOne(ul => ul.GroceryList)
-            .WithMany(ul => ul.Users)
-            .HasForeignKey(ul => ul.GroceryListID);
-        modelBuilder.Entity<UserList>()
-            .HasOne(ul => ul.User)
-            .WithMany(ul => ul.GroceryLists);
-        
-
-
+            .HasMany(g => g.Users);
     }
     
     public DbSet<Item> ItemTable { get; set; } = null!;
-    public DbSet<User> UserTable { get; set; } = null!;
-    public DbSet<GroceryList> GroceryListsTable { get; set; } = null!;
+    
+
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<GroceryList> GroceryLists { get; set; } = null!;
+    public DbSet<UserGroceryList> UserGroceryLists { get; set; } = null!;
 }

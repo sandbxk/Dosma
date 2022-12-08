@@ -5,8 +5,10 @@ public class User
     public int Id { get; set; }
     public string DisplayName { get; set;} = string.Empty;
 
-    public ICollection<UserList> GroceryLists { get; set; }
-    public List<GroceryList> SharedLists { get; set; }
+    // public ICollection<UserGroceryList> SharedLists { get; set; }
+    public List<GroceryList> GroceryLists { get; set; }
+
+    // public List<UserGroceryList> UserGroceryLists { get; set; }
 
     /* The following properties are used for authentication
     *
