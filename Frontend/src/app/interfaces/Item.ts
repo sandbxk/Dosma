@@ -5,5 +5,7 @@ export interface Item {
   groceryListId: number;
   status: number;
   category: string;
+  index: number;
+  
 
 }

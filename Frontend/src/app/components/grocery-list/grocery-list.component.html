@@ -98,7 +98,7 @@
      groceryListId in the child component to the chosen value, using @input -->
      <div id="item-creation-panel" [ngClass]="creatingItem ? 'animateIntoFrame' : 'animateOutOfFrame'">
       <app-new-item
-        id="new-item-panel" [groceryListId]="groceryList.id"
+        id="new-item-panel" [groceryListId]="groceryList.id" [listSize]="groceryList.items.length"
         (newItemEvent)="addItem($event)" (closeItemCreationEvent)="showNewItemPanel(!$event)">
       </app-new-item>
     </div>

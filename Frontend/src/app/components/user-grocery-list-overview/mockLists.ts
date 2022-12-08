@@ -12,7 +12,8 @@ export const MockLists: GroceryList[] =
             quantity: 1,
             groceryListId: 1,
             status: 1,
-            category: "Fruits"
+            category: "Fruits",
+            index: 0
           },
           {
             id: 2,
@@ -20,7 +21,8 @@ export const MockLists: GroceryList[] =
             quantity: 2,
             groceryListId: 1,
             status: 1,
-            category: "Fruits"
+            category: "Fruits",
+            index: 1
           },
           {
             id: 3,
@@ -28,7 +30,8 @@ export const MockLists: GroceryList[] =
             quantity: 3,
             groceryListId: 1,
             status: 1,
-            category: "Fruits"
+            category: "Fruits",
+            index: 2
           },
           {
             id: 4,
@@ -36,7 +39,8 @@ export const MockLists: GroceryList[] =
             quantity: 4,
             groceryListId: 1,
             status: 1,
-            category: "Fruits"
+            category: "Fruits",
+            index: 3
           },
           {
             id: 5,
@@ -44,7 +48,8 @@ export const MockLists: GroceryList[] =
             quantity: 5,
             groceryListId: 1,
             status: 1,
-            category: "Fruits"
+            category: "Fruits",
+            index: 4
           },
           {
             id: 6,
@@ -52,7 +57,8 @@ export const MockLists: GroceryList[] =
             quantity: 6,
             groceryListId: 1,
             status: 1,
-            category: "Fruits"
+            category: "Fruits",
+            index: 5
           },
           {
             id: 7,
@@ -60,7 +66,8 @@ export const MockLists: GroceryList[] =
             quantity: 7,
             groceryListId: 1,
             status: 1,
-            category: "Fruits"
+            category: "Fruits",
+            index: 6
           },
           {
             id: 8,
@@ -68,7 +75,8 @@ export const MockLists: GroceryList[] =
             quantity: 8,
             groceryListId: 1,
             status: 1,
-            category: "Fruits"
+            category: "Fruits",
+            index: 7
           },
           {
             id: 9,
@@ -76,7 +84,8 @@ export const MockLists: GroceryList[] =
             quantity: 9,
             groceryListId: 1,
             status: 1,
-            category: "Test Category 1"
+            category: "Test Category 1",
+            index: 8
           },
           {
             id: 10,
@@ -84,7 +93,8 @@ export const MockLists: GroceryList[] =
             quantity: 10,
             groceryListId: 1,
             status: 1,
-            category: "Test Category 1"
+            category: "Test Category 1",
+            index: 9
           },
           {
             id: 11,
@@ -92,7 +102,8 @@ export const MockLists: GroceryList[] =
             quantity: 11,
             groceryListId: 1,
             status: 1,
-            category: "Test Category 1"
+            category: "Test Category 1",
+            index: 10
           },
           {
             id: 12,
@@ -100,7 +111,8 @@ export const MockLists: GroceryList[] =
             quantity: 12,
             groceryListId: 1,
             status: 1,
-            category: "Test Category 1"
+            category: "Test Category 1",
+            index: 11
           },
           {
             id: 13,
@@ -108,7 +120,8 @@ export const MockLists: GroceryList[] =
             quantity: 13,
             groceryListId: 1,
             status: 1,
-            category: "Test Category 1"
+            category: "Test Category 1",
+            index: 12
           },
           {
             id: 14,
@@ -116,7 +129,8 @@ export const MockLists: GroceryList[] =
             quantity: 14,
             groceryListId: 1,
             status: 1,
-            category: "Test Category 1"
+            category: "Test Category 1",
+            index: 13
           },
           {
             id: 15,
@@ -124,7 +138,8 @@ export const MockLists: GroceryList[] =
             quantity: 15,
             groceryListId: 1,
             status: 1,
-            category: "Test Category 1"
+            category: "Test Category 1",
+            index: 14
           }
         ]
       },
@@ -138,7 +153,8 @@ export const MockLists: GroceryList[] =
             quantity: 3,
             groceryListId: 2,
             status: 1,
-            category: "Test Category 1"
+            category: "Test Category 1",
+            index: 0
           },
           {
             id: 4,
@@ -146,7 +162,8 @@ export const MockLists: GroceryList[] =
             quantity: 4,
             groceryListId: 2,
             status: 1,
-            category: 'meat'
+            category: 'meat',
+            index: 1
           }
         ]
       },
@@ -160,7 +177,8 @@ export const MockLists: GroceryList[] =
             quantity: 5,
             groceryListId: 3,
             status: 1,
-            category: "Fruits"
+            category: "Fruits",
+            index: 0
 },
           {
             id: 6,
@@ -168,7 +186,8 @@ export const MockLists: GroceryList[] =
             quantity: 6,
             groceryListId: 3,
             status: 1,
-            category: "Fruits"
+            category: "Fruits",
+            index: 1
           }]
       },
       {
@@ -181,7 +200,8 @@ export const MockLists: GroceryList[] =
             quantity: 7,
             groceryListId: 4,
             status: 1,
-            category: "Fruits"
+            category: "Fruits",
+            index: 1
           }]
 
       },
@@ -195,7 +215,8 @@ export const MockLists: GroceryList[] =
           quantity: 7,
           groceryListId: 4,
           status: 1,
-          category: "Fruits"
+          category: "Fruits",
+          index: 0
         }]
 
     }

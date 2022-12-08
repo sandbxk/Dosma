@@ -64,7 +64,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     quantity: 0,
     category: "None",
     status: 0,
-    groceryListId: 0
+    groceryListId: 0,
+    index: 0
   });
 
   // Valid categories for items
@@ -108,6 +109,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     }
 
     setInterval(this.sync, 60000);
+    //TODO: sync on app close???
+    //TODO load and sort items by index from local storage
   }
 
   //TODO:
@@ -132,12 +135,13 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   /**
    * From IComponentCanDeactivate
    * Will prevent the user from navigating away from the page if there are unsaved changes
-   * To be used for SyncService
+   * used for SyncService
    */
   @HostListener('window:beforeunload', ['$event'])
   canDeactivate(): boolean | Observable<boolean> {
     while (this.syncing) {
       // Wait for the sync to finish
+      //TODO: update all items to have the correct index and save in local storage
     }
     return true;
   }
@@ -148,6 +152,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   drop(event: CdkDragDrop<Item>) {
     moveItemInArray(this.groceryList.items, event.previousIndex, event.currentIndex);
+    event.item.data.index = event.currentIndex; //TODO TEST
   }
 
   sync() {
