@@ -11,6 +11,8 @@ import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/con
 import {MatDialog} from "@angular/material/dialog";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
 import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
+import {SyncService} from "../../../services/sync.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-grocery-list',
@@ -76,13 +78,17 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   selectedItems: Item[] = [];
   editingItem: Item = this.placeholderItem;
 
+  syncing: boolean = false;
+
 
   constructor(
     private currentRoute: ActivatedRoute,
     private router: Router,
     private dataService: DataService,
     private httpService: HttpGroceryListService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private syncService: SyncService,
+    private matSnackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -100,6 +106,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
         this.groceryList = list;
       });
     }
+
+    setInterval(this.sync, 60000);
   }
 
   //TODO:
@@ -141,6 +149,22 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   drop(event: CdkDragDrop<Item>) {
     moveItemInArray(this.groceryList.items, event.previousIndex, event.currentIndex);
   }
+
+  sync() {
+    this.syncing = true;
+
+    this.syncService.syncUp(this.groceryList).then(async r => {
+      const updatedList = await this.syncService.syncDown()
+      if (updatedList.id !== 0) {
+        this.groceryList = updatedList;
+      }
+    })
+      .catch(reason => this.matSnackBar
+      .open(reason, "Dismiss", {duration: 5000}))
+      .finally(() => this.syncing = false);
+
+  }
+
 
  /**
   * Navigates back to the dashboard with all the users grocery lists

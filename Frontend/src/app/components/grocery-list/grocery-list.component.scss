@@ -109,6 +109,7 @@ Menu button on list item
   font-weight: 500;
 }
 
+
 .opened
 {
   opacity: 1;
@@ -256,8 +257,23 @@ Quantity box for indicating the quantity of an item
 }
 
 .listActionBtn:disabled {
-  opacity: 0.5;
+  opacity: 1;
 }
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.syncingAnimation {
+  animation: rotate 1s linear infinite;
+  color: map.get($primary-colors, "main");
+}
+
 
 .backButton {
   position: fixed;

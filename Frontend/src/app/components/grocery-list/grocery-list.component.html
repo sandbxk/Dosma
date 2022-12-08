@@ -17,9 +17,13 @@
     <!-- Container for the other actions -->
     <div class="listActionsContainer">
 
-      <!-- Share button -- Disabled -->
-      <button [disabled]="true" mat-icon-button class="listActionBtn"  aria-label="Grocery list menu">
-        <mat-icon>share</mat-icon>
+      <!-- Sync button -- Disabled while syncing -->
+      <button mat-icon-button [disabled]="syncing"
+              class="listActionBtn"
+              (click)="sync()">
+        <mat-icon [ngClass]="{'syncingAnimation': syncing}">
+          sync
+        </mat-icon>
       </button>
 
       <!-- Button for activating mat Menu -->
@@ -31,6 +35,11 @@
 
       <!-- Mat menu for the list actions -->
       <mat-menu #listMenu="matMenu">
+        <!-- share button -->
+        <button [disabled]="true" mat-menu-item>
+          <mat-icon>share</mat-icon>
+          <span>Share</span>
+        </button>
         <!-- Edit list title -->
         <button mat-menu-item (click)="editListName()">
           <mat-icon>edit</mat-icon>
