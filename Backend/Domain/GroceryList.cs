@@ -7,5 +7,5 @@ public class GroceryList
     
     public List<Item> Items { get; set; }
     
-    public List<UserList> Users { get; set; }
+    public ICollection<User> Users { get; set; }
 }
