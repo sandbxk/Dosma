@@ -5,7 +5,7 @@ import {GroceryList} from "../../interfaces/GroceryList";
 import {DataService} from "../../../services/data.service";
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 import {IComponentCanDeactivate} from "../../../services/PendingChanges.guard";
-import {Observable, timeout} from "rxjs";
+import {Observable} from "rxjs";
 import {Item} from "../../interfaces/Item";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -136,9 +136,9 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   @HostListener('window:beforeunload', ['$event'])
   canDeactivate(): boolean | Observable<boolean> {
-    // insert logic to check if there are pending changes here;
-    // returning true will navigate without confirmation
-    // returning false will show a confirm dialog before navigating away
+    while (this.syncing) {
+      // Wait for the sync to finish
+    }
     return true;
   }
 
@@ -153,7 +153,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   sync() {
     this.syncing = true;
 
-    this.syncService.syncUp(this.groceryList).then(async r => {
+    this.syncService.syncUp(this.groceryList).then(async () => {
       const updatedList = await this.syncService.syncDown()
       if (updatedList.id !== 0) {
         this.groceryList = updatedList;
@@ -167,7 +167,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
 
  /**
-  * Navigates back to the dashboard with all the users grocery lists
+  * Navigates back to the dashboard with all the user's grocery lists
   */
   navigateBack() {
     this.router.navigate(['/dashboard']);

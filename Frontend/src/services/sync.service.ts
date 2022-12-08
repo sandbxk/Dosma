@@ -27,7 +27,7 @@ export class SyncService {
     }
 
     else {
-      this.HttpGroceryListService.updateList(list);
+      await this.HttpGroceryListService.updateList(list);
       this.lastSyncedList = list;
     }
   }
