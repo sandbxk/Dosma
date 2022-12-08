@@ -67,27 +67,29 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<UserList>()
             .HasKey(ul => new { ul.UserID, ul.GroceryListID });
 
-
         modelBuilder.Entity<User>()
-            .HasMany(l => l.GroceryLists)
+            .HasMany( u => u.SharedList)
             .WithOne(u => u.User);
+
         modelBuilder.Entity<GroceryList>()
-            .HasMany(u => u.Users)
+            .HasMany(u => u.SharedList)
             .WithOne(l => l.GroceryList);
-            
+
         modelBuilder.Entity<UserList>()
-            .HasOne(ul => ul.GroceryList)
-            .WithMany(ul => ul.Users)
-            .HasForeignKey(ul => ul.GroceryListID);
+            .HasOne(u => u.User)
+            .WithMany(ul => ul.SharedList);
+
         modelBuilder.Entity<UserList>()
-            .HasOne(ul => ul.User)
-            .WithMany(ul => ul.GroceryLists);
-        
+            .HasOne(gl => gl.GroceryList)
+            .WithMany(ul => ul.SharedList);
+
 
 
     }
     
-    public DbSet<Item> ItemTable { get; set; } = null!;
-    public DbSet<User> UserTable { get; set; } = null!;
-    public DbSet<GroceryList> GroceryListsTable { get; set; } = null!;
+    public DbSet<Item> ItemTable { get; set; }
+    public DbSet<User> UserTable { get; set; }
+    public DbSet<GroceryList> GroceryListsTable { get; set; }
+    
+    public DbSet<UserList> GroceryListUserJoinTable { get; set; }
 }
