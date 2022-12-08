@@ -35,7 +35,7 @@ public static class TokenGenerator
             new Claim("id", user.Id.ToString()),
             new Claim("name", user.DisplayName ?? user.Username),
             new Claim("username", user.Username),
-            new Claim("lists", JsonConvert.SerializeObject(user.GroceryLists.Select(x => new { id = x.Id })))
+            new Claim("lists", JsonConvert.SerializeObject(user.GroceryLists.Select(x => x.Id)))
         };
         
         var payload = new JwtPayload(null, null, claims, DateTime.Now, DateTime.Now.AddMinutes(45));

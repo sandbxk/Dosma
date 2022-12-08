@@ -64,7 +64,7 @@ public static class ObjectGenerator
     public static UserResponse ToResponse(this User user)
     {
         return new UserResponse {
-            Id = user.Id,
+            Username = user.Username,
             DisplayName = user.DisplayName
         };
     }
