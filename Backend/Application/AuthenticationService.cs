@@ -16,10 +16,10 @@ public class AuthenticationService : IAuthenticationService
     /// <inheritdoc/>
     public bool Login(LoginRequest request, out string token)
     {
-        if (!_loginValidator.Validate(request).IsValid)
-        {
-            throw new ArgumentException("Invalid login request");
-        }
+       // if (!_loginValidator.Validate(request).IsValid)
+       // {
+       //     throw new ArgumentException("Invalid login request");
+       // }
         
         var user = FindUser(request.Username); 
         
@@ -51,10 +51,10 @@ public class AuthenticationService : IAuthenticationService
     /// <inheritdoc/>
     public bool Register(RegisterRequest request, out string token)
     { 
-        if (_registerValidator.Validate(request).IsValid)
-        {
-            throw new ArgumentException("Invalid registration request");
-        }
+       // if (_registerValidator.Validate(request).IsValid)
+       // {
+       //     throw new ArgumentException("Invalid registration request");
+       // }
 
         var user = FindUser(request.Username);
         
