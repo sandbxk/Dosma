@@ -21,7 +21,8 @@ public class GroceryListController : ControllerBase
         _groceryListService = groceryListService;
         _authenticationService = authenticationService;
     }
-
+    
+    [Produces("application/json")]
     [HttpGet]
     public List<GroceryList> GetListsByUser([FromHeader] String token)
     {
@@ -35,6 +36,7 @@ public class GroceryListController : ControllerBase
         return _groceryListService.GetListsByUser(user);
     }
     
+    [Produces("application/json")]
     [HttpGet]
     [Route("grocerylist/{id}")]
     public ActionResult<GroceryList> GetListById([FromRoute] int id, [FromHeader] String token)
@@ -60,9 +62,10 @@ public class GroceryListController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-
+    
+    [Produces("application/json")]
     [HttpPost]
-    public ActionResult<GroceryList> CreateGroceryList(GroceryListRequest request, [FromHeader] String token)
+    public ActionResult<GroceryListResponse> CreateGroceryList(GroceryListRequest request, [FromHeader] String token)
     {
         var user = _authenticationService.GetUserFromToken(token);
         
@@ -86,6 +89,8 @@ public class GroceryListController : ControllerBase
         }
     }
 
+    [Consumes("application/json")]
+    [Produces("application/json")]
     [HttpPatch]
     [Route("{id}")]
     public ActionResult<GroceryList> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList, [FromHeader] String token)
@@ -116,9 +121,9 @@ public class GroceryListController : ControllerBase
         }
     }
     
+    [Consumes("application/json")]
     [HttpDelete]
-    [Route("{id}")]
-    public ActionResult DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList, [FromHeader] String token)
+    public ActionResult DeleteList([FromBody] GroceryList groceryList, [FromHeader] String token)
     {
         var user = _authenticationService.GetUserFromToken(token);
         
@@ -127,10 +132,6 @@ public class GroceryListController : ControllerBase
             throw new NullReferenceException("User could not be found.");
         }
         
-        if (id != groceryList.Id)
-        {
-            throw new ValidationException("List ID does not match ID in URL.");
-        }
         try
         {
             return Ok(_groceryListService.DeleteList(groceryList));

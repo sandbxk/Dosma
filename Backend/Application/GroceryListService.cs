@@ -14,51 +14,51 @@ public class GroceryListService : IGroceryListService
 {
     private IRepository<GroceryList> _groceryListRepository;
     private IMapper _mapper;
-    private IValidator<GroceryListResponse> _dtoValidator;
+    private IValidator<GroceryListResponse> _dtoResponseValidator;
+    private readonly IValidator<GroceryListRequest> _dtoRequestValidator;
     private IValidator<GroceryList> _validator;
     
-    public GroceryListService(IRepository<GroceryList> repository, IMapper mapper, IValidator<GroceryListResponse> dtoValidator, IValidator<GroceryList> validator)
+    public GroceryListService(IRepository<GroceryList> repository, IMapper mapper, IValidator<GroceryListResponse> dtoResponseValidator, IValidator<GroceryListRequest> dtoRequestValidator, IValidator<GroceryList> validator)
     {
         _groceryListRepository = repository;
         _mapper = mapper;
-        _dtoValidator = dtoValidator;
+        _dtoResponseValidator = dtoResponseValidator;
+        _dtoRequestValidator = dtoRequestValidator;
         _validator = validator;
     }
 
 
-    public GroceryList Create(GroceryListResponse response)
+    public GroceryListResponse Create(GroceryListRequest request)
     {
-        var validation = _dtoValidator.Validate(response);
+        var validation = _dtoRequestValidator.Validate(request);
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
         
-        return _groceryListRepository.Create(_mapper.Map<GroceryList>(response));
+        var groceryList =  _groceryListRepository.Create(request.requestToGrocerylist());
+        return groceryList.GroceryListToResponse();
     }
 
     public GroceryListResponse GetListById(int id)
     {
         var grocerylist = _groceryListRepository.Single(id);
-        
-        foreach (var User in grocerylist.Users)
-        {
-            User.UserToDTO();
-        }
-        
+
         if (grocerylist == null)
             throw new ValidationException("Grocery list not found");
 
-        return grocerylist.GroceryListToDTO();
+        return grocerylist.GroceryListToResponse();
     }
 
     public List<GroceryList> GetListsByUser(User user)
     {
         return _groceryListRepository.All();
     }
-
+    
+    #if DEBUG
     public List<GroceryList> GetAllLists()
     {
         return _groceryListRepository.All();
     }
+    #endif
 
     public bool DeleteList(GroceryList groceryList)
     {

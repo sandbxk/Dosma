@@ -60,7 +60,7 @@ public static class ObjectGenerator
         return userDTOs;
     }
     
-    public static GroceryListResponse GroceryListToDTO(this GroceryList groceryList)
+    public static GroceryListResponse GroceryListToResponse(this GroceryList groceryList)
     {
             return new GroceryListResponse
         {
@@ -68,6 +68,17 @@ public static class ObjectGenerator
             Title = groceryList.Title,
             Items = groceryList.Items,
             Users = groceryList.Users.UsersToDTO()
+        };
+    }
+
+    public static GroceryList requestToGrocerylist(this GroceryListRequest response)
+    {
+        return new GroceryList()
+        {
+            Title = response.Title,
+            Items = new List<Item>(),
+            Users = new List<User>(),
+            SharedList = new List<UserList>()
         };
     }
 }

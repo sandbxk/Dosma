@@ -41,11 +41,7 @@ public class ItemRepository : IRepository<Item>
         _dbContext.Remove(item);
         int change = _dbContext.SaveChanges();
         
-        if (change == 0)
-        {
-            return false;
-        }
-        return true;
+        return change > 0;
     }
 
     public Item Single(long id)

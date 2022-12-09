@@ -7,7 +7,7 @@ namespace Application.Interfaces;
 
 public interface IGroceryListService
 {
-    public GroceryList Create(GroceryListResponse response);
+    public GroceryListResponse Create(GroceryListRequest request);
     public List<GroceryList> GetListsByUser(User user);
     
     public GroceryListResponse GetListById(int id);
