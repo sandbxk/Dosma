@@ -10,4 +10,6 @@ public interface IGroceryListService
     public List<GroceryListResponse> GetAllLists();
     public bool DeleteList(int id);
     public GroceryListResponse UpdateList(int id, GroceryList groceryList);
+
+    public GroceryList GetListById(int id);
 }

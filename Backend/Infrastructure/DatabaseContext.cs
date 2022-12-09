@@ -25,13 +25,21 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<UserGroceryList>()
             .HasKey(ul => new { ul.UserID, ul.GroceryListID });
 
-        modelBuilder.Entity<UserGroceryList>()
-            .Property(ul => ul.AccessLevel)
-            .HasConversion(c => c.ToString(), c => (AccessLevel)Enum.Parse(typeof(AccessLevel), c));
+        modelBuilder.Entity<User>()
+            .HasMany( u => u.SharedList)
+            .WithOne(u => u.User);
+
+        modelBuilder.Entity<GroceryList>()
+            .HasMany(u => u.SharedList)
+            .WithOne(l => l.GroceryList);
 
         modelBuilder.Entity<UserGroceryList>()
-            .Property(ul => ul.AccessState)
-            .HasConversion(c => c.ToString(), c => (AccessState)Enum.Parse(typeof(AccessState), c));
+            .HasOne(u => u.User)
+            .WithMany(ul => ul.SharedList);
+
+        modelBuilder.Entity<UserGroceryList>()
+            .HasOne(gl => gl.GroceryList)
+            .WithMany(ul => ul.SharedList);
     }
 
     private void BindItemToGroceryList(ref ModelBuilder modelBuilder)

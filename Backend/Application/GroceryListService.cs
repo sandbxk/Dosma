@@ -37,7 +37,12 @@ public class GroceryListService : IGroceryListService
 
     public GroceryListResponse GetListById(int id)
     {
-        return _groceryListRepository.Single(id).ToResponse();
+        var grocerylist = _groceryListRepository.Single(id).ToResponse();
+        
+        if (grocerylist == null)
+            throw new ValidationException("Grocery list not found");
+
+        return grocerylist;
     }
 
     public List<GroceryListResponse> GetListsByUser(User user)
@@ -67,4 +72,5 @@ public class GroceryListService : IGroceryListService
 
         return _groceryListRepository.Update(groceryList).ToResponse();
     }
+
 }

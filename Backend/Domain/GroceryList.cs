@@ -9,4 +9,6 @@ public class GroceryList
 
     public List<User> Users { get; set; }
 
+    
+    public List<UserGroceryList> SharedList { get; set; }
 }

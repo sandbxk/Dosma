@@ -17,7 +17,32 @@ public class GroceryListRepository : IGroceryListRepository
     /// <inheritdoc />
     public List<GroceryList> All()
     {
-        var gl = _dbContext.GroceryListsTable.ToList();
+        var existingList =  _dbContext.GroceryListsTable
+            .Include(l => l.Items)
+            .Include(l => l.SharedList)
+            .ToList();
+
+        foreach (var GroceryList in existingList )
+        {
+            var j = _dbContext.UserGroceryListsTable.Where(j => j.GroceryListID == GroceryList.Id).ToList();
+
+            List<User> user = new List<User>();
+
+            foreach (var UserList in j)
+            {
+                user.Add(_dbContext.UserTable.Find(UserList.UserID));
+            }
+            
+            GroceryList.Users = user;
+        }
+
+        return existingList;
+    }
+    
+
+    public List<GroceryList> AlternativeAll()
+    {
+         var gl = _dbContext.GroceryListsTable.ToList();
 
         foreach (var groceryList in gl)
         {
@@ -73,7 +98,9 @@ public class GroceryListRepository : IGroceryListRepository
     /// <inheritdoc />
     public GroceryList Single(long id)
     {
-        throw new NotImplementedException();
+        return _dbContext.GroceryListsTable
+            .Include(l => l.Items)
+            .FirstOrDefault(l => l.Id == id);
     }
 
     /// <inheritdoc />
