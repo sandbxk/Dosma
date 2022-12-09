@@ -54,7 +54,9 @@ public class GroceryListRepository : IRepository<GroceryList>
 
     public GroceryList Single(long id)
     {
-        throw new NotImplementedException();
+        return _dbContext.GroceryListsTable
+            .Include(l => l.Items)
+            .FirstOrDefault(l => l.Id == id);
     }
 
     public GroceryList Update(GroceryList model)

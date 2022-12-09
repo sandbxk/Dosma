@@ -33,6 +33,26 @@ public class GroceryListController : ControllerBase
     {
         return _groceryListService.GetListsByUser(user);
     }
+    
+    [HttpGet]
+    [Route("grocerylist/{id}")]
+    public ActionResult GetListById([FromRoute] int id)
+    {
+        if (id == 0 || id < 0)
+        {
+            return BadRequest();
+        }
+
+        try
+        {
+            return Ok(_groceryListService.GetListById(id));
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+
+    }
 
     [HttpPost]
     public ActionResult<GroceryList> CreateGroceryList(GroceryListDTO dto)
