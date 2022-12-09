@@ -7,6 +7,8 @@ public interface IGroceryListService
 {
     public GroceryList Create(GroceryListDTO dto);
     public List<GroceryList> GetListsByUser(User user);
+    
+    public GroceryList GetListById(int id);
     public List<GroceryList> GetAllLists();
     public bool DeleteList(GroceryList groceryList);
     public GroceryList UpdateList(int id, GroceryList groceryList);
