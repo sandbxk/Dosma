@@ -26,7 +26,7 @@ public class GroceryListController : ControllerBase
      * Get Lists by various methods
      */
     [HttpGet]
-    public ActionResult<IEnumerable<GroceryList>> GetAllLists([FromHeader] string token)
+    public ActionResult<List<GroceryListResponse>> GetAllLists([FromHeader] string token)
     {
         if (_authenticationService.AuthenticateToken(token))
         {
@@ -44,7 +44,7 @@ public class GroceryListController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public ActionResult<IEnumerable<GroceryList>> GetListsByUser(int id, [FromHeader] string token)
+    public ActionResult<List<GroceryListResponse>> GetListsByUser(int id, [FromHeader] string token)
     {
         if (_authenticationService.AuthenticateToken(token))
         {
@@ -67,7 +67,7 @@ public class GroceryListController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<GroceryList> CreateGroceryList(GroceryListDTO dto, [FromHeader] string token)
+    public ActionResult<GroceryListResponse> CreateGroceryList(GroceryListCreateRequest dto, [FromHeader] string token)
     {
         if (_authenticationService.AuthenticateToken(token))
         {
@@ -97,7 +97,7 @@ public class GroceryListController : ControllerBase
 
     [HttpPatch]
     [Route("{id}")]
-    public ActionResult<GroceryList> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList, [FromHeader] string token)
+    public ActionResult<GroceryListResponse> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList, [FromHeader] string token)
     {
         if (_authenticationService.AuthenticateToken(token))
         {
@@ -126,7 +126,7 @@ public class GroceryListController : ControllerBase
 
         return Unauthorized("Could not be authenticated");
     }
-    
+
     [HttpDelete]
     [Route("{id}")]
     public ActionResult DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList, [FromHeader] string token)
@@ -144,7 +144,7 @@ public class GroceryListController : ControllerBase
                     // id matches a list that the user has access to and has permission to delete
                     // Forbid();
                     
-                return Ok(_groceryListService.DeleteList(groceryList));
+                return Ok(_groceryListService.DeleteList(id));
             }
             catch (ValidationException e)
             {

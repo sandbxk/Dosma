@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Application.DTOs;
 using AutoMapper;
 using Domain;
@@ -12,6 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
@@ -32,6 +36,15 @@ var mapper = new MapperConfiguration(config => {
     config.CreateMap<ItemDTO, Item>();
     config.CreateMap<TokenUserDTO, User>();
     config.CreateMap<User, TokenUserDTO>();
+
+    //config.CreateMap<GroceryList, GroceryListResponse>();
+    //config.CreateMap<List<GroceryList>, List<GroceryListResponse>>();
+    //
+    //config.CreateMap<Item, ItemResponse>();
+    //config.CreateMap<List<Item>, List<ItemResponse>>();
+    //
+    //config.CreateMap<User, UserResponse>();
+    //config.CreateMap<List<User>, List<UserResponse>>();
 }).CreateMapper();
 
 

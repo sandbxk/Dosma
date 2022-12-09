@@ -6,6 +6,7 @@ public class GroceryList
     public string Title { get; set; }
     
     public List<Item> Items { get; set; }
-    
-    public List<UserList> Users { get; set; }
+
+    public List<User> Users { get; set; }
+
 }

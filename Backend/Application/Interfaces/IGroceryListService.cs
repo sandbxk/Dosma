@@ -5,9 +5,9 @@ namespace Application.Interfaces;
 
 public interface IGroceryListService
 {
-    public GroceryList Create(GroceryListDTO dto);
-    public List<GroceryList> GetListsByUser(User user);
-    public List<GroceryList> GetAllLists();
-    public bool DeleteList(GroceryList groceryList);
-    public GroceryList UpdateList(int id, GroceryList groceryList);
+    public GroceryListResponse Create(GroceryListCreateRequest dto);
+    public List<GroceryListResponse> GetListsByUser(User user);
+    public List<GroceryListResponse> GetAllLists();
+    public bool DeleteList(int id);
+    public GroceryListResponse UpdateList(int id, GroceryList groceryList);
 }

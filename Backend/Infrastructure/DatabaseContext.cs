@@ -22,30 +22,16 @@ public class DatabaseContext : DbContext
     private void BindUserToGroceryList(ref ModelBuilder modelBuilder)
     {
         // shared primary key
-        modelBuilder.Entity<UserList>()
+        modelBuilder.Entity<UserGroceryList>()
             .HasKey(ul => new { ul.UserID, ul.GroceryListID });
 
-        modelBuilder.Entity<UserList>()
+        modelBuilder.Entity<UserGroceryList>()
             .Property(ul => ul.AccessLevel)
             .HasConversion(c => c.ToString(), c => (AccessLevel)Enum.Parse(typeof(AccessLevel), c));
 
-        modelBuilder.Entity<UserList>()
+        modelBuilder.Entity<UserGroceryList>()
             .Property(ul => ul.AccessState)
             .HasConversion(c => c.ToString(), c => (AccessState)Enum.Parse(typeof(AccessState), c));
-
-        
-        // one grocery list can have many users
-        modelBuilder.Entity<UserList>()
-            .HasOne(ul => ul.GroceryList)
-            .WithMany(ul => ul.Users)
-            .HasForeignKey(ul => ul.GroceryListID);
-        
-
-        // one user can have many grocery lists
-        modelBuilder.Entity<UserList>()
-            .HasOne(ul => ul.User)
-            .WithMany(ul => ul.GroceryLists)
-            .HasForeignKey(ul => ul.UserID);
     }
 
     private void BindItemToGroceryList(ref ModelBuilder modelBuilder)
@@ -142,5 +128,5 @@ public class DatabaseContext : DbContext
     public DbSet<Item> ItemTable { get; set; } = null!;
     public DbSet<User> UserTable { get; set; } = null!;
     public DbSet<GroceryList> GroceryListsTable { get; set; } = null!;
-    public DbSet<UserList> UserListsTable { get; set; } = null!;
+    public DbSet<UserGroceryList> UserGroceryListsTable { get; set; } = null!;
 }

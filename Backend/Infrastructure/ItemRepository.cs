@@ -81,7 +81,7 @@ public class ItemRepository : IItemRepository
     /// <inheritdoc />
     public Item Create(Item t)
     {
-        GroceryList groceryList = _dbContext.GroceryListsTable
+        GroceryList groceryList = _dbContext.GroceryLists
             .Include(l => l.Items).ToList()
             .Find(l => l.Id == t.GroceryListId) ?? throw new InvalidOperationException();
 

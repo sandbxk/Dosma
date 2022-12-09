@@ -17,10 +17,17 @@ public class GroceryListRepository : IGroceryListRepository
     /// <inheritdoc />
     public List<GroceryList> All()
     {
-        return _dbContext.GroceryListsTable
-            .Include(l => l.Items)
-            .ToList();
+        var gl = _dbContext.GroceryLists.ToList();
+
+        foreach (var groceryList in gl)
+        {
+            groceryList.Items = _dbContext.ItemTable.Where(i => i.GroceryListId == groceryList.Id).ToList();
+            groceryList.Users = _dbContext.UserGroceryLists.Where(u => u.GroceryListID == groceryList.Id).Select(u => u.User).ToList();
+        }
+
+        return gl;
     }
+    
 
     /// <inheritdoc />
     public GroceryList Create(GroceryList t)
@@ -30,7 +37,7 @@ public class GroceryListRepository : IGroceryListRepository
             t.Items = new List<Item>();
         }
         
-        _dbContext.GroceryListsTable.Add(t);
+        _dbContext.GroceryLists.Add(t);
         _dbContext.SaveChanges();
         return t;
     }
@@ -38,14 +45,14 @@ public class GroceryListRepository : IGroceryListRepository
     /// <inheritdoc />
     public bool Delete(int id)
     {
-        var groceryList = _dbContext.GroceryListsTable.Find(id);
+        var groceryList = _dbContext.GroceryLists.Find(id);
 
         if (groceryList == null)
         {
             throw new NullReferenceException("List not found.");
         }
 
-        _dbContext.GroceryListsTable.Remove(groceryList);
+        _dbContext.GroceryLists.Remove(groceryList);
         int change = _dbContext.SaveChanges();
         
         if (change == 0)
@@ -72,7 +79,7 @@ public class GroceryListRepository : IGroceryListRepository
     /// <inheritdoc />
     public GroceryList Update(GroceryList model)
     {
-        _dbContext.GroceryListsTable.Update(model);
+        _dbContext.GroceryLists.Update(model);
         _dbContext.SaveChanges();
         return model;
     }

@@ -20,3 +20,11 @@ public class PostGroceryListValidator : AbstractValidator<GroceryListDTO>
         RuleFor(x => x.Title).NotEmpty().WithMessage("Title is required");
     }
 }
+
+public class PostGroceryListReqValidator : AbstractValidator<GroceryListCreateRequest>
+{
+    public PostGroceryListReqValidator()
+    {
+        RuleFor(x => x.Title).NotEmpty().WithMessage("Title is required");
+    }
+}
