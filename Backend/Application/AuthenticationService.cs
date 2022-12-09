@@ -5,6 +5,9 @@ using Application.Helpers;
 using AutoMapper;
 using FluentValidation;
 using Application.DTOs;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Application;
 
@@ -92,9 +95,10 @@ public class AuthenticationService : IAuthenticationService
                 request.DisplayName = request.Username;
             }
 
-            user = _userRepository.Create(ObjectGenerator.GenerateUser(request));
 
+            user = _userRepository.Create(ObjectGenerator.GenerateUser(request)) ?? throw new Exception("user could not be created!");
             token_result = GenerateToken(user, _secret);
+
             return true;
         }
         catch (ArgumentOutOfRangeException ae)
@@ -131,7 +135,7 @@ public class AuthenticationService : IAuthenticationService
         {
             if (Configuration.IsDebug && username == "debug")
             {
-                return GenerateUser(new RegisterRequest
+                return ObjectGenerator.GenerateUser(new RegisterRequest
                 {
                     Username = "debug",
                     DisplayName = "Debug User",
@@ -178,7 +182,7 @@ public class AuthenticationService : IAuthenticationService
     /// <author>
     ///     <name>Mads Mandahl-Barth</name>
     /// </author>
-    public string GenerateToken(TokenUserDTO user, byte[] secret)
+    public string GenerateToken(User user, byte[] secret)
     {
         List<Claim> claims = new()
         {
