@@ -22,10 +22,20 @@ public class PostGroceryListValidator : AbstractValidator<GroceryListResponse>
     }
 }
 
-public class PostGroceryListRequestValidator : AbstractValidator<GroceryListRequest>
+public class PostGroceryListCreateRequestValidator : AbstractValidator<GroceryListCreateRequest>
 {
-    public PostGroceryListRequestValidator()
+    public PostGroceryListCreateRequestValidator()
     {
         RuleFor(x => x.Title).NotEmpty().WithMessage("Title is required");
     }
 }
+
+public class PostGroceryListUpdateRequestValidator : AbstractValidator<GroceryListUpdateRequest>
+{
+    public PostGroceryListUpdateRequestValidator()
+    {
+        RuleFor(x => x.Id).Must(x => x > 0).WithMessage("Id must be greater than 0");
+        RuleFor(x => x.Title).NotEmpty().WithMessage("Title is required");
+    }
+}
+

@@ -1,5 +1,7 @@
 ﻿namespace Infrastructure.Interfaces;
 
+using Domain;
+
 public interface IRepository<T>
 {
     List<T> All();
@@ -8,6 +10,8 @@ public interface IRepository<T>
     T Single(long id);
     T Update(T model);
 }
+
+
 public interface IDatabase
 {
     void BuildDB();

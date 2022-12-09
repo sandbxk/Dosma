@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using Application.DTOs;
+using Application.DTOs.Response;
 using AutoMapper;
 using Domain;
 using FluentValidation;
@@ -33,7 +34,7 @@ InfrastructureDependencies.RegisterInfrastructureLayer(builder.Services);
 
 var mapper = new MapperConfiguration(config => {
     config.CreateMap<ItemDTO, Item>();
-    config.CreateMap<UserDTO, User>();
+    config.CreateMap<UserResponse, User>();
 }).CreateMapper();
 
 

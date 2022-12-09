@@ -1,5 +1,6 @@
 
 using Application.DTOs;
+using Application.DTOs.Requests;
 using Application.DTOs.Response;
 using Domain;
 using GroceryListResponse = Application.DTOs.Response.GroceryListResponse;
@@ -38,10 +39,10 @@ public static class ObjectGenerator
             Salt = salt
         };
     }
-    
-    public static UserDTO UserToDTO(this User user)
+
+    public static TokenUser ToTokenUser(this User user)
     {
-        return new UserDTO
+        return new TokenUser
         {
             Id = user.Id,
             Username = user.Username,
@@ -49,9 +50,19 @@ public static class ObjectGenerator
         };
     }
 
-    public static List<UserDTO> UsersToDTO(this List<User> users)
+    public static UserResponse UserToDTO(this User user)
     {
-        List<UserDTO> userDTOs = new();
+        return new UserResponse
+        {
+            Id = user.Id,
+            Username = user.Username,
+            DisplayName = user.DisplayName
+        };
+    }
+
+    public static List<UserResponse> UsersToDTO(this List<User> users)
+    {
+        List<UserResponse> userDTOs = new();
 
         foreach (var user in users)
         {
@@ -60,6 +71,7 @@ public static class ObjectGenerator
         return userDTOs;
     }
     
+
     public static GroceryListResponse GroceryListToResponse(this GroceryList groceryList)
     {
             return new GroceryListResponse
@@ -71,11 +83,34 @@ public static class ObjectGenerator
         };
     }
 
-    public static GroceryList requestToGrocerylist(this GroceryListRequest response)
+    public static List<GroceryListResponse> GroceryListsToResponses(this List<GroceryList> lists)
+    {
+        List<GroceryListResponse> userDTOs = new();
+
+        foreach (var list in lists)
+        {
+            userDTOs.Add(list.GroceryListToResponse());
+        }
+        return userDTOs;
+    }
+
+    public static GroceryList RequestToGrocerylist(this GroceryListUpdateRequest _this)
     {
         return new GroceryList()
         {
-            Title = response.Title,
+            Id = _this.Id,
+            Title = _this.Title,
+            Items = new List<Item>(),
+            Users = new List<User>(),
+            SharedList = new List<UserList>()
+        };
+    }
+
+    public static GroceryList RequestToGrocerylist(this GroceryListCreateRequest _this)
+    {
+        return new GroceryList()
+        {
+            Title = _this.Title,
             Items = new List<Item>(),
             Users = new List<User>(),
             SharedList = new List<UserList>()

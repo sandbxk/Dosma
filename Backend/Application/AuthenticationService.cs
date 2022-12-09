@@ -4,10 +4,11 @@ using Infrastructure.Interfaces;
 using Application.Helpers;
 using AutoMapper;
 using FluentValidation;
-using Application.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using Application.DTOs.Requests;
+using Application.DTOs;
 
 namespace Application;
 
@@ -43,7 +44,7 @@ public class AuthenticationService : IAuthenticationService
 
             if (HashGenerator.Validate(request.Password, user.Salt, user.HashedPassword))
             {
-                token_result = TokenGenerator.GenerateToken(user, _secret);
+                token_result = GenerateToken(user, _secret);
                 return true;
             }
 
@@ -150,14 +151,36 @@ public class AuthenticationService : IAuthenticationService
             return null;
         }
     }
+    public bool AuthenticateToken(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var validationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(_secret),
+        };
 
-    public User? GetUserFromToken(string token)
+        try
+        {
+            handler.ValidateToken(token, validationParameters, out _);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public TokenUser? GetPartialUserFromToken(string token)
     {
         try
         {
             var payload = new JwtSecurityTokenHandler().ReadJwtToken(token);
 
-            return FindUser(payload.Claims.First(c => c.Type == "username").Value);
+            return FindUser(payload.Claims.First(c => c.Type == "username").Value).ToTokenUser();
         }
         catch
         {

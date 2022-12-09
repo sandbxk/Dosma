@@ -24,9 +24,12 @@ public class GroceryListController : ControllerBase
     
     [Produces("application/json")]
     [HttpGet]
-    public List<GroceryList> GetListsByUser([FromHeader] String token)
+    public List<GroceryListResponse> GetListsByUser([FromHeader] String token)
     {
-        var user = _authenticationService.GetUserFromToken(token);
+        if (!_authenticationService.AuthenticateToken(token))
+            throw new UnauthorizedAccessException();
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
         
         if (user == null)
         {
@@ -39,9 +42,12 @@ public class GroceryListController : ControllerBase
     [Produces("application/json")]
     [HttpGet]
     [Route("grocerylist/{id}")]
-    public ActionResult<GroceryList> GetListById([FromRoute] int id, [FromHeader] String token)
+    public ActionResult<GroceryListResponse> GetListById([FromRoute] int id, [FromHeader] String token)
     {
-        var user = _authenticationService.GetUserFromToken(token);
+        if (!_authenticationService.AuthenticateToken(token))
+            throw new UnauthorizedAccessException();
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
         
         if (user == null)
         {
@@ -65,9 +71,12 @@ public class GroceryListController : ControllerBase
     
     [Produces("application/json")]
     [HttpPost]
-    public ActionResult<GroceryListResponse> CreateGroceryList(GroceryListRequest request, [FromHeader] String token)
+    public ActionResult<GroceryListResponse> CreateGroceryList(GroceryListCreateRequest request, [FromHeader] String token)
     {
-        var user = _authenticationService.GetUserFromToken(token);
+        if (!_authenticationService.AuthenticateToken(token))
+            throw new UnauthorizedAccessException();
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
         
         if (user == null)
         {
@@ -76,7 +85,7 @@ public class GroceryListController : ControllerBase
         
         try
         {
-            var result = _groceryListService.Create(request);
+            var result = _groceryListService.Create(request, user);
             return Created("product/" + result.Id, result);
         }
         catch (ValidationException e)
@@ -93,9 +102,12 @@ public class GroceryListController : ControllerBase
     [Produces("application/json")]
     [HttpPatch]
     [Route("{id}")]
-    public ActionResult<GroceryList> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList, [FromHeader] String token)
+    public ActionResult<GroceryListResponse> UpdateList([FromRoute] int id, [FromBody] GroceryListUpdateRequest groceryList, [FromHeader] String token)
     {
-        var user = _authenticationService.GetUserFromToken(token);
+        if (!_authenticationService.AuthenticateToken(token))
+            throw new UnauthorizedAccessException();
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
 
         if (user == null)
         {
@@ -109,7 +121,7 @@ public class GroceryListController : ControllerBase
         
         try
         {
-            return Ok(_groceryListService.UpdateList(id, groceryList));
+            return Ok(_groceryListService.UpdateList(groceryList));
         }
         catch (ValidationException e)
         {
@@ -123,9 +135,12 @@ public class GroceryListController : ControllerBase
     
     [Consumes("application/json")]
     [HttpDelete]
-    public ActionResult DeleteList([FromBody] GroceryList groceryList, [FromHeader] String token)
+    public ActionResult DeleteList([FromBody] GroceryListUpdateRequest groceryList, [FromHeader] String token)
     {
-        var user = _authenticationService.GetUserFromToken(token);
+        if (!_authenticationService.AuthenticateToken(token))
+            throw new UnauthorizedAccessException();
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
         
         if (user == null)
         {
@@ -134,7 +149,7 @@ public class GroceryListController : ControllerBase
         
         try
         {
-            return Ok(_groceryListService.DeleteList(groceryList));
+            return Ok(_groceryListService.DeleteList(groceryList.Id, user));
         }
         catch (ValidationException e)
         {
