@@ -71,9 +71,26 @@ public class GroceryListRepository : IRepository<GroceryList>
 
     public GroceryList Single(long id)
     {
-        return _dbContext.GroceryListsTable
+        var fetchedList =_dbContext.GroceryListsTable
             .Include(l => l.Items)
+            .Include(l => l.SharedList)
+            .Include(l => l.Users)
             .FirstOrDefault(l => l.Id == id);
+        
+        if (fetchedList == null)
+            throw new NullReferenceException("List not found.");
+        
+        var userJoined = _dbContext.GroceryListUserJoinTable.Where(j => j.GroceryListID == fetchedList.Id).ToList();
+
+        List<User> user = new List<User>();
+
+        foreach (var UserList in userJoined)
+        {
+            user.Add(_dbContext.UserTable.Find(UserList.UserID));
+        }
+        fetchedList.Users = user;
+        
+        return fetchedList;
     }
 
     public GroceryList Update(GroceryList model)
