@@ -56,4 +56,6 @@ public interface IAuthenticationService
     ///     <name>Mads Mandahl-Barth</name>
     /// </author>
     public bool Register(RegisterRequest request, out string token_result);
+
+    public User? GetUserFromToken(string token);
 }
