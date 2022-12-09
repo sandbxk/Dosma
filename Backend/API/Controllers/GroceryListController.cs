@@ -67,7 +67,7 @@ public class GroceryListController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<GroceryListResponse> CreateGroceryList(GroceryListCreateRequest dto, [FromHeader] string token)
+    public ActionResult<GroceryListResponse> CreateGroceryList(GroceryListDTO dto, [FromHeader] string token)
     {
         if (_authenticationService.AuthenticateToken(token))
         {
@@ -79,7 +79,7 @@ public class GroceryListController : ControllerBase
                 var user = _authenticationService.GetUserFromToken(token);
                 // TODO: bind user to list as owner
 
-                var result = _groceryListService.Create(dto);
+                var result = _groceryListService.Create(new GroceryListCreateRequest {Title = dto.Title, UserId = user.Id});
                 return Created("product/" + result.Id, result);
             }
             catch (ValidationException e)
