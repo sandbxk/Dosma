@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using Application.DTOs;
+using Application.DTOs.Response;
+using Application.Helpers;
 using Application.Interfaces;
 using AutoMapper;
 using Domain;
@@ -12,10 +14,10 @@ public class GroceryListService : IGroceryListService
 {
     private IRepository<GroceryList> _groceryListRepository;
     private IMapper _mapper;
-    private IValidator<GroceryListDTO> _dtoValidator;
+    private IValidator<GroceryListResponse> _dtoValidator;
     private IValidator<GroceryList> _validator;
     
-    public GroceryListService(IRepository<GroceryList> repository, IMapper mapper, IValidator<GroceryListDTO> dtoValidator, IValidator<GroceryList> validator)
+    public GroceryListService(IRepository<GroceryList> repository, IMapper mapper, IValidator<GroceryListResponse> dtoValidator, IValidator<GroceryList> validator)
     {
         _groceryListRepository = repository;
         _mapper = mapper;
@@ -24,23 +26,28 @@ public class GroceryListService : IGroceryListService
     }
 
 
-    public GroceryList Create(GroceryListDTO dto)
+    public GroceryList Create(GroceryListResponse response)
     {
-        var validation = _dtoValidator.Validate(dto);
+        var validation = _dtoValidator.Validate(response);
         if (!validation.IsValid)
             throw new ValidationException(validation.ToString());
         
-        return _groceryListRepository.Create(_mapper.Map<GroceryList>(dto));
+        return _groceryListRepository.Create(_mapper.Map<GroceryList>(response));
     }
 
-    public GroceryList GetListById(int id)
+    public GroceryListResponse GetListById(int id)
     {
         var grocerylist = _groceryListRepository.Single(id);
+        
+        foreach (var User in grocerylist.Users)
+        {
+            User.UserToDTO();
+        }
         
         if (grocerylist == null)
             throw new ValidationException("Grocery list not found");
 
-        return grocerylist;
+        return grocerylist.GroceryListToDTO();
     }
 
     public List<GroceryList> GetListsByUser(User user)

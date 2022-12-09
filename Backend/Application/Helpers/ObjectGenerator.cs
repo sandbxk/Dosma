@@ -1,6 +1,8 @@
 
 using Application.DTOs;
+using Application.DTOs.Response;
 using Domain;
+using GroceryListResponse = Application.DTOs.Response.GroceryListResponse;
 
 namespace Application.Helpers;
 
@@ -34,6 +36,38 @@ public static class ObjectGenerator
             DisplayName = registration.DisplayName,
             HashedPassword = hash,
             Salt = salt
+        };
+    }
+    
+    public static UserDTO UserToDTO(this User user)
+    {
+        return new UserDTO
+        {
+            Id = user.Id,
+            Username = user.Username,
+            DisplayName = user.DisplayName
+        };
+    }
+
+    public static List<UserDTO> UsersToDTO(this List<User> users)
+    {
+        List<UserDTO> userDTOs = new();
+
+        foreach (var user in users)
+        {
+            userDTOs.Add(user.UserToDTO());
+        }
+        return userDTOs;
+    }
+    
+    public static GroceryListResponse GroceryListToDTO(this GroceryList groceryList)
+    {
+            return new GroceryListResponse
+        {
+            Id = groceryList.Id,
+            Title = groceryList.Title,
+            Items = groceryList.Items,
+            Users = groceryList.Users.UsersToDTO()
         };
     }
 }

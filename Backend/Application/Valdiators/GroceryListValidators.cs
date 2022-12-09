@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Application.DTOs;
+using Application.DTOs.Response;
 using Domain;
 using FluentValidation;
 
@@ -13,7 +14,7 @@ public class GroceryListValidator : AbstractValidator<GroceryList>
     }
 }
 
-public class PostGroceryListValidator : AbstractValidator<GroceryListDTO>
+public class PostGroceryListValidator : AbstractValidator<GroceryListResponse>
 {
     public PostGroceryListValidator()
     {

@@ -1,5 +1,7 @@
 using System.Data;
 using Application.DTOs;
+using Application.DTOs.Response;
+using Application.Helpers;
 using Application.Interfaces;
 using Domain;
 using FluentValidation;
@@ -12,35 +14,41 @@ namespace API.Controllers;
 public class GroceryListController : ControllerBase
 {
     private readonly IGroceryListService _groceryListService;
+    private readonly IAuthenticationService _authenticationService;
     
-    public GroceryListController(IGroceryListService groceryListService)
+    public GroceryListController(IGroceryListService groceryListService, IAuthenticationService authenticationService)
     {
         _groceryListService = groceryListService;
+        _authenticationService = authenticationService;
     }
 
-    
-    /**
-     * Get Lists by various methods
-     */
     [HttpGet]
-    public IEnumerable<GroceryList> GetAllLists()
+    public List<GroceryList> GetListsByUser([FromHeader] String token)
     {
-        return _groceryListService.GetAllLists();
-    }
-
-    [HttpGet("{id}")]
-    public IEnumerable<GroceryList> GetListsByUser([FromBody] User user)
-    {
+        var user = _authenticationService.GetUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+        
         return _groceryListService.GetListsByUser(user);
     }
     
     [HttpGet]
     [Route("grocerylist/{id}")]
-    public ActionResult GetListById([FromRoute] int id)
+    public ActionResult<GroceryList> GetListById([FromRoute] int id, [FromHeader] String token)
     {
+        var user = _authenticationService.GetUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+        
         if (id == 0 || id < 0)
         {
-            return BadRequest();
+            return BadRequest("Invalid id.");
         }
 
         try
@@ -51,15 +59,21 @@ public class GroceryListController : ControllerBase
         {
             return StatusCode(500, e.Message);
         }
-
     }
 
     [HttpPost]
-    public ActionResult<GroceryList> CreateGroceryList(GroceryListDTO dto)
+    public ActionResult<GroceryList> CreateGroceryList(GroceryListRequest request, [FromHeader] String token)
     {
+        var user = _authenticationService.GetUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+        
         try
         {
-            var result = _groceryListService.Create(dto);
+            var result = _groceryListService.Create(request);
             return Created("product/" + result.Id, result);
         }
         catch (ValidationException e)
@@ -74,8 +88,15 @@ public class GroceryListController : ControllerBase
 
     [HttpPatch]
     [Route("{id}")]
-    public ActionResult<GroceryList> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList)
+    public ActionResult<GroceryList> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList, [FromHeader] String token)
     {
+        var user = _authenticationService.GetUserFromToken(token);
+
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+        
         if (id != groceryList.Id)
         {
             throw new ValidationException("List ID does not match ID in URL.");
@@ -97,8 +118,15 @@ public class GroceryListController : ControllerBase
     
     [HttpDelete]
     [Route("{id}")]
-    public ActionResult DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList)
+    public ActionResult DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList, [FromHeader] String token)
     {
+        var user = _authenticationService.GetUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+        
         if (id != groceryList.Id)
         {
             throw new ValidationException("List ID does not match ID in URL.");

@@ -2,7 +2,7 @@
 
 namespace Application.DTOs;
 
-public class GroceryListDTO
+public class GroceryListRequest
 {
     public string Title { get; set; }
 }
