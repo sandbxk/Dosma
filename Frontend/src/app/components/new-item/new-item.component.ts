@@ -23,7 +23,7 @@ export class NewItemComponent implements OnInit {
   // ID for the grocery list.
   @Input() groceryListId: number = 0;
 
-  @Input() groceryListSize: number = 0;
+  @Input() listSize: number = 0;
 
 
   constructor() { }
@@ -82,7 +82,7 @@ export class NewItemComponent implements OnInit {
         groceryListId: this.groceryListId,
         status: 0,
         category: this.category?.value,
-        index: this.groceryListSize
+        index: this.listSize
       }
 
       this.newItemEvent.emit(newItem);

@@ -65,7 +65,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     category: "None",
     status: 0,
     groceryListId: 0,
-    index: 0
+    index: -1
   });
 
   // Valid categories for items
@@ -92,7 +92,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     private matSnackBar: MatSnackBar
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+
     // Get the id from the route.
     this.routeId = this.currentRoute.snapshot.paramMap.get('id');
 
@@ -103,14 +104,36 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
     // If the id is 0, the data service did not pass a list, so we need to get it from the server
     if (this.groceryList.id === 0) {
-      this.httpService.getListById(this.routeId).then((list: GroceryList) => {
-        this.groceryList = list;
-      });
+      this.groceryList = await this.httpService.getListById(this.routeId);
     }
 
-    setInterval(this.sync, 60000);
-    //TODO: sync on app close???
-    //TODO load and sort items by index from local storage
+    this.applyAndSortIndexes();
+
+    setInterval(this.sync, 120000); // Sync every 2 minutes
+  }
+
+
+
+  applyAndSortIndexes() {
+    const localItemsStorage = localStorage.getItem(this.routeId.toString()); // Get the list from local storage
+    if (localItemsStorage) { // If the list exists in local storage
+
+      let localItems: Item[] = JSON.parse(localItemsStorage); // Parse the list
+
+      let indexes = localItems.map(i => i.id); // Get the indexes of the item.ids in the list
+
+      for (let i = 0; i < this.groceryList.items.length; i++) {
+        let index = indexes.indexOf(this.groceryList.items[i].id); // Get the index of the item with the same id in the local storage list
+        if (index !== -1) {
+          this.groceryList.items[i].index = localItems[index].index; // Set the index of the item in the list to the index of the item in the local storage list
+        }
+      }
+
+        this.groceryList.items.sort((a, b) => { // Sort the items by index
+          console.log(a.index, b.index);
+          return a.index - b.index;
+        }); // Sort the items by their index
+    }
   }
 
   //TODO:
@@ -152,22 +175,54 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   drop(event: CdkDragDrop<Item>) {
     moveItemInArray(this.groceryList.items, event.previousIndex, event.currentIndex);
-    event.item.data.index = event.currentIndex; //TODO TEST
+    event.item.data.index = event.currentIndex;
+
+    //Update the index of all items in the list
+    for (let i = 0; i < this.groceryList.items.length; i++) {
+      this.groceryList.items[i].index = i;
+    }
+
+    localStorage.setItem(this.routeId.toString(), JSON.stringify(this.groceryList.items));
   }
 
-  sync() {
+  /**
+   * Syncs the local list with the server
+   * Starts with syncing down and notifying the user of any changes present on the server,
+   * the user can discard the changes or merge them with the local list
+   * Then the local list is synced up to the server
+   */
+  async sync() {
     this.syncing = true;
 
+    try {
+
+    const updatedList = await this.syncService.syncDown()
+    if (updatedList.id !== 0 && updatedList !== this.groceryList) { //Must not be the placeholder list, and should not be identical to the current list
+
+      this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          title: "New changes detected",
+          message: "Would you like to update your list with the new changes? " +
+            "This will overwrite any recent changes you have made.",
+        }
+      }).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          this.groceryList = updatedList;
+        }
+      }).unsubscribe();
+    }
+
     this.syncService.syncUp(this.groceryList).then(async () => {
-      const updatedList = await this.syncService.syncDown()
-      if (updatedList.id !== 0) {
-        this.groceryList = updatedList;
-      }
     })
       .catch(reason => this.matSnackBar
-      .open(reason, "Dismiss", {duration: 5000}))
-      .finally(() => this.syncing = false);
+        .open(reason, "Dismiss", {duration: 5000}))
+          .finally(() => this.syncing = false);
 
+
+    } catch (error) {
+      this.syncing = false;
+      this.matSnackBar.open('ERROR: Could not synchronize', "Dismiss", {duration: 5000});
+    }
   }
 
 
