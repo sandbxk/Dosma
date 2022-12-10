@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Application.DTOs;
 using AutoMapper;
 using Domain;
@@ -12,6 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
