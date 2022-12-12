@@ -27,6 +27,9 @@ import { MatExpansionModule} from "@angular/material/expansion";
 import { NewItemComponent } from './components/new-item/new-item.component';
 import { MatAutocompleteModule} from "@angular/material/autocomplete";
 import { EditItemComponent } from './components/edit-item/edit-item.component';
+import { TriStateCheckboxComponent } from './components/tri-state-checkbox/tri-state-checkbox.component';
+
+
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { LoginComponent } from './components/login/login.component';
@@ -35,6 +38,7 @@ import { ContactUsComponent } from './components/contact-us/contact-us.component
 import { AboutUsComponent } from './components/about-us/about-us.component';
 import { EditorProfileComponent } from './components/editor-profile/editor-profile.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+
 
 @NgModule({
   declarations: [
@@ -48,6 +52,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     //ItemCreatorComponent,
     NewItemComponent,
     EditItemComponent,
+    TriStateCheckboxComponent,
     LoginComponent,
     RegisterComponent,
     ContactUsComponent,
