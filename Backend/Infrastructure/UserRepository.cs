@@ -1,4 +1,3 @@
-using Backend.Helpers;
 using Domain;
 using Infrastructure.Interfaces;
 
@@ -34,8 +33,7 @@ public class UserRepository : IUserRepository
         
         if (change == 0)
         {
-            // todo: why do we not return false here?
-            throw new InvalidOperationException("User could not be deleted");
+            return false;
         }
 
         return true;

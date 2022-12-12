@@ -1,4 +1,6 @@
 using Application.DTOs;
+using Application.DTOs.Requests;
+using Domain;
 
 namespace Application.Interfaces;
 
@@ -56,4 +58,8 @@ public interface IAuthenticationService
     ///     <name>Mads Mandahl-Barth</name>
     /// </author>
     public bool Register(RegisterRequest request, out string token_result);
+
+    public bool AuthenticateToken(string token);
+
+    public TokenUser? GetPartialUserFromToken(string token);
 }

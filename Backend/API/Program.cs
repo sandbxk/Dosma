@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using Application.DTOs;
+using Application.DTOs.Response;
 using AutoMapper;
 using Domain;
 using FluentValidation;
@@ -32,8 +33,8 @@ ApplicationDependencies.RegisterSecurityLayer(builder.Services, Encoding.ASCII.G
 InfrastructureDependencies.RegisterInfrastructureLayer(builder.Services);
 
 var mapper = new MapperConfiguration(config => {
-    config.CreateMap<GroceryListDTO, GroceryList>();
     config.CreateMap<ItemDTO, Item>();
+    config.CreateMap<UserResponse, User>();
 }).CreateMapper();
 
 

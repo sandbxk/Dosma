@@ -1,6 +1,6 @@
 namespace Application.DTOs
 {
-    public class TokenResponseDTO
+    public class TokenResponse
     {
         public uint Status { get; set; } = 200;
         public string? ErrorMessage { get; set; }

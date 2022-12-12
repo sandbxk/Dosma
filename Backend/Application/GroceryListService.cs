@@ -1,73 +1,126 @@
 ﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 using Application.DTOs;
+using Application.DTOs.Response;
+using Application.Helpers;
 using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using FluentValidation;
+using Infrastructure;
 using Infrastructure.Interfaces;
 
 namespace Application;
 
 public class GroceryListService : IGroceryListService
 {
-    private IRepository<GroceryList> _groceryListRepository;
-    private IMapper _mapper;
-    private IValidator<GroceryListDTO> _dtoValidator;
-    private IValidator<GroceryList> _validator;
+    private readonly IRepository<GroceryList> _groceryListRepository;
+    private readonly IUserGroceryBinding _userGroceryRepository;
+
+    private readonly IValidator<GroceryListResponse> _groceryListResponseValidator;
+    private readonly IValidator<GroceryListCreateRequest> _groceryListCreateRequestValidator;
+    private readonly IValidator<GroceryListUpdateRequest> _groceryListUpdateRequestValidator;
+    private readonly IValidator<GroceryList> _groceryListValidator;
     
-    public GroceryListService(IRepository<GroceryList> repository, IMapper mapper, IValidator<GroceryListDTO> dtoValidator, IValidator<GroceryList> validator)
+    public GroceryListService(
+        IRepository<GroceryList> repository,
+        IUserGroceryBinding userGroceryRepository,
+        
+        IValidator<GroceryListResponse> responseValidator, 
+        IValidator<GroceryListCreateRequest> createRequestValidator,
+        IValidator<GroceryListUpdateRequest> updateRequestValidator,
+        IValidator<GroceryList> validator
+    )
     {
         _groceryListRepository = repository;
-        _mapper = mapper;
-        _dtoValidator = dtoValidator;
-        _validator = validator;
+        _userGroceryRepository = userGroceryRepository;
+
+        _groceryListResponseValidator = responseValidator;
+        _groceryListCreateRequestValidator = createRequestValidator;
+        _groceryListUpdateRequestValidator = updateRequestValidator;
+        _groceryListValidator = validator;
     }
 
-
-    public GroceryList Create(GroceryListDTO dto)
+    public GroceryListResponse Create(GroceryListCreateRequest request, TokenUser user)
     {
-        var validation = _dtoValidator.Validate(dto);
-        if (!validation.IsValid)
-            throw new ValidationException(validation.ToString());
-        
-        return _groceryListRepository.Create(_mapper.Map<GroceryList>(dto));
+        // Validate the request
+        _groceryListCreateRequestValidator.ValidateAndThrow(request);
+
+        // Map the request to a GroceryList
+        var mapped = request.RequestToGrocerylist();
+
+        // Create and validate
+        var groceryList = _groceryListRepository.Create(mapped);
+        _groceryListValidator.ValidateAndThrow(groceryList);
+
+        // map to a response and validate it
+        var response = groceryList.GroceryListToResponse();
+        _groceryListResponseValidator.ValidateAndThrow(response);
+
+        // Bind the user to the grocery list
+        if (_userGroceryRepository.AddUserToGroceryList(user.Id, groceryList.Id))
+        {
+            return response;
+        }
+
+        throw new Exception("Could not bind user to grocery list");
     }
 
-    public GroceryList GetListById(int id)
+    public GroceryListResponse GetListById(int listID)
     {
-        var grocerylist = _groceryListRepository.Single(id);
-        
-        if (grocerylist == null)
-            throw new ValidationException("Grocery list not found");
+        // get and validate the list
+        var grocerylist = _groceryListRepository.Single(listID);
+        _groceryListValidator.ValidateAndThrow(grocerylist);
 
-        return grocerylist;
+        return grocerylist.GroceryListToResponse();
     }
 
-    public List<GroceryList> GetListsByUser(User user)
+    public List<GroceryListResponse> GetListsByUser(TokenUser user)
     {
-        return _groceryListRepository.All();
+        return _userGroceryRepository.GetAllGroceryLists(user.Id).GroceryListsToResponses();
+    }
+    
+    public List<GroceryListResponse> GetAllLists()
+    {
+#if DEBUG
+        return _groceryListRepository.All().GroceryListsToResponses();
+#else
+        return new List<GroceryListResponse>();
+#endif
     }
 
-    public List<GroceryList> GetAllLists()
+    public bool DeleteList(int listID, TokenUser user)
     {
-        return _groceryListRepository.All();
+        // remove the user from the list
+        if (_userGroceryRepository.RemoveUserFromGroceryList(user.Id, listID))
+        {
+            // delete list only if no other users are assigned to it.
+            // without sharing this should always be true
+            if (_userGroceryRepository.GetAllUsers(listID).Count() == 0)
+            {
+                return _groceryListRepository.Delete(listID);
+            }
+        }
+
+        return false;
     }
 
-    public bool DeleteList(GroceryList groceryList)
+    public GroceryListResponse UpdateList(GroceryListUpdateRequest request)
     {
-        var validation = _validator.Validate(groceryList);
-        if (!validation.IsValid)
-            throw new ValidationException(validation.ToString());
-        
-        return _groceryListRepository.Delete(groceryList.Id);
-    }
+        // Validate the request
+        _groceryListUpdateRequestValidator.ValidateAndThrow(request);
 
-    public GroceryList UpdateList(int id, GroceryList groceryList)
-    {
-        var validation = _validator.Validate(groceryList);
-        if (!validation.IsValid)
-            throw new ValidationException(validation.ToString());
-        
-        return _groceryListRepository.Update(groceryList);
+        // Map the request to a GroceryList
+        var mapped = request.RequestToGrocerylist();
+
+        // Update and validate
+        var groceryList = _groceryListRepository.Update(mapped);
+        _groceryListValidator.ValidateAndThrow(groceryList);
+
+        // map to a response and validate it
+        var response = groceryList.GroceryListToResponse();
+        _groceryListResponseValidator.ValidateAndThrow(response);
+
+        return response;
     }
 }

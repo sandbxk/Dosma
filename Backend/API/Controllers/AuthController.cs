@@ -1,5 +1,6 @@
 
 using Application.DTOs;
+using Application.DTOs.Requests;
 using Application.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -29,10 +30,10 @@ public class AuthController : ControllerBase
 
         if (_authenticationService.Login(loginInfo, out string result))
         {
-            return Ok(new TokenResponseDTO { Token = result });
+            return Ok(new TokenResponse { Token = result });
         }
 
-        return BadRequest(new TokenResponseDTO { Status = 400, ErrorMessage = result });
+        return BadRequest(new TokenResponse { Status = 400, ErrorMessage = result });
     }
 
     [AllowAnonymous]
@@ -46,9 +47,9 @@ public class AuthController : ControllerBase
 
         if (_authenticationService.Register(registrationInfo, out string result))
         {
-            return Ok(new TokenResponseDTO { Token = result });
+            return Ok(new TokenResponse { Token = result });
         }
 
-        return BadRequest(new TokenResponseDTO { Status = 400, ErrorMessage = result });
+        return BadRequest(new TokenResponse { Status = 400, ErrorMessage = result });
     }
 }

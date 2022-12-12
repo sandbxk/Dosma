@@ -1,15 +1,18 @@
 ﻿using Application.DTOs;
+using Application.DTOs.Response;
 using Domain;
+
 
 namespace Application.Interfaces;
 
 public interface IGroceryListService
 {
-    public GroceryList Create(GroceryListDTO dto);
-    public List<GroceryList> GetListsByUser(User user);
+    public GroceryListResponse Create(GroceryListCreateRequest request, TokenUser user);
+    public List<GroceryListResponse> GetListsByUser(TokenUser user);
+
+    public GroceryListResponse GetListById(int id);
+    public List<GroceryListResponse> GetAllLists();
     
-    public GroceryList GetListById(int id);
-    public List<GroceryList> GetAllLists();
-    public bool DeleteList(GroceryList groceryList);
-    public GroceryList UpdateList(int id, GroceryList groceryList);
+    public bool DeleteList(int id, TokenUser user);
+    public GroceryListResponse UpdateList(GroceryListUpdateRequest groceryList);
 }

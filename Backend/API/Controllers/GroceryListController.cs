@@ -1,5 +1,7 @@
 using System.Data;
 using Application.DTOs;
+using Application.DTOs.Response;
+using Application.Helpers;
 using Application.Interfaces;
 using Domain;
 using FluentValidation;
@@ -12,35 +14,49 @@ namespace API.Controllers;
 public class GroceryListController : ControllerBase
 {
     private readonly IGroceryListService _groceryListService;
+    private readonly IAuthenticationService _authenticationService;
     
-    public GroceryListController(IGroceryListService groceryListService)
+    public GroceryListController(IGroceryListService groceryListService, IAuthenticationService authenticationService)
     {
         _groceryListService = groceryListService;
+        _authenticationService = authenticationService;
     }
-
     
-    /**
-     * Get Lists by various methods
-     */
+    [Produces("application/json")]
     [HttpGet]
-    public IEnumerable<GroceryList> GetAllLists()
+    public List<GroceryListResponse> GetListsByUser([FromHeader] String token)
     {
-        return _groceryListService.GetAllLists();
-    }
-
-    [HttpGet("{id}")]
-    public IEnumerable<GroceryList> GetListsByUser([FromBody] User user)
-    {
+        if (!_authenticationService.AuthenticateToken(token))
+            throw new UnauthorizedAccessException();
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+        
         return _groceryListService.GetListsByUser(user);
     }
     
+    [Produces("application/json")]
     [HttpGet]
     [Route("grocerylist/{id}")]
-    public ActionResult GetListById([FromRoute] int id)
+    public ActionResult<GroceryListResponse> GetListById([FromRoute] int id, [FromHeader] String token)
     {
+        if (!_authenticationService.AuthenticateToken(token))
+            throw new UnauthorizedAccessException();
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+        
         if (id == 0 || id < 0)
         {
-            return BadRequest();
+            return BadRequest("Invalid id.");
         }
 
         try
@@ -51,15 +67,25 @@ public class GroceryListController : ControllerBase
         {
             return StatusCode(500, e.Message);
         }
-
     }
-
+    
+    [Produces("application/json")]
     [HttpPost]
-    public ActionResult<GroceryList> CreateGroceryList(GroceryListDTO dto)
+    public ActionResult<GroceryListResponse> CreateGroceryList(GroceryListCreateRequest request, [FromHeader] String token)
     {
+        if (!_authenticationService.AuthenticateToken(token))
+            throw new UnauthorizedAccessException();
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+        
         try
         {
-            var result = _groceryListService.Create(dto);
+            var result = _groceryListService.Create(request, user);
             return Created("product/" + result.Id, result);
         }
         catch (ValidationException e)
@@ -72,10 +98,22 @@ public class GroceryListController : ControllerBase
         }
     }
 
+    [Consumes("application/json")]
+    [Produces("application/json")]
     [HttpPatch]
     [Route("{id}")]
-    public ActionResult<GroceryList> UpdateList([FromRoute] int id, [FromBody] GroceryList groceryList)
+    public ActionResult<GroceryListResponse> UpdateList([FromRoute] int id, [FromBody] GroceryListUpdateRequest groceryList, [FromHeader] String token)
     {
+        if (!_authenticationService.AuthenticateToken(token))
+            throw new UnauthorizedAccessException();
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
+
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+        
         if (id != groceryList.Id)
         {
             throw new ValidationException("List ID does not match ID in URL.");
@@ -83,7 +121,7 @@ public class GroceryListController : ControllerBase
         
         try
         {
-            return Ok(_groceryListService.UpdateList(id, groceryList));
+            return Ok(_groceryListService.UpdateList(groceryList));
         }
         catch (ValidationException e)
         {
@@ -95,17 +133,23 @@ public class GroceryListController : ControllerBase
         }
     }
     
+    [Consumes("application/json")]
     [HttpDelete]
-    [Route("{id}")]
-    public ActionResult DeleteList([FromRoute] int id, [FromBody] GroceryList groceryList)
+    public ActionResult DeleteList([FromBody] GroceryListUpdateRequest groceryList, [FromHeader] String token)
     {
-        if (id != groceryList.Id)
+        if (!_authenticationService.AuthenticateToken(token))
+            throw new UnauthorizedAccessException();
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
+        
+        if (user == null)
         {
-            throw new ValidationException("List ID does not match ID in URL.");
+            throw new NullReferenceException("User could not be found.");
         }
+        
         try
         {
-            return Ok(_groceryListService.DeleteList(groceryList));
+            return Ok(_groceryListService.DeleteList(groceryList.Id, user));
         }
         catch (ValidationException e)
         {

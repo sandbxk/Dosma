@@ -9,6 +9,7 @@ using Domain;
 using AutoMapper;
 
 using System.Text;
+using Application.DTOs.Requests;
 
 namespace Backend.Tests;
 
