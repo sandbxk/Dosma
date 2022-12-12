@@ -26,8 +26,6 @@ export class EditItemComponent implements OnInit {
   @Output() cancelEditItemEvent = new EventEmitter<boolean>();
 
 
-
-
   constructor() {
 
   }
@@ -81,7 +79,8 @@ export class EditItemComponent implements OnInit {
         quantity: this.quantity?.value,
         groceryListId: this.listItem.groceryListId,
         status: this.listItem.status,
-        category: this.category?.value
+        category: this.category?.value,
+        index: this.listItem.index
       }
 
       this.editItemEvent.emit(editedItem);

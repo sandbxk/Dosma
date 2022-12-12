@@ -10,12 +10,44 @@ import {Item} from "../../interfaces/Item";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
+import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
+import {SyncService} from "../../../services/sync.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 import {Status} from "../../interfaces/StatusEnum";
 
 @Component({
   selector: 'app-grocery-list',
   templateUrl: './grocery-list.component.html',
-  styleUrls: ['./grocery-list.component.scss']
+  styleUrls: ['./grocery-list.component.scss'],
+  animations: [  // This is the animation for the items, triggered upon adding and removing items
+    trigger("inOutAnimation", [
+      state("in", style({ opacity: 1 })),
+      transition(":enter", [
+        animate(
+          300,
+          keyframes([
+            style({ opacity: 0, offset: 0 }),
+            style({ opacity: 0.25, offset: 0.25 }),
+            style({ opacity: 0.5, offset: 0.5 }),
+            style({ opacity: 0.75, offset: 0.75 }),
+            style({ opacity: 1, offset: 1 }),
+          ])
+        )
+      ]),
+      transition(":leave", [
+        animate(
+          300,
+          keyframes([
+            style({ opacity: 1, offset: 0 }),
+            style({ opacity: 0.75, offset: 0.25 }),
+            style({ opacity: 0.5, offset: 0.5 }),
+            style({ opacity: 0.25, offset: 0.75 }),
+            style({ opacity: 0, offset: 1 }),
+          ])
+        )
+      ])
+    ])
+  ]
 })
 export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
@@ -33,7 +65,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     quantity: 0,
     category: "None",
     status: 0,
-    groceryListId: 0
+    groceryListId: 0,
+    index: -1
   });
 
   // Valid categories for items
@@ -47,16 +80,21 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   selectedItems: Item[] = [];
   editingItem: Item = this.placeholderItem;
 
+  syncing: boolean = false;
+
 
   constructor(
     private currentRoute: ActivatedRoute,
     private router: Router,
     private dataService: DataService,
     private httpService: HttpGroceryListService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private syncService: SyncService,
+    private matSnackBar: MatSnackBar
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+
     // Get the id from the route.
     this.routeId = this.currentRoute.snapshot.paramMap.get('id');
 
@@ -67,9 +105,35 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
     // If the id is 0, the data service did not pass a list, so we need to get it from the server
     if (this.groceryList.id === 0) {
-      this.httpService.getListById(this.routeId).then((list: GroceryList) => {
-        this.groceryList = list;
-      });
+      this.groceryList = await this.httpService.getListById(this.routeId);
+    }
+
+    this.applyAndSortIndexes();
+
+    setInterval(this.sync, 120000); // Sync every 2 minutes
+  }
+
+
+
+  applyAndSortIndexes() {
+    const localItemsStorage = localStorage.getItem(this.routeId.toString()); // Get the list from local storage
+    if (localItemsStorage) { // If the list exists in local storage
+
+      let localItems: Item[] = JSON.parse(localItemsStorage); // Parse the list
+
+      let indexes = localItems.map(i => i.id); // Get the indexes of the item.ids in the list
+
+      for (let i = 0; i < this.groceryList.items.length; i++) {
+        let index = indexes.indexOf(this.groceryList.items[i].id); // Get the index of the item with the same id in the local storage list
+        if (index !== -1) {
+          this.groceryList.items[i].index = localItems[index].index; // Set the index of the item in the list to the index of the item in the local storage list
+        }
+      }
+
+        this.groceryList.items.sort((a, b) => { // Sort the items by index
+          console.log(a.index, b.index);
+          return a.index - b.index;
+        }); // Sort the items by their index
     }
   }
 
@@ -93,13 +157,14 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   /**
    * From IComponentCanDeactivate
    * Will prevent the user from navigating away from the page if there are unsaved changes
-   * To be used for SyncService
+   * used for SyncService
    */
   @HostListener('window:beforeunload', ['$event'])
   canDeactivate(): boolean | Observable<boolean> {
-    // insert logic to check if there are pending changes here;
-    // returning true will navigate without confirmation
-    // returning false will show a confirm dialog before navigating away
+    while (this.syncing) {
+      // Wait for the sync to finish
+      //TODO: update all items to have the correct index and save in local storage
+    }
     return true;
   }
 
@@ -109,7 +174,56 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   drop(event: CdkDragDrop<Item>) {
     moveItemInArray(this.groceryList.items, event.previousIndex, event.currentIndex);
+    event.item.data.index = event.currentIndex;
+
+    //Update the index of all items in the list
+    for (let i = 0; i < this.groceryList.items.length; i++) {
+      this.groceryList.items[i].index = i;
+    }
+
+    localStorage.setItem(this.routeId.toString(), JSON.stringify(this.groceryList.items));
   }
+
+  /**
+   * Syncs the local list with the server
+   * Starts with syncing down and notifying the user of any changes present on the server,
+   * the user can discard the changes or merge them with the local list
+   * Then the local list is synced up to the server
+   */
+  async sync() {
+    this.syncing = true;
+
+    try {
+
+    const updatedList = await this.syncService.syncDown()
+    if (updatedList.id !== 0 && updatedList !== this.groceryList) { //Must not be the placeholder list, and should not be identical to the current list
+
+      this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          title: "New changes detected",
+          message: "Would you like to update your list with the new changes? " +
+            "This will overwrite any recent changes you have made.",
+        }
+      }).afterClosed().subscribe((result: boolean) => {
+        if (result) {
+          this.groceryList = updatedList;
+        }
+      }).unsubscribe();
+    }
+
+    this.syncService.syncUp(this.groceryList).then(async () => {
+    })
+      .catch(reason => this.matSnackBar
+        .open(reason, "Dismiss", {duration: 5000}))
+          .finally(() => this.syncing = false);
+
+
+    } catch (error) {
+      this.syncing = false;
+      this.matSnackBar.open('ERROR: Could not synchronize', "Dismiss", {duration: 5000});
+    }
+  }
+
 
  /**
   * Navigates back to the dashboard with all the user's grocery lists
@@ -202,12 +316,37 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   editItem($event: Item) {
     let index = this.groceryList.items.indexOf(this.editingItem);
     this.groceryList.items[index] = $event;
+
     this.editingItem = this.placeholderItem;
   }
 
 
-  deleteItem(item: Item) {
+  deleteItems() {
+    const itemsToDelete = this.selectedItems;
 
+    let deleteMessage = "";
+
+    if (itemsToDelete.length === 1)
+      deleteMessage = "Are you sure you want to delete this item?";
+    else
+      deleteMessage = `Are you sure you want to delete these ${itemsToDelete.length} items?`;
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        title: 'Delete Items',
+        message: deleteMessage
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(userSaidYes => {
+      if (userSaidYes) {
+        const setOfItemsToDelete = new Set(itemsToDelete);
+        const newGroceryListItems = this.groceryList.items.filter((item) => {
+          return !setOfItemsToDelete.has(item);
+        });
+        this.groceryList.items = newGroceryListItems;
+      }
+    });
   }
 
   /**
@@ -223,8 +362,9 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    * @param cancel
    */
   cancelEditItem(cancel: boolean) {
-    if (cancel)
+    if (cancel) {
       this.editingItem = this.placeholderItem;
+    }
   }
 
   /**
@@ -272,9 +412,4 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   get statusEnum(){
     return Status;
   }
-
-
-
-
-
 }

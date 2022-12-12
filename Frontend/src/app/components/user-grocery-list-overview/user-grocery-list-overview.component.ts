@@ -62,6 +62,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
     });
 
 
+
     //TODO TEMP
     this.groceryLists = MockLists;
 

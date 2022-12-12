@@ -17,9 +17,13 @@
     <!-- Container for the other actions -->
     <div class="listActionsContainer">
 
-      <!-- Share button -- Disabled -->
-      <button [disabled]="true" mat-icon-button class="listActionBtn"  aria-label="Grocery list menu">
-        <mat-icon>share</mat-icon>
+      <!-- Sync button -- Disabled while syncing -->
+      <button mat-icon-button [disabled]="syncing"
+              class="listActionBtn"
+              (click)="sync()">
+        <mat-icon [ngClass]="{'syncingAnimation': syncing}">
+          sync
+        </mat-icon>
       </button>
 
       <!-- Button for activating mat Menu -->
@@ -31,6 +35,11 @@
 
       <!-- Mat menu for the list actions -->
       <mat-menu #listMenu="matMenu">
+        <!-- share button -->
+        <button [disabled]="true" mat-menu-item>
+          <mat-icon>share</mat-icon>
+          <span>Share</span>
+        </button>
         <!-- Edit list title -->
         <button mat-menu-item (click)="editListName()">
           <mat-icon>edit</mat-icon>
@@ -50,7 +59,7 @@
 
   <!-- ITEMS -->
   <div cdkDropList class="itemDnDContainer" (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="dragAndDropIsDisabled()"> <!-- Drag and Drop container -->
-    <div  *ngFor="let item of groceryList.items"
+    <div  [@inOutAnimation] *ngFor="let item of groceryList.items"
           class="itemBox"
           [ngClass]="{
           'itemBox': item.status === statusEnum.Unchecked,
@@ -60,7 +69,6 @@
           'itemBoxCheckedAndSelected': selectedItems.includes(item) && item.status === statusEnum.Done,
           'itemBoxSkippedAndSelected': selectedItems.includes(item) && item.status === statusEnum.Skipped
           }"
-
           (click)="selectItem(item)"
           cdkDrag [cdkDragData]="item">
       <!-- Individual items | ngClass will apply the the correct class as described by each scenario-->
@@ -102,9 +110,9 @@
     <!-- item creation panel, using the new-item component. NewItemEvent and CancelItemCreationEvent are @output events
      in the child component and will be emitted in addItem() and close(). The [groceryListId] sets the variable
      groceryListId in the child component to the chosen value, using @input -->
-     <div id="item-creation-panel" [class.hidden]="!creatingItem">
+     <div id="item-creation-panel" [ngClass]="creatingItem ? 'animateIntoFrame' : 'animateOutOfFrame'">
       <app-new-item
-        id="new-item-panel" [groceryListId]="groceryList.id"
+        id="new-item-panel" [groceryListId]="groceryList.id" [listSize]="groceryList.items.length"
         (newItemEvent)="addItem($event)" (closeItemCreationEvent)="showNewItemPanel(!$event)">
       </app-new-item>
     </div>
@@ -126,7 +134,7 @@
       <mat-icon>edit</mat-icon>
     </button>
 
-    <button mat-mini-fab class="matFabDeleteBtn">
+    <button mat-mini-fab (click)="deleteItems()" class="matFabDeleteBtn">
       <mat-icon>delete</mat-icon>
     </button>
 

@@ -103,8 +103,9 @@ export class HttpGroceryListService {
    * Get the list with the given id
    * @param routeId
    */
-  async getListById(routeId: number) {
+  async getListById(routeId: number): Promise<GroceryList> {
     //TODO
-    return MockLists[0];
+    const result = await MockLists.find(list => list.id == routeId);
+    return result as GroceryList;
   }
 }

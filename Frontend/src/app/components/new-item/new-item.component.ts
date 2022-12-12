@@ -20,8 +20,10 @@ export class NewItemComponent implements OnInit {
 
   // List of categories for the autocomplete
   categories: string[] = ['None', 'Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
-  // ID for the grocery list. TODO: Get this from the parent component with @Input
+  // ID for the grocery list.
   @Input() groceryListId: number = 0;
+
+  @Input() listSize: number = 0;
 
 
   constructor() { }
@@ -79,7 +81,8 @@ export class NewItemComponent implements OnInit {
         quantity: this.quantity?.value,
         groceryListId: this.groceryListId,
         status: 0,
-        category: this.category?.value
+        category: this.category?.value,
+        index: this.listSize
       }
 
       this.newItemEvent.emit(newItem);
