@@ -1,0 +1,32 @@
+
+<mat-toolbar color="primary">
+  <img [src]="image" alt="Logo" width="10%" (click)="goHome()"/>
+  <span class="spacer"></span>
+
+  <div>
+    <!--
+      if the user not logged in, show the login and register buttons
+      then hide them when the user logged in
+    -->
+    <div *ngIf="user.isLoggedIn() === false">
+      <button mat-button (click)="openLoginForm()">Login</button>
+      <button mat-button (click)="openRegisterForm()">Register</button>
+    </div>
+    <!--
+      if the user logged in drop down menu will be shown on the right side of the navigation bar
+      when the user click on the drop down menu, the user can see the profile and logout button
+    -->
+    <div *ngIf="user.isLoggedIn() === true">
+      <mat-icon>account_circle</mat-icon>
+      <span>user?.displayName</span>
+      <button mat-button routerLink="/account">Edit Profile</button>
+      <span>-</span>
+      <button mat-button routerLink="/about">About</button>
+      <button mat-button routerLink="/contact">Contact</button>
+      <span>-</span>
+      <button mat-button (click)="logoutCurrentUser()">Logout</button>
+    </div>
+
+  </div>
+
+</mat-toolbar>

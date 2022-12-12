@@ -58,7 +58,7 @@ public class UserRepository : IUserRepository
         user.Username = model.Username;
         user.HashedPassword = model.HashedPassword;
         user.DisplayName = model.DisplayName;
-        user.GroceryLists = model.GroceryLists;
+        user.SharedList = model.SharedList;
         _DBContext.SaveChanges();
         return user;
     }

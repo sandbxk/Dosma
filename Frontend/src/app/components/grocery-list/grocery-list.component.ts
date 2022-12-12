@@ -13,6 +13,7 @@ import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-
 import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
 import {SyncService} from "../../../services/sync.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {Status} from "../../interfaces/StatusEnum";
 
 @Component({
   selector: 'app-grocery-list',
@@ -143,8 +144,6 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   //    - Mark all items as purchased
 
   //TODO: Item status
-  // 4. Mark an item as purchased -> ItemStatusComponent
-  // 5. Mark an item as skipped -> ItemStatusComponent
   // 5. Mark all items as purchased -> ListMenu Options
   // On check, opacity 0.7 and strikethrough
   // On skipped, color warn-light, opacity 0.7 and strikethrough
@@ -264,10 +263,10 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   selectItem(item: Item) {
     if (this.selectedItems.includes(item))
-      this.selectedItems.splice(this.selectedItems.indexOf(item), 1);
+      this.selectedItems.splice(this.selectedItems.indexOf(item), 1); // Remove the item from the array
 
     else
-      this.selectedItems.push(item);
+      this.selectedItems.push(item); // Add the item to the array
   }
 
   /**
@@ -410,4 +409,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     }
   }
 
+  get statusEnum(){
+    return Status;
+  }
 }
