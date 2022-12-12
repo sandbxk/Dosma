@@ -191,18 +191,20 @@ export const MockLists: GroceryList[] =
             index: 1
           }]
       },
-      {
-        id: 4,
-        title: "Test List 4",
-        items: [
-          {
-            id: 7,
-            title: "Test Item 7",
-            quantity: 7,
-            groceryListId: 4,
-            status: Status.Unchecked,
-            category: "Fruits",
-            index: 1
-          }];
-
+    {
+      id: 4,
+      title: "Test List 4",
+      items: [
+        {
+          id: 7,
+          title: "Test Item 7",
+          quantity: 7,
+          groceryListId: 4,
+          status: Status.Unchecked,
+          category: "Fruits",
+          index: 1
+        }
+        ],
+    },
+];
 
