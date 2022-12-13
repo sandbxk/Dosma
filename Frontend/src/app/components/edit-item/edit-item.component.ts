@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Item} from "../../interfaces/Item";
-import {FormCustomValidators} from "../../util/autoComplete.validator";
+import {FormCustomValidators} from "../../util/formCustomValidators";
 
 
 @Component({

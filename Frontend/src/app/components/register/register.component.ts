@@ -6,6 +6,8 @@ import { RegisterRequest, User } from 'src/app/interfaces/User';
 import { ObjectGenerator } from 'src/app/util/ObjectGenerator';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { LoginComponent } from '../login/login.component';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import { FormCustomValidators } from 'src/app/util/formCustomValidators';
 
 @Component({
   templateUrl: './register.component.html',
@@ -13,28 +15,48 @@ import { LoginComponent } from '../login/login.component';
 })
 export class RegisterComponent implements OnInit {
 
+  request : RegisterRequest = new RegisterRequest();
+
+  confirm_password : string = '';
+  registerFormControlGroup: FormGroup = new FormGroup({})
+
+
   constructor(
     private authService : AuthenticationService,
     private router: Router,
     public registerForm: MatDialogRef<RegisterComponent>,
-    private dialog: MatDialog
+    private dialog: MatDialog,
     ) { }
 
-  request : RegisterRequest = new RegisterRequest();
+  ngOnInit(): void {
+    this.registerFormControlGroup = new FormGroup({
+      username: new FormControl(this.request.username, [
+        Validators.required,
+        Validators.minLength(3), // minimum length of 3
+        Validators.maxLength(20), // maxLength of 20 characters
+        Validators.pattern('^[a-zA-Z0-9]+$') //alphanumeric only
+      ]),
 
-  confirm_password : string = '';
+      displayName: new FormControl('', []),
+
+      password: new FormControl('',[
+        Validators.required,
+        FormCustomValidators.matchValidator('confirmPassword', true)
+        ]),
+      confirmPassword: new FormControl('', [
+        Validators.required,
+        FormCustomValidators.matchValidator('password')
+      ])
+    });
+  }
 
   register() {
-    if (this.request.username == '' || this.request.password == '') {
-      alert('Please fill in all required (*) fields');
-      return;
+    if (this.registerFormControlGroup.valid) {
+        this.request.username = this.username?.value;
+        this.request.password = this.password?.value;
+        this.request.displayName = this.displayName?.value;
     }
 
-    if (this.request.password != this.confirm_password) {
-      alert('passwords do not match');
-      return;
-    }
-    
     this.authService.register(this.request).then((result) => {
       localStorage.setItem('user', JSON.stringify(ObjectGenerator.userFromToken(result.token)));
       this.router.navigate(['/login']);
@@ -50,7 +72,22 @@ export class RegisterComponent implements OnInit {
     this.registerForm.close();
   }
 
-  ngOnInit(): void {
-
+  get username() {
+    return this.registerFormControlGroup.get('username');
   }
+
+  get password() {
+    return this.registerFormControlGroup.get('password')!;
+  }
+
+  get displayName() {
+    return this.registerFormControlGroup.get('displayName');
+  }
+
+  get confirmPassword() {
+    return this.registerFormControlGroup.get('confirmPassword')!;
+  }
+
+
+
 }

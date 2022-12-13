@@ -3,7 +3,7 @@ import {map, Observable, startWith} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Item} from "../../interfaces/Item";
 import {DataService} from "../../../services/data.service";
-import {FormCustomValidators} from "../../util/autoComplete.validator";
+import {FormCustomValidators} from "../../util/formCustomValidators";
 
 @Component({
   selector: 'app-new-item',

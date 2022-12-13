@@ -23,8 +23,9 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/dashboard']);
         this.loginForm.close();
       }).catch((error) => {
-        // handle error
+        // mat snackbar handled in auth service
         this.error = error;
+
       }).finally(() => {
         // save login data to local storage if remember me is checked regardless of login success
         if (this.rememberMe) {
@@ -84,6 +85,10 @@ export class LoginComponent implements OnInit {
     }
 
     return false;
+  }
+
+  clearError() {
+    this.error = '';
   }
 
   ngOnInit(): void {

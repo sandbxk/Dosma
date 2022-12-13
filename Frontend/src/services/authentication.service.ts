@@ -30,7 +30,7 @@ export class AuthenticationService {
       rejected => {
         if(rejected.response.status >= 400 && rejected.response.status < 500) { //Client error
           matSnackbar.open(rejected.response.status + ": An error has occurred. " +
-            "Please check your network connectivity and account privileges", "Dismiss", {duration: 5000});
+            "Please check your network connectivity and verify your account credentials", "Dismiss", {duration: 5000});
         }
         else if (rejected.response.status > 499) { //Server error
           this.matSnackbar.open("Something went wrong", "Dismiss", {duration: 5000})
@@ -41,7 +41,27 @@ export class AuthenticationService {
   }
 
   async login(req : LoginRequest) {
-    const httpResult = await axiosInstance.post('auth/login', req);
+    const loginAxiosInstance = axios.create({baseURL: environment.apiBaseUrl}); // Create a new instance to avoid have meaningful interceptors
+    loginAxiosInstance.interceptors.response.use(
+      response => {
+        if (response.status == 201) { //Success
+          this.matSnackbar.open("Logged in successfully")
+        }
+        return response;
+      }, rejected => {
+
+        if (rejected.response.status >= 400 && rejected.response.status < 500) { //Client error
+          this.matSnackbar.open(rejected.response.status + ": No such user could be found", "Dismiss", {duration: 5000});
+          throw new Error(rejected.response.status + ": No such user could be found");
+
+        } else if (rejected.response.status > 499) { //Server error
+          this.matSnackbar.open("Something went wrong, please try again later", "Dismiss", {duration: 5000})
+          throw new Error("Something went wrong, please try again later");
+        }
+      });
+
+    const httpResult = await loginAxiosInstance.post('auth/login', req);
+
     return httpResult.data as TokenResponse;
   }
 

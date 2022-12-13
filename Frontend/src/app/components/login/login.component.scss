@@ -31,6 +31,8 @@
 }
 
 .buttonContainer {
+  bottom: 0;
+  position: relative;
   display: inline-block;
   width: 90%;
 }
@@ -53,4 +55,24 @@
   color: $dark-primary-text !important;
 }
 
+.error {
+  max-width: 200px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
 
+.errorText {
+  color: map.get($warn-colors, "main");
+  font-size: 0.8rem;
+}
+
+
+.hidden {
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.visible {
+  opacity: 1;
+  transition: 0.3s;
+}
