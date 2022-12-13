@@ -18,8 +18,7 @@ export class EditItemComponent implements OnInit {
   formControlGroup: FormGroup = new FormGroup({});
 
   // List of categories for the autocomplete
-  categories: string[] = ['None', 'Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
-
+  @Input() categories: string[] = [];
   @Input() listItem: Item = {} as Item;
 
   @Output() editItemEvent = new EventEmitter<Item>();

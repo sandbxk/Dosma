@@ -18,11 +18,8 @@
     -->
     <div *ngIf="user.isLoggedIn() === true">
       <mat-icon>account_circle</mat-icon>
-      <span>user?.displayName</span>
-      <button mat-button routerLink="/account">Edit Profile</button>
+      <span>{{user.userDisplayName}}</span>
       <span>-</span>
-      <button mat-button routerLink="/about">About</button>
-      <button mat-button routerLink="/contact">Contact</button>
       <span>-</span>
       <button mat-button (click)="logoutCurrentUser()">Logout</button>
     </div>
@@ -30,3 +27,4 @@
   </div>
 
 </mat-toolbar>
+

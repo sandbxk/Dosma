@@ -57,8 +57,8 @@
 
     <!-- Buttons -->
     <div class="buttonContainer">
-      <button mat-raised-button color="primary" class="cancelButton" (click)="cancel()">Cancel</button>
-      <button mat-raised-button color="primary" class="saveButton" (click)="editItem()">Save</button>
+      <button mat-raised-button color="primary" class="cancelButton" (keyup.escape)="cancel()" (click)="cancel()">Cancel</button>
+      <button mat-raised-button color="primary" class="saveButton" (keyup.enter)="editItem()" (click)="editItem()">Save</button>
     </div>
   </div>
 </div>

@@ -100,6 +100,7 @@
         <app-edit-item
           (click)="$event.stopPropagation()"
           class="editingItemBox" [listItem]="item"
+          [categories]="categories"
           (editItemEvent)="editItem($event)"
           (cancelEditItemEvent)="cancelEditItem(true)">
         </app-edit-item>
@@ -112,7 +113,7 @@
      groceryListId in the child component to the chosen value, using @input -->
      <div id="item-creation-panel" [ngClass]="creatingItem ? 'animateIntoFrame' : 'animateOutOfFrame'">
       <app-new-item
-        id="new-item-panel" [groceryListId]="groceryList.id" [listSize]="groceryList.items.length"
+        id="new-item-panel" [groceryListId]="groceryList.id" [listSize]="groceryList.items.length" [categories]="categories"
         (newItemEvent)="addItem($event)" (closeItemCreationEvent)="showNewItemPanel(!$event)">
       </app-new-item>
     </div>

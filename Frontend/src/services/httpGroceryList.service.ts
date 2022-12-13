@@ -108,4 +108,8 @@ export class HttpGroceryListService {
     const result = await MockLists.find(list => list.id == routeId);
     return result as GroceryList;
   }
+
+  async getCategories() {
+    return ['Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other'];
+  }
 }

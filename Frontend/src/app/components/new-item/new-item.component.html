@@ -58,7 +58,7 @@
   <!-- Buttons -->
 </div>
 <div class="buttonContainer">
-  <button mat-raised-button color="primary" class="closeButton" (click)="close()">Close</button>
-  <button mat-raised-button color="primary" class="addButton" (click)="addItem()">Add</button>
+  <button mat-raised-button color="primary" class="closeButton" (keyup.escape)="close()" (click)="close()">Close</button>
+  <button mat-raised-button color="primary" class="addButton" (keyup.enter)="addItem()" (click)="addItem()">Add</button>
 </div>
 </div>

@@ -62,10 +62,6 @@ export class UserGroceryListOverviewComponent implements OnInit {
     });
 
 
-
-    //TODO TEMP
-    this.groceryLists = MockLists;
-
   }
 
   /**
@@ -136,15 +132,6 @@ export class UserGroceryListOverviewComponent implements OnInit {
         });
       }
     }).unsubscribe(); // Unsubscribe from the observable to prevent memory leaks
-  }
-
-
-  async duplicateList(list: GroceryList) {
-    //HTTP DUPLICATE LIST
-
-    const duplicateList = await this.httpService.duplicateList(list.id);
-    //TODO: add to list
-    this.groceryLists.splice(0, 0, list);
   }
 
 

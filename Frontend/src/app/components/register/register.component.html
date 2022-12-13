@@ -1,29 +1,40 @@
-<button mat-icon-button (click)="cancel()">
+
+<div style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px">
+
+<h2 style="margin-top: 4px">Register</h2>
+<button style="" class="closeButton" mat-icon-button (click)="cancel()">
   <mat-icon>close</mat-icon>
 </button>
 
-<form>
-  <mat-form-field appearance="fill">
+</div>
+
+<div class="contentContainer">
+<form class="formContainer">
+
+  <mat-form-field style="margin: 5px;" appearance="fill">
     <mat-label>Display name</mat-label>
     <input matInput type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.request.displayName" (keyup.enter)="register()">
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field style="margin: 5px;" appearance="fill">
     <mat-label>Username</mat-label>
     <input matInput type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.request.username" required (keyup.enter)="register()">
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+
+  <mat-form-field style="margin: 5px;" appearance="fill">
     <mat-label>Password</mat-label>
     <input matInput type="password" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.request.password" required (keyup.enter)="register()">
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field style="margin: 5px;" appearance="fill">
     <mat-label>Confirm Password</mat-label>
     <input matInput type="password" [ngModelOptions]="{standalone: true}" [(ngModel)]="confirm_password" required (keyup.enter)="register()">
   </mat-form-field>
 
-  <button type="submit" mat-raised-button color="primary" (click)="register()">Register</button>
-
-  <a mat-button (click)="openLoginForm()">Already a member</a>
+  <div class="buttonContainer">
+  <a mat-button style="margin-bottom: 10px" (click)="openLoginForm()">Already a member?</a>
+  <button class="actionButton" type="submit" mat-raised-button color="primary" (click)="register()">Register</button>
+  </div>
 </form>
+</div>

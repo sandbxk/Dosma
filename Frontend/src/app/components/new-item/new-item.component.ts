@@ -19,7 +19,7 @@ export class NewItemComponent implements OnInit {
   formControlGroup: FormGroup = new FormGroup({});
 
   // List of categories for the autocomplete
-  categories: string[] = ['None', 'Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
+  @Input() categories: string[] = [];
   // ID for the grocery list.
   @Input() groceryListId: number = 0;
 

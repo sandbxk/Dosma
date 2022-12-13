@@ -55,6 +55,11 @@ export class UserService {
     return this.hasAccess("LIST", listID.toString(), "DELETE");
   }
 
+  get userDisplayName() : string | null {
+    const user = JSON.parse(localStorage.getItem('user') as string) as User;
+
+    return user.name;
+  }
 
   /*
   ****************************************************************************

@@ -21,7 +21,6 @@ import { MatInputModule } from "@angular/material/input";
 import { EditListDialogComponent } from "./dialogs/edit-list-dialog/edit-list-dialog.component";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { PendingChangesGuard } from "../services/PendingChanges.guard";
-// import { ItemCreatorComponent } from "./components/item-creator/item-creator.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatExpansionModule} from "@angular/material/expansion";
 import { NewItemComponent } from './components/new-item/new-item.component';
@@ -34,8 +33,6 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { ContactUsComponent } from './components/contact-us/contact-us.component';
-import { AboutUsComponent } from './components/about-us/about-us.component';
 import { EditorProfileComponent } from './components/editor-profile/editor-profile.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
@@ -49,14 +46,11 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     TruncatePipe,
     ConfirmationDialogComponent,
     EditListDialogComponent,
-    //ItemCreatorComponent,
     NewItemComponent,
     EditItemComponent,
     TriStateCheckboxComponent,
     LoginComponent,
     RegisterComponent,
-    ContactUsComponent,
-    AboutUsComponent,
     EditorProfileComponent,
     NavbarComponent,
   ],

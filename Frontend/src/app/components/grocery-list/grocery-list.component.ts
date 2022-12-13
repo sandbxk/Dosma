@@ -70,7 +70,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   });
 
   // Valid categories for items
-  categories: string[] = ['Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
+  categories: string[] = [];
   // The ID of the list we are currently viewing
   routeId: any = {};
 
@@ -93,10 +93,14 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     private matSnackBar: MatSnackBar
   ) { }
 
+
   async ngOnInit(): Promise<void> {
 
     // Get the id from the route.
     this.routeId = this.currentRoute.snapshot.paramMap.get('id');
+
+    // Get categories from server
+    this.categories = await this.httpService.getCategories();
 
     // Get the grocery list from the data service, passed from the previous page
     this.dataService.currentListStageObject.subscribe(list => {
@@ -137,21 +141,9 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     }
   }
 
-  //TODO:
-  // 1. Delete an item from the list
-  // 2. ListMenu Options
-  //    - Delete all items from the list?
-  //    - Mark all items as purchased
-
-  //TODO: Item status
-  // 5. Mark all items as purchased -> ListMenu Options
-  // On check, opacity 0.7 and strikethrough
-  // On skipped, color warn-light, opacity 0.7 and strikethrough
 
 
-  //TODO: Sync
-  // 7. Sync on timer -> SyncService?
-  // 8. Sync on button press -> SyncService?
+
 
 
   /**
@@ -163,7 +155,6 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   canDeactivate(): boolean | Observable<boolean> {
     while (this.syncing) {
       // Wait for the sync to finish
-      //TODO: update all items to have the correct index and save in local storage
     }
     return true;
   }
