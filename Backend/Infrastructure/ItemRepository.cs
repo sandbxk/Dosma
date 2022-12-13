@@ -33,6 +33,7 @@ public class ItemRepository : IRepository<Item>
     public bool Delete(int id)
     {
         var item = _dbContext.ItemTable.Find(id);
+        
         if (item == null)
         {
             throw new NullReferenceException("Item not found.");
@@ -46,7 +47,14 @@ public class ItemRepository : IRepository<Item>
 
     public Item Single(long id)
     {
-        throw new NotImplementedException();
+        var item =_dbContext.ItemTable.Find(id);
+        
+        if (item == null)
+        {
+            throw new NullReferenceException("Item not found.");
+        }
+        
+        return item;
     }
 
     public Item Update(Item model)

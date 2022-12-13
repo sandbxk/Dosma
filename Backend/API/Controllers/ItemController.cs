@@ -26,6 +26,13 @@ public class ItemController : ControllerBase
         {
             return Unauthorized("Invalid token");
         }
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
 
             try
         {
@@ -49,6 +56,13 @@ public class ItemController : ControllerBase
         if (!_authenticationService.AuthenticateToken(token))
         {
             return Unauthorized("Invalid token");
+        }
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
         }
         
         if (id != item.Id)
@@ -83,10 +97,17 @@ public class ItemController : ControllerBase
         {
             return Unauthorized("Invalid token");
         }
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
 
         try
         {
-            var result = _itemService.DeleteItem(id);
+            var result = _itemService.DeleteItem(id, user);
             
             if (result)
                 return Ok("Item has been deleted.");

@@ -11,9 +11,11 @@ namespace Application;
 public class ItemService : IItemService
 {
     private readonly IRepository<Item> _itemRepository;
-    private ItemValidators _validator;
-    private ItemDTOValidator _itemDTOValidator;
-    private IMapper _mapper;
+    private readonly ItemValidators _validator;
+    private readonly ItemDTOValidator _itemDTOValidator;
+    private readonly IMapper _mapper;
+
+
     public ItemService(IRepository<Item> itemRepository, ItemValidators validator, ItemDTOValidator dtoValidator, IMapper mapper)
     {
         _itemRepository = itemRepository;
@@ -32,8 +34,11 @@ public class ItemService : IItemService
         return _itemRepository.Create(_mapper.Map<Item>(itemDTO));
     }
 
-    public bool DeleteItem(int id)
+    public bool DeleteItem(int id, TokenUser user)
     {
+        
+        
+        
         return _itemRepository.Delete(id);
     }
 
