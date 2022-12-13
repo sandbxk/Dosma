@@ -32,14 +32,9 @@ public class ItemService : IItemService
         return _itemRepository.Create(_mapper.Map<Item>(itemDTO));
     }
 
-    public bool DeleteItem(Item item)
+    public bool DeleteItem(int id)
     {
-        var validation = _validator.Validate(item);
-        
-        if (!validation.IsValid)
-            throw new ValidationException(validation.ToString());
-        
-        return _itemRepository.Delete(item.Id);
+        return _itemRepository.Delete(id);
     }
 
     public Item UpdateItem(Item item)

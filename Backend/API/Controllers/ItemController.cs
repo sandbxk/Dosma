@@ -77,21 +77,19 @@ public class ItemController : ControllerBase
     
     [HttpDelete]
     [Route("{id}")]
-    public ActionResult DeleteItem([FromRoute] int id, [FromBody] Item item, [FromHeader] String token)
+    public ActionResult DeleteItem([FromRoute] int id, [FromHeader] String token)
     {
         if (!_authenticationService.AuthenticateToken(token))
         {
             return Unauthorized("Invalid token");
         }
-        
-        if (id != item.Id)
-            throw new ValidationException("Item ID does not match ID in URL.");
+
         try
         {
             var result = _itemService.DeleteItem(item);
             
             if (result)
-                return Ok(item.Title + " has been deleted.");
+                return Ok("Item has been deleted.");
             else
                 return StatusCode(304, "Item could not be deleted.");
         }
