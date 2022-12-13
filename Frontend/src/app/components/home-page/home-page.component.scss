@@ -1,0 +1,216 @@
+@use "sass:map";
+@import "src/assets/themeVariables";
+
+$cardAnimationTiming: 5s;
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.background {
+  background: linear-gradient(50deg, $light-background, map.get($primary-colors, 'lighter'), $light-background, lighten(map.get($accent-colors, 'lighter'), 5%), $light-background);
+  background-size: 400% 400%;
+  animation: Gradient 15s ease infinite;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  padding:0;
+  margin:0px;
+}
+
+@keyframes Gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes MoveUpDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+}
+
+.container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.textContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.cardContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  align-content: center;
+  flex-grow: 4; /* default 0 */
+  width: 70%;
+  height: 70%;
+  border-color: map.get($primary-colors, 'main');
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.listButton {
+  max-height: 32px;
+}
+
+.listButton:hover {
+  background-color: map.get($primary-colors, "darker");
+  color: $dark-primary-text !important;
+}
+
+.listButton:active {
+  background-color: map.get($primary-colors, "lighter");
+  color: $dark-primary-text !important;
+}
+
+// Card
+$cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
+
+.listCard {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  list-style: circle;
+  display: block;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
+  height: 20em;
+  min-width: 15em;
+  max-width: 45em;
+  max-height: 30em;
+  background-color: $cardDefaultColor;
+  border-radius: 10px;
+  border-width: 3px;
+  border-style: solid;
+  border-color: map.get($primary-colors, "main");
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+  animation: MoveUpDown $cardAnimationTiming linear infinite;
+}
+
+.listCard:hover {
+  background-color: map.get($primary-colors, "darker");
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  .emptyListText {
+    color: $dark-text;
+  }
+}
+
+.listCard:active {
+  background-color: map.get($primary-colors, "main");
+}
+
+
+.listCard > mat-card-header {
+  min-height: 2em;
+  margin-bottom: 0.2em;
+}
+
+.listCardTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.listCardTitle h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+  font-weight: 500;
+  color: $dark-text;
+  position: absolute;
+  top: 0.2em;
+  left: 5%;
+}
+
+
+.listCard > mat-card-content {
+  padding-top: 1em;
+  padding-right: 1em;
+  display: flex;
+  justify-content: left;
+  align-items: flex-start;
+  align-content: flex-start;
+  height: 4em;
+  width: 100%;
+  max-height: 6em;
+  color: $dark-disabled-text;
+  font-weight: 200;
+}
+
+.listCard > mat-card-content {
+  color: $dark-text;
+}
+
+.listCard > mat-card-footer {
+  display: block;
+  justify-content: space-between;
+  height: 1em;
+  width: 100%;
+  max-height: 1em;
+}
+
+.listCard > mat-card-footer > span {
+  position: absolute;
+  bottom: 0.5em;
+  right: 0.8em;
+  font-size: 1em;
+  color: $dark-disabled-text;
+  font-weight: 450;
+  transition: 0.3ms;
+}
+
+.listCard:hover > mat-card-footer > span {
+  color: $dark-text;
+}
+
+.listCardButton{
+  @extend .listCard;
+  animation: MoveUpDown $cardAnimationTiming ease-in-out infinite;
+  display: flex;
+  background-color: $cardDefaultColor;
+}
+
+.listCardButton > mat-label {
+  font-weight: 500;
+  transform: scale(2);
+  color: $dark-primary-text;
+  transition: 0.3s;
+}
+
+.listCardButton:hover > mat-label {
+  transform: scale(3);
+  color: $light-primary-text;
+}
+
+.listCardButton:active {
+  background-color: map.get($primary-colors, "main");
+}

@@ -11,7 +11,7 @@
 
 <div mat-dialog-content class="contentContainer">
   <form class="formContainer">
-    <mat-form-field appearance="fill" (click)="clearError()">
+    <mat-form-field appearance="fill" (click)="clearError()" color="accent">
       <mat-label>Username</mat-label>
       <input required="true"
              matInput type="text"
@@ -20,7 +20,7 @@
              name="username"
              (keyup.enter)="login()">
     </mat-form-field>
-    <mat-form-field appearance="fill" (click)="clearError()">
+    <mat-form-field appearance="fill" (click)="clearError()" color="accent">
       <mat-label>Password</mat-label>
       <input required="true"
              matInput type="password"
@@ -30,7 +30,7 @@
              (keyup.enter)="login()">
     </mat-form-field>
 
-    <mat-checkbox style="float: left" (change)="toggleRememberMe()" [checked]="rememberMe" name="rememberMe">Remember me</mat-checkbox>
+    <mat-checkbox style="float: left" (change)="toggleRememberMe()" [checked]="rememberMe" name="rememberMe" color="accent">Remember me</mat-checkbox>
 
     <div class="error">
       <p class="errorText" [ngClass]="error !== '' ? 'visible' : 'hidden'">

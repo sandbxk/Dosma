@@ -34,6 +34,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { HomePageComponent } from './components/home-page/home-page.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     LoginComponent,
     RegisterComponent,
     NavbarComponent,
+    HomePageComponent,
   ],
   imports: [
     BrowserModule,

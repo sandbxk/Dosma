@@ -16,6 +16,21 @@ export class LoginComponent implements OnInit {
   rememberMe: boolean = false;
   error: string | any = '';
 
+  constructor(
+    private authService: AuthenticationService,
+    private router : Router,
+    public loginForm: MatDialogRef<LoginComponent>,
+    private dialog: MatDialog
+  ) {}
+
+  ngOnInit(): void {
+    if (this.loadSavedToken()) {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.loadRememberMe();
+    }
+  }
+
   login() {
     this.authService.login(this.loginRequest).then((result) => {
         // handle success
@@ -55,13 +70,6 @@ export class LoginComponent implements OnInit {
     this.rememberMe = !this.rememberMe;
   }
 
-  constructor(
-    private authService: AuthenticationService,
-    private router : Router,
-    public loginForm: MatDialogRef<LoginComponent>,
-    private dialog: MatDialog
-  ) {}
-
   private loadRememberMe() : void{
     let remembered : LoginRequest | null = JSON.parse(localStorage.getItem("rememberedLogin") as string);
 
@@ -89,13 +97,5 @@ export class LoginComponent implements OnInit {
 
   clearError() {
     this.error = '';
-  }
-
-  ngOnInit(): void {
-    if (this.loadSavedToken()) {
-      this.router.navigate(['/dashboard']);
-    } else {
-      this.loadRememberMe();
-    }
   }
 }

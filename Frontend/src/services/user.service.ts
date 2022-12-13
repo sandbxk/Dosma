@@ -24,7 +24,6 @@ export class UserService {
       // TODO: check if time is expired
       return true;
     }
-
     return false;
   }
 
@@ -55,7 +54,7 @@ export class UserService {
     return this.hasAccess("LIST", listID.toString(), "DELETE");
   }
 
-  get userDisplayName() : string | null {
+  get userDisplayName() : string {
     const user = JSON.parse(localStorage.getItem('user') as string) as User;
 
     return user.name;

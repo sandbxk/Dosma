@@ -18,7 +18,6 @@ export class NavbarComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     public user: UserService
-
   ) { }
 
   openLoginForm() : void

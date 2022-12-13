@@ -3,13 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserGroceryListOverviewComponent } from "./components/user-grocery-list-overview/user-grocery-list-overview.component";
 import { GroceryListComponent } from "./components/grocery-list/grocery-list.component";
 import { PendingChangesGuard } from "../services/PendingChanges.guard";
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
+import {AuthGuardService} from "../services/authGuard.service";
+import {HomePageComponent} from "./components/home-page/home-page.component";
 
 const routes: Routes = [
-  { path: 'dashboard', component: UserGroceryListOverviewComponent },
-  { path: 'grocery-list/:id', component: GroceryListComponent, canDeactivate: [PendingChangesGuard] },
-  { path: '**', redirectTo: '/dashboard', pathMatch: 'full'},
+  { path: 'dashboard', component: UserGroceryListOverviewComponent, canActivate: [AuthGuardService] },
+  { path: 'grocery-list/:id', component: GroceryListComponent, canDeactivate: [PendingChangesGuard], canActivate: [AuthGuardService] },
+  { path: 'home', component: HomePageComponent },
+  { path: '**', redirectTo: 'home', pathMatch: 'full'},
 ];
 
 @NgModule({
