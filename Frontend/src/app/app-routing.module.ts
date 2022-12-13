@@ -5,12 +5,10 @@ import { GroceryListComponent } from "./components/grocery-list/grocery-list.com
 import { PendingChangesGuard } from "../services/PendingChanges.guard";
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { EditorProfileComponent } from './components/editor-profile/editor-profile.component';
 
 const routes: Routes = [
   { path: 'dashboard', component: UserGroceryListOverviewComponent },
   { path: 'grocery-list/:id', component: GroceryListComponent, canDeactivate: [PendingChangesGuard] },
-  { path: 'account', component: EditorProfileComponent },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full'},
 ];
 

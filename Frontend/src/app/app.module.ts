@@ -33,7 +33,6 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { EditorProfileComponent } from './components/editor-profile/editor-profile.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
 
@@ -51,7 +50,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     TriStateCheckboxComponent,
     LoginComponent,
     RegisterComponent,
-    EditorProfileComponent,
     NavbarComponent,
   ],
   imports: [

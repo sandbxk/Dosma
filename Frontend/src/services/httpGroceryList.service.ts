@@ -5,6 +5,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {catchError} from "rxjs";
 import {GroceryList} from "../app/interfaces/GroceryList";
 import {MockLists} from "../app/components/user-grocery-list-overview/mockLists";
+import {Status} from "../app/interfaces/StatusEnum";
 
 export const axiosInstance =
    axios.create({
@@ -32,10 +33,11 @@ export class HttpGroceryListService {
       },
       rejected => {
         if(rejected.response.status >= 400 && rejected.response.status < 500) { //Client error
-          matSnackbar.open(rejected.response.data);
+          matSnackbar.open(rejected.response.status + ": An error has occurred. " +
+            "Please check your network connectivity and account privileges", "Dismiss", {duration: 5000});
         }
         else if (rejected.response.status > 499) { //Server error
-          this.matSnackbar.open("Something went wrong")
+          this.matSnackbar.open("Something went wrong", "Dismiss", {duration: 5000})
         }
         catchError(rejected);
       }
@@ -111,5 +113,12 @@ export class HttpGroceryListService {
 
   async getCategories() {
     return ['Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other'];
+  }
+
+  async duplicateItem(duplicateDTO: { quantity: number; title: string; category: string; status: Status; groceryListId: number }) {
+
+    const httpsResult = await axiosInstance.post(`GroceryItem/${duplicateDTO.groceryListId}`, duplicateDTO);
+    return httpsResult.data;
+
   }
 }

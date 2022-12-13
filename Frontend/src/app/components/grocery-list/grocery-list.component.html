@@ -36,9 +36,9 @@
       <!-- Mat menu for the list actions -->
       <mat-menu #listMenu="matMenu">
         <!-- share button -->
-        <button [disabled]="true" mat-menu-item>
-          <mat-icon>share</mat-icon>
-          <span>Share</span>
+        <button *ngIf="selectedItems.length === 1" mat-menu-item (click)="duplicateSelectedItem()">
+          <mat-icon>control_point_duplicate</mat-icon>
+          <span>Duplicate item</span>
         </button>
         <!-- Edit list title -->
         <button mat-menu-item (click)="editListName()">

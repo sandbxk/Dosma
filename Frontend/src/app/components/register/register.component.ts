@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
       alert('passwords do not match');
       return;
     }
-
+    
     this.authService.register(this.request).then((result) => {
       localStorage.setItem('user', JSON.stringify(ObjectGenerator.userFromToken(result.token)));
       this.router.navigate(['/login']);

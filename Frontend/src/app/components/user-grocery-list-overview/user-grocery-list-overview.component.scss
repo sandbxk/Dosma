@@ -170,6 +170,11 @@ $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
   padding: 0 !important;
 }
 
+::ng-deep .mat-menu-panel {
+  background-color: $light-background;
+  min-height: 45px !important;
+}
+
 .mat-menu-item {
   color: $dark-primary-text !important;
   padding: 0 0.5em;

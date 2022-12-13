@@ -403,4 +403,33 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   get statusEnum(){
     return Status;
   }
+
+  duplicateSelectedItem() {
+    let selectedItem = this.selectedItems[0]; // Get the selected item
+
+    //DTO
+    const duplicateDTO = {
+      title: selectedItem.title,
+      quantity: selectedItem.quantity,
+      status: selectedItem.status,
+      groceryListId: selectedItem.groceryListId,
+      category: selectedItem.category
+    }
+
+    //Post the duplicated item
+    this.httpService.duplicateItem(duplicateDTO).then((item) => {
+      let duplicatedItem: Item = { // add missing properties
+        id: item.id,
+        groceryListId: item.groceryListId,
+        index: this.selectedItems.length,
+        quantity: item.quantity,
+        status: item.status,
+        title: item.title,
+        category: item.category
+      }
+
+      this.groceryList.items.push(duplicatedItem);
+    });
+
+  }
 }

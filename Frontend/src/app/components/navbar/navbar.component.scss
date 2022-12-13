@@ -1,4 +1,71 @@
+@use "sass:map";
+@import "src/assets/themeVariables.scss";
+
 
 .spacer {
   flex: 1 1 auto;
 }
+
+
+
+
+::ng-deep .mat-menu-content {
+  padding: 0 !important;
+}
+
+.mat-menu-item {
+  color: $dark-primary-text !important;
+  padding: 0 0.5em;
+}
+
+button.mat-menu-item{
+  background-color: $light-background;
+}
+
+button.mat-menu-item:hover {
+  background-color: map.get($primary-colors, "main");
+  color: $dark-primary-text !important;
+}
+
+::ng-deep .mat-menu-panel {
+  background-color: $light-background;
+  min-height: 45px !important;
+}
+
+
+
+.userContainer {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  transition: 0.3s;
+  position: relative;
+}
+
+.displayName {
+  margin: 0;
+  padding: 0;
+  color: $dark-primary-text;
+  font-weight: 400;
+  font-size: 1em;
+  margin-right: 0.5em;
+}
+
+.userMenu {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  transition: 0.3s;
+}
+
+.userMenu:hover {
+  color: $light-text;
+}
+
+.userMenu:active {
+  color: $light-disabled-text;
+}
+

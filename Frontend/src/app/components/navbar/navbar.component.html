@@ -1,6 +1,9 @@
 
 <mat-toolbar style="z-index: 200; position: fixed" color="primary">
-  <img [src]="image" alt="Logo" width="10%" (click)="goHome()"/>
+  <div style="align-items: center; align-content: center">
+  <img [src]="image" alt="Logo" width="200px" style="top: 0" (click)="goHome()"/>
+  </div>
+
   <span class="spacer"></span>
 
   <div>
@@ -8,22 +11,41 @@
       if the user not logged in, show the login and register buttons
       then hide them when the user logged in
     -->
-    <div *ngIf="user.isLoggedIn() === false">
-      <button mat-button (click)="openLoginForm()">Login</button>
-      <button mat-button (click)="openRegisterForm()">Register</button>
+
+    <div *ngIf="user.isLoggedIn(); else notLoggedIn">
+
+      <div class="userContainer">
+      <p class="displayName"> {{user.userDisplayName}} </p>
+
+      <button mat-icon-button [matMenuTriggerFor]="userMenu"
+              class="userMenu"
+              #t="matMenuTrigger" [class.opened]="t.menuOpen" aria-label="User menu">
+        <mat-icon style="transform: scale(1.5)">account_circle</mat-icon>
+      </button>
+      </div>
+
+
+      <mat-menu #userMenu="matMenu">
+
+        <button mat-menu-item (click)="logoutCurrentUser()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+
+      </mat-menu>
+
     </div>
+
     <!--
       if the user logged in drop down menu will be shown on the right side of the navigation bar
       when the user click on the drop down menu, the user can see the profile and logout button
     -->
-    <div *ngIf="user.isLoggedIn() === true">
-      <mat-icon>account_circle</mat-icon>
-      <span>{{user.userDisplayName}}</span>
-      <span>-</span>
-      <span>-</span>
-      <button mat-button (click)="logoutCurrentUser()">Logout</button>
+    <ng-template #notLoggedIn>
+    <div>
+      <button mat-button (click)="openLoginForm()">Login</button>
+      <button mat-button (click)="openRegisterForm()">Register</button>
     </div>
-
+    </ng-template>
   </div>
 
 </mat-toolbar>
