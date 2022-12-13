@@ -86,7 +86,7 @@ public class ItemController : ControllerBase
 
         try
         {
-            var result = _itemService.DeleteItem(item);
+            var result = _itemService.DeleteItem(id);
             
             if (result)
                 return Ok("Item has been deleted.");
