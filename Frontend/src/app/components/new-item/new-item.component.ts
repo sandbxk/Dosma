@@ -4,6 +4,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Item} from "../../interfaces/Item";
 import {DataService} from "../../../services/data.service";
 import {FormCustomValidators} from "../../util/formCustomValidators";
+import {CategoryEnum} from "../../interfaces/CategoryEnum";
 
 @Component({
   selector: 'app-new-item',
@@ -19,7 +20,7 @@ export class NewItemComponent implements OnInit {
   formControlGroup: FormGroup = new FormGroup({});
 
   // List of categories for the autocomplete
-  @Input() categories: string[] = [];
+  @Input() inputCategories: string[] = [];
   // ID for the grocery list.
   @Input() groceryListId: number = 0;
 
@@ -36,7 +37,7 @@ export class NewItemComponent implements OnInit {
       quantity: new FormControl(1, [
         Validators.required, Validators.min(1), Validators.max(99)]), //Range 1-99, required
       category: new FormControl('None',
-        [FormCustomValidators.autocompleteStringValidator(this.categories)]) //Use custom validator to check if the category is in the list
+        [FormCustomValidators.autocompleteStringValidator(this.inputCategories)]) //Use custom validator to check if the category is valid
     });
 
   }
@@ -70,7 +71,7 @@ export class NewItemComponent implements OnInit {
    */
   addItem() {
     if (this.category?.errors) { //If the category is not valid, set it to 'None'
-      this.category?.setValue('None');
+      this.category?.setValue(CategoryEnum.None);
     }
 
     if (this.formControlGroup.valid) {  //If the form is valid, create the item and emit it to the parent component

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import axios from "axios";
 import {environment} from "../environments/environment";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -6,7 +6,8 @@ import {catchError} from "rxjs";
 import {GroceryList} from "../app/interfaces/GroceryList";
 import {Status} from "../app/interfaces/StatusEnum";
 import {User} from "../app/interfaces/User";
-import {Item} from "../app/interfaces/Item";
+import {Item, ItemDTO} from "../app/interfaces/Item";
+import {CategoryEnum} from "../app/interfaces/CategoryEnum";
 
 export const axiosInstance =
    axios.create({
@@ -97,12 +98,55 @@ export class HttpGroceryListService {
   async updateList(editedList: GroceryList) {
     try {
       const header = this.configHeader();
-      const httpResult = await axiosInstance.patch('GroceryList', editedList, header);
+      const httpResult = await axiosInstance.patch('GroceryList/', editedList, header);
       return httpResult.data as GroceryList;
     }
     catch (e) {
       this.matSnackbar.open("You must be logged in to update lists", "Dismiss", {duration: 5000});
       throw new Error("You must be logged in to update lists");
+    }
+  }
+
+
+
+  async createItem(item: {quantity: number; title: string; category: string; status: Status; groceryListId: number }): Promise<ItemDTO> {
+    try {
+      const header = this.configHeader();
+
+      return await axiosInstance.post('item', item, header)
+        .then(response => {
+            return response.data as ItemDTO;
+          }
+        )
+    } catch (e) {
+      console.log(e);
+      this.matSnackbar.open("You must be logged in to create items", "Dismiss", {duration: 5000});
+      throw new Error("You must be logged in to create items");
+    }
+  }
+
+
+  async updateItem(item: {id: number; quantity: number; title: string; category: string; status: Status; groceryListId: number }) {
+    try {
+      const header = this.configHeader();
+      const httpResult = await axiosInstance.patch('item', item, header);
+      return httpResult.data as GroceryList;
+    }
+    catch (e) {
+      this.matSnackbar.open("You must be logged in to update lists", "Dismiss", {duration: 5000});
+      throw new Error("You must be logged in to update lists");
+    }
+  }
+
+  async deleteItem(itemId: number) {
+    try {
+      const header = this.configHeader();
+      await axiosInstance.delete(`item/${itemId}`, header); //Errors handled in interceptor
+      return true;
+    }
+    catch (e) {
+      this.matSnackbar.open("You must be logged in to delete items", "Dismiss", {duration: 5000});
+      return false;
     }
   }
 
@@ -143,17 +187,8 @@ export class HttpGroceryListService {
     }
   }
 
-  async getCategories() {
-    return [
-      'None',
-      'Fruits',
-      'Vegetables',
-      'Meat',
-      'Dairy',
-      'Bakery',
-      'Beverages',
-      'Other'
-    ];
+  getCategories() {
+    return Object.values(CategoryEnum).filter((value) => typeof value === 'string') as string[];
   }
 
   async duplicateItem(duplicateDTO: {quantity: number; title: string; category: string; status: Status; groceryListId: number }) {
@@ -169,7 +204,7 @@ export class HttpGroceryListService {
         title: "Error",
         status: Status.Unchecked,
         quantity: 0,
-        category: "None",
+        category: 'None',
         groceryListId: 0,
         index: 0
       };

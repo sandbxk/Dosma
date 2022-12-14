@@ -42,7 +42,7 @@
 
     <!-- The autocomplete options use for categories -->
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let categoryOpt of categories" [value]="categoryOpt">
+      <mat-option *ngFor="let categoryOpt of inputCategories" [value]="categoryOpt">
         {{categoryOpt}}
       </mat-option>
     </mat-autocomplete>

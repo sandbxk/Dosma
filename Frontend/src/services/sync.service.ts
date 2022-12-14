@@ -28,6 +28,8 @@ export class SyncService {
 
     else {
       await this.HttpGroceryListService.updateList(list);
+
+
       this.lastSyncedList = list;
     }
   }
