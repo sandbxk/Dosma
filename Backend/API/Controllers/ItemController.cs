@@ -11,16 +11,30 @@ namespace API.Controllers;
 public class ItemController : ControllerBase
 {
     private readonly IItemService _itemService;
+    private readonly IAuthenticationService _authenticationService;
 
-    public ItemController(IItemService itemService)
+    public ItemController(IItemService itemService, IAuthenticationService authenticationService)
     {
         _itemService = itemService;
+        _authenticationService = authenticationService;
     }
 
     [HttpPost]
-    public ActionResult<Item> CreateItem([FromBody] ItemDTO item)
+    public ActionResult<Item> CreateItem([FromBody] Item item, [FromHeader] String token)
     {
-        try
+        if (!_authenticationService.AuthenticateToken(token))
+        {
+            return Unauthorized("Invalid token");
+        }
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+
+            try
         {
             var result = _itemService.AddItem(item);
             return Created("Item/" + result.Id, result);
@@ -37,8 +51,20 @@ public class ItemController : ControllerBase
 
     [HttpPatch]
     [Route("{id}")]
-    public ActionResult<Item> UpdateItem([FromRoute] int id, [FromBody] Item item)
+    public ActionResult<Item> UpdateItem([FromRoute] int id, [FromBody] Item item, [FromHeader] String token)
     {
+        if (!_authenticationService.AuthenticateToken(token))
+        {
+            return Unauthorized("Invalid token");
+        }
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
+        
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+        
         if (id != item.Id)
             throw new ValidationException("Item ID does not match ID in URL.");
         
@@ -65,18 +91,24 @@ public class ItemController : ControllerBase
     
     [HttpDelete]
     [Route("{id}")]
-    public ActionResult DeleteItem([FromRoute] int id, [FromBody] Item item)
+    public ActionResult DeleteItem([FromRoute] int id, [FromHeader] String token)
     {
-        if (id != item.Id)
-            throw new ValidationException("Item ID does not match ID in URL.");
+        if (!_authenticationService.AuthenticateToken(token))
+        {
+            return Unauthorized("Invalid token");
+        }
+        
+        var user = _authenticationService.GetPartialUserFromToken(token);
+
+        if (user == null)
+        {
+            throw new NullReferenceException("User could not be found.");
+        }
+
         try
         {
-            var result = _itemService.DeleteItem(item);
-            
-            if (result)
-                return Ok(item.Title + " has been deleted.");
-            else
-                return StatusCode(304, "Item could not be deleted.");
+            var result = _itemService.DeleteItem(id, user);
+            return Ok("Item has been deleted.");
         }
         catch (ValidationException e)
         {

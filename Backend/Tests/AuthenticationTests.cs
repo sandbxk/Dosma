@@ -3,10 +3,8 @@ using Application;
 using Application.Interfaces;
 using Application.Validators;
 using Application.Helpers;
-using Application.DTOs;
 using Infrastructure.Interfaces;
 using Domain;
-using AutoMapper;
 
 using System.Text;
 using Application.DTOs.Requests;
@@ -44,11 +42,8 @@ public class AuthenticationTests
         user_repo.Setup(x => x.All()).Returns(db_users);
         user_repo.Setup(x => x.Single(It.IsAny<int>())).Returns((int id) => db_users.FirstOrDefault(x => x.Id == id) ?? throw new NullReferenceException("User not found"));
 
-        var mapper = new MapperConfiguration(config => {}).CreateMapper();;
-        
         return new AuthenticationService(
-            user_repo.Object, 
-            mapper, 
+            user_repo.Object,
             new LoginValidator(),
             new RegisterValidator(), 
             new UserValidator(), 

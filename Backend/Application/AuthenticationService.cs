@@ -2,7 +2,6 @@ using Application.Interfaces;
 using Domain;
 using Infrastructure.Interfaces;
 using Application.Helpers;
-using AutoMapper;
 using FluentValidation;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -222,15 +221,13 @@ public class AuthenticationService : IAuthenticationService
     }
 
     public AuthenticationService(
-        IUserRepository userRepository, 
-        IMapper mapper, 
+        IUserRepository userRepository,
         IValidator<LoginRequest> loginValidator, 
         IValidator<RegisterRequest> registerValidator, 
         IValidator<User> userValidator, 
         byte[] secret)
     {
         _userRepository = userRepository;
-        _mapper = mapper;
         _loginValidator = loginValidator;
         _registerValidator = registerValidator;
         _validator = userValidator;
@@ -238,7 +235,6 @@ public class AuthenticationService : IAuthenticationService
     }
     private readonly byte[] _secret;
     private readonly IUserRepository _userRepository;
-    private readonly IMapper _mapper;
     private readonly IValidator<LoginRequest> _loginValidator;
     private readonly IValidator<RegisterRequest> _registerValidator;
     private readonly IValidator<User> _validator;
