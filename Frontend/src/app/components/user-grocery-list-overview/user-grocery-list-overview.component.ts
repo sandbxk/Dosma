@@ -8,7 +8,6 @@ import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 import {Item} from "../../interfaces/Item";
 import {ActivatedRoute, NavigationExtras, Router, RouterLink, RouterModule} from "@angular/router";
-import {MockLists} from "./mockLists";
 import {DataService} from "../../../services/data.service";
 
 @Component({

@@ -4,7 +4,6 @@ import {environment} from "../environments/environment";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {catchError} from "rxjs";
 import {GroceryList} from "../app/interfaces/GroceryList";
-import {MockLists} from "../app/components/user-grocery-list-overview/mockLists";
 import {Status} from "../app/interfaces/StatusEnum";
 
 export const axiosInstance =
@@ -106,9 +105,8 @@ export class HttpGroceryListService {
    * @param routeId
    */
   async getListById(routeId: number): Promise<GroceryList> {
-    //TODO
-    const result = await MockLists.find(list => list.id == routeId);
-    return result as GroceryList;
+    const httpsResult = await axiosInstance.get(`GroceryList/${routeId}`);
+    return httpsResult.data as GroceryList;
   }
 
   async getCategories() {
