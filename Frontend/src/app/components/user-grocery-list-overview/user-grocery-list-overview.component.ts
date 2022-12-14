@@ -9,6 +9,7 @@ import {HttpGroceryListService} from "../../../services/httpGroceryList.service"
 import {Item} from "../../interfaces/Item";
 import {ActivatedRoute, NavigationExtras, Router, RouterLink, RouterModule} from "@angular/router";
 import {DataService} from "../../../services/data.service";
+import {first, lastValueFrom, Observable} from "rxjs";
 
 @Component({
   selector: 'app-user-grocery-list-overview',
@@ -65,16 +66,15 @@ export class UserGroceryListOverviewComponent implements OnInit {
 
   /**
    * Opens the create list dialog. If the user creates a list, it is added to the list of groceryLists and posted to the server
+   * It is only necessary to unsubscribe from infinite observables, which is not the case here
    */
   newGroceryList() {
-    this.dialog.open(CreateListDialogComponent).afterClosed().subscribe( // Open the create list dialog
-      result => {
-        if (result !== null) {
-            this.groceryLists.push(result); // Add the list to the list of groceryLists
-        }
-      }
-    );
+    this.dialog.open(CreateListDialogComponent).afterClosed().pipe(first()).subscribe(dto => {
+        if (dto !== null && dto !== undefined)
+          this.httpService.createList(dto).then(list => { this.groceryLists.push(list) });
+        });
   }
+
 
   /**
    * Opens the selected grocery list by navigating to the list page, which uses the grocery-list component
@@ -87,6 +87,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
 
   /**
    * Opens the edit list dialog. If the user edits the list name, the list is updated in the list of groceryLists and posted to the server
+   * It is only necessary to unsubscribe from infinite observables, which is not the case here
    * @param list
    */
   editList(list: GroceryList) {
@@ -109,7 +110,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
           console.error(err);
         }
       }
-    }).unsubscribe(); // Unsubscribe from the observable to prevent memory leaks
+    })
   }
 
   deleteList(list: GroceryList) {
@@ -129,7 +130,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
           console.error(err);
         });
       }
-    }).unsubscribe(); // Unsubscribe from the observable to prevent memory leaks
+    })
   }
 
 

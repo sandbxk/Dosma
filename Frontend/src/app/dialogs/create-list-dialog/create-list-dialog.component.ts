@@ -43,7 +43,11 @@ export class CreateListDialogComponent implements OnInit {
 
     const capitalizedTitle = postTitle.charAt(0).toUpperCase() + postTitle.slice(1);
 
-    return capitalizedTitle;
+    let dto = {
+      title: capitalizedTitle,
+    };
+
+    return dto;
   }
 
 
