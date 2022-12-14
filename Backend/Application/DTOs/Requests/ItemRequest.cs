@@ -2,7 +2,7 @@
 
 namespace Application.DTOs;
 
-public class ItemDTO
+public class ItemCreateRequest
 {
     public string Title { get; set; }
     public int Quantity { get; set; }
