@@ -134,8 +134,9 @@ public class GroceryListController : ControllerBase
     }
     
     [Consumes("application/json")]
+    [Route("{id}")]
     [HttpDelete]
-    public ActionResult DeleteList([FromBody] GroceryListUpdateRequest groceryList, [FromHeader] String token)
+    public ActionResult DeleteList([FromRoute] int id, [FromHeader] String token)
     {
         if (!_authenticationService.AuthenticateToken(token))
             throw new UnauthorizedAccessException();
@@ -149,7 +150,7 @@ public class GroceryListController : ControllerBase
         
         try
         {
-            return Ok(_groceryListService.DeleteList(groceryList.Id, user));
+            return Ok(_groceryListService.DeleteList(id, user));
         }
         catch (ValidationException e)
         {
