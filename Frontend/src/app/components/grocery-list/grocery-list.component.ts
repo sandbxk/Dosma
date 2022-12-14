@@ -100,7 +100,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     this.routeId = this.currentRoute.snapshot.paramMap.get('id');
 
     // Get categories from server
-    this.categories = await this.httpService.getCategories();
+    this.categories = this.httpService.getCategories();
 
     // Get the grocery list from the data service, passed from the previous page
     this.dataService.currentListStageObject.subscribe(list => {
@@ -203,6 +203,9 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     }
 
     this.syncService.syncUp(this.groceryList).then(async () => {
+      this.matSnackBar.open("Synced", "Close", {
+        duration: 2000,
+      });
     })
       .catch(reason => this.matSnackBar
         .open(reason, "Dismiss", {duration: 5000}))
@@ -269,7 +272,30 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    * @param $event The item to be added to the list, emitted from the new-item component
    */
   addItem($event: Item) {
-    this.groceryList.items.push($event);
+    let item: Item = $event;
+
+    let dto = {
+      title: item.title,
+      quantity: item.quantity,
+      groceryListId: item.groceryListId,
+      category: item.category,
+      status: item.status
+    }
+
+
+    this.httpService.createItem(dto).then(result => {
+      if (result) {
+        let newItem: Item = result.toItem();
+        this.groceryList.items.push(newItem);
+        this.applyAndSortIndexes();
+        }
+      }
+    ).catch(err => {
+      console.error(err);
+
+    });
+
+
     const scrollToItem = () => this.scrollToItemCreationPanel()
     setTimeout(scrollToItem, 250); // Timeout is required as an additional element comes into view when the panel is shown, changing the scroll position
   }

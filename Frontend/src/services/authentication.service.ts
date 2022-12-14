@@ -65,9 +65,13 @@ export class AuthenticationService {
     return httpResult.data as TokenResponse;
   }
 
-  async register(req : RegisterRequest) {
-    const httpResult = await axiosInstance.post('auth/register', req);
-    return httpResult.data as TokenResponse;
+  async register(req : RegisterRequest): Promise<TokenResponse> {
+   return await axiosInstance.post('auth/register', req, this.headerConfig)
+      .then(
+        response => {
+          return response.data as TokenResponse;
+        }
+      )
   }
 
   async refreshToken() {
