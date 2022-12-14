@@ -53,8 +53,7 @@ public class ItemController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("{id}")]
-    public ActionResult<ItemResponse> UpdateItem([FromRoute] int id, [FromBody] Item item, [FromHeader] String token)
+    public ActionResult<ItemResponse> UpdateItem([FromBody] Item item, [FromHeader] String token)
     {
         if (!_authenticationService.AuthenticateToken(token))
         {
@@ -67,9 +66,6 @@ public class ItemController : ControllerBase
         {
             throw new NullReferenceException("User could not be found.");
         }
-        
-        if (id != item.Id)
-            throw new ValidationException("Item ID does not match ID in URL.");
         
         try
         {
