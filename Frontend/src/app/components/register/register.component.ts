@@ -19,6 +19,7 @@ export class RegisterComponent implements OnInit {
 
   confirm_password : string = '';
   registerFormControlGroup: FormGroup = new FormGroup({})
+  usernameTakenError: boolean = false;
 
 
   constructor(
@@ -57,10 +58,13 @@ export class RegisterComponent implements OnInit {
         this.request.displayName = this.displayName?.value;
     }
 
-    this.authService.register(this.request).then((result) => {
-      localStorage.setItem('user', JSON.stringify(ObjectGenerator.userFromToken(result.token)));
-      this.router.navigate(['/login']);
-    });
+      this.authService.register(this.request).then((result) => {
+        localStorage.setItem('user', JSON.stringify(ObjectGenerator.userFromToken(result.token)));
+        this.openLoginForm()
+      }).catch((error) => {
+        this.usernameTakenError = true;
+      });
+
   }
 
   openLoginForm() {

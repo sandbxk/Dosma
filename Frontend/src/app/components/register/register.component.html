@@ -19,7 +19,7 @@
            (keyup.enter)="register()">
   </mat-form-field>
 
-  <mat-form-field style="margin: 5px;" appearance="fill" color="accent">
+  <mat-form-field style="margin: 5px;" appearance="fill" color="accent" (click)="usernameTakenError = false">
     <mat-label>Username</mat-label>
     <input matInput type="text"
            formControlName="username"
@@ -46,6 +46,7 @@
 
   <!-- Errors -->
   <div style="transform: translateY(-5px); max-width: 200px" >
+    <mat-error *ngIf="usernameTakenError"> *Username already taken </mat-error>
     <mat-error *ngIf="username?.errors"> *Username must be between 3 and 20 characters </mat-error>
     <br>
     <mat-error *ngIf="password?.errors || confirmPassword?.errors"> *Password must be matching and not empty </mat-error>

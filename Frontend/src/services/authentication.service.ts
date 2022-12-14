@@ -66,7 +66,25 @@ export class AuthenticationService {
   }
 
   async register(req : RegisterRequest): Promise<TokenResponse> {
-   return await axiosInstance.post('auth/register', req, this.headerConfig)
+    const registerAxiosInstance = axios.create({baseURL: environment.apiBaseUrl}); // Create a new instance to avoid have meaningful interceptors
+    registerAxiosInstance.interceptors.response.use(
+      response => {
+        if (response.status == 201) { //Success
+          this.matSnackbar.open("Account created")
+        }
+        return response;
+      }, rejected => {
+
+        if (rejected.response.status >= 400 && rejected.response.status < 500) { //Client error
+          this.matSnackbar.open(rejected.response.status + ": Username already taken", "Dismiss", {duration: 5000});
+
+        } else if (rejected.response.status > 499) { //Server error
+          this.matSnackbar.open("Something went wrong, please try again later", "Dismiss", {duration: 5000})
+        }
+      });
+
+
+   return await registerAxiosInstance.post('auth/register', req, this.headerConfig)
       .then(
         response => {
           return response.data as TokenResponse;
