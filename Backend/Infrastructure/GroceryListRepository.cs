@@ -69,7 +69,7 @@ public class GroceryListRepository : IRepository<GroceryList>
         return true;
     }
 
-    public GroceryList Single(long id)
+    public GroceryList Single(int id)
     {
         var fetchedList =_dbContext.GroceryListsTable
             .Include(l => l.Items)

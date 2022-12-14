@@ -39,7 +39,7 @@ public class UserRepository : IUserRepository
         return true;
     }
 
-    public User Single(long id)
+    public User Single(int id)
     {
         return _DBContext.UserTable.Find(id) ?? throw new NullReferenceException("User does not exist");
     }

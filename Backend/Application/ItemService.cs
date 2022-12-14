@@ -33,7 +33,7 @@ public class ItemService : IItemService
 
     public bool DeleteItem(int id, TokenUser user)
     {
-        if (_userGroceryBinding.IsUserInGroceryList(user.Id, id))
+        if (_userGroceryBinding.IsUserInGroceryList(user.Id, _itemRepository.Single(id).GroceryListId))
         {
             return _itemRepository.Delete(id);
         }

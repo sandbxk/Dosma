@@ -45,7 +45,7 @@ public class ItemRepository : IRepository<Item>
         return change > 0;
     }
 
-    public Item Single(long id)
+    public Item Single(int id)
     {
         var item =_dbContext.ItemTable.Find(id);
         
