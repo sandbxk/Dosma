@@ -238,8 +238,12 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
     dialogueRef.afterClosed().subscribe(userSaidYes => {
       if (userSaidYes) {
-        this.httpService.deleteList(this.groceryList).then(() => {
-          this.navigateBack();
+
+        this.httpService.deleteList(this.groceryList.id).then((result) => {
+          if (result)
+            this.navigateBack();
+          else
+            this.matSnackBar.open('ERROR: Could not delete list', "Dismiss", {duration: 5000});
         })
           .catch(err => {
             console.error(err);

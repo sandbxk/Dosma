@@ -105,10 +105,16 @@ export class UserGroceryListOverviewComponent implements OnInit {
 
     dialogueRef.afterClosed().subscribe(async editedList => {
       if (editedList !== null) {
-        const patchedList = await this.httpService.updateList(editedList); // Update the edited list on the server
+        let patchedList: GroceryList = {id: 0, title: "", items: []};
 
-        let index = this.groceryLists.findIndex(x => x.id === patchedList.id); // Find the index of the list in the list of groceryLists
-        this.groceryLists[index] = patchedList; // Update the list in the list of groceryLists
+        try {
+          patchedList = await this.httpService.updateList(editedList); // Update the edited list on the server
+          let index = this.groceryLists.findIndex(x => x.id === patchedList.id); // Find the index of the list in the list of groceryLists
+          this.groceryLists[index] = patchedList; // Update the list in the list of groceryLists
+        }
+        catch (err) {
+          console.error(err);
+        }
       }
     }).unsubscribe(); // Unsubscribe from the observable to prevent memory leaks
   }
@@ -123,7 +129,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
 
     dialogueRef.afterClosed().subscribe(userSaidYes => {
       if (userSaidYes) {
-        this.httpService.deleteList(list).then(() => { // Delete the list from the server
+        this.httpService.deleteList(list.id).then(() => { // Delete the list from the server
           this.groceryLists.splice(this.groceryLists.indexOf(list), 1); // Remove the list from the list of groceryLists
         })
           .catch(err => {

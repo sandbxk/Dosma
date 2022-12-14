@@ -5,6 +5,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {catchError} from "rxjs";
 import {GroceryList} from "../app/interfaces/GroceryList";
 import {Status} from "../app/interfaces/StatusEnum";
+import {User} from "../app/interfaces/User";
+import {Item} from "../app/interfaces/Item";
 
 export const axiosInstance =
    axios.create({
@@ -41,24 +43,26 @@ export class HttpGroceryListService {
         catchError(rejected);
       }
     )
-  }
 
-  /**
-   * Get all lists in the system -- Strictly for testing purposes
-   */
-  async getAllLists() {
-    const httpResponse = await axiosInstance.get<any>('GroceryList');
-    return httpResponse.data as GroceryList[];
+
   }
 
   /**
    * Get the lists that the user has access to
    * @param userId
    */
-  async getUserLists(userId: number) {
-    const httpResponse = await axiosInstance.get<any>(`GroceryList/${userId})`);
-    return httpResponse.data as GroceryList[];
+  async getAllLists() {
+    try {
+      const header = this.configHeader();
+      const httpResponse = await axiosInstance.get<any>('GroceryList', header);
+      return httpResponse.data as GroceryList[];
+    }
+    catch (e) {
+      this.matSnackbar.open("You must be logged in to view lists", "Dismiss", {duration: 5000});
+      return [];
+    }
   }
+
 
   /**
    * Create a new list and post it to the backend
@@ -66,20 +70,24 @@ export class HttpGroceryListService {
    * @param dto
    */
   async createList(dto: { title: string; }) {
-    const httpResult = await axiosInstance.post('GroceryList', dto);
-    return httpResult.data as GroceryList;
+    try {
+      const header = this.configHeader();
+      const httpResult = await axiosInstance.post('GroceryList', dto, header);
+      return httpResult.data as GroceryList;
+    }
+    catch (e) {
+      this.matSnackbar.open("You must be logged in to create lists", "Dismiss", {duration: 5000});
+      let error: GroceryList = {
+        id: 0,
+        title: "Error",
+        items: []
+      }
+      return error;
+    }
+
   }
 
-  /**
-   * Duplicates the list and posts it to the backend.
-   * returns the duplicated list with the correct id
-   * @param groceryListId
-   */
-  async duplicateList(groceryListId: number) {
-    //TODO implement
-    const httpsResult = await axiosInstance.post(`GroceryList/${groceryListId}`);
-    return httpsResult.data;
-  }
+
 
   /**
    * Update the list in the backend with the new values
@@ -87,17 +95,31 @@ export class HttpGroceryListService {
    * @param editedList
    */
   async updateList(editedList: GroceryList) {
-    //TODO
-    return editedList;
+    try {
+      const header = this.configHeader();
+      const httpResult = await axiosInstance.patch('GroceryList', editedList, header);
+      return httpResult.data as GroceryList;
+    }
+    catch (e) {
+      this.matSnackbar.open("You must be logged in to update lists", "Dismiss", {duration: 5000});
+      throw new Error("You must be logged in to update lists");
+    }
   }
 
   /**
    * Delete the list from the backend
    * @param groceryList
    */
-  async deleteList(groceryList: GroceryList) {
-    const httpsResult = await axiosInstance.delete(`GroceryList/${groceryList.id}`, { data: groceryList });
-    return httpsResult.data;
+  async deleteList(groceryListId: number) {
+    try {
+      const header = this.configHeader();
+      await axiosInstance.delete(`GroceryList/${groceryListId}`, header); //Errors handled in interceptor
+      return true;
+    }
+    catch (e) {
+      this.matSnackbar.open("You must be logged in to delete lists", "Dismiss", {duration: 5000});
+      return false;
+    }
   }
 
   /**
@@ -105,18 +127,67 @@ export class HttpGroceryListService {
    * @param routeId
    */
   async getListById(routeId: number): Promise<GroceryList> {
-    const httpsResult = await axiosInstance.get(`GroceryList/${routeId}`);
-    return httpsResult.data as GroceryList;
+    try {
+      const header = this.configHeader();
+      const httpsResult = await axiosInstance.get(`GroceryList/${routeId}`, header);
+      return httpsResult.data as GroceryList;
+    }
+    catch (e) {
+      this.matSnackbar.open("You must be logged in to view lists", "Dismiss", {duration: 5000});
+      let error: GroceryList = {
+        id: 0,
+        title: "Error",
+        items: [],
+      };
+      return error;
+    }
   }
 
   async getCategories() {
-    return ['Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other'];
+    return [
+      'None',
+      'Fruits',
+      'Vegetables',
+      'Meat',
+      'Dairy',
+      'Bakery',
+      'Beverages',
+      'Other'
+    ];
   }
 
-  async duplicateItem(duplicateDTO: { quantity: number; title: string; category: string; status: Status; groceryListId: number }) {
+  async duplicateItem(duplicateDTO: {quantity: number; title: string; category: string; status: Status; groceryListId: number }) {
+    try {
+      const header = this.configHeader();
+      const httpsResult = await axiosInstance.post(`Item`, duplicateDTO, header);
+      return httpsResult.data as Item;
+    }
+    catch (e) {
+      this.matSnackbar.open("You must be logged in to view lists", "Dismiss", {duration: 5000});
+      let error: Item = {
+        id: 0,
+        title: "Error",
+        status: Status.Unchecked,
+        quantity: 0,
+        category: "None",
+        groceryListId: 0,
+        index: 0
+      };
+      return error;
+    }
+  }
 
-    const httpsResult = await axiosInstance.post(`GroceryItem/${duplicateDTO.groceryListId}`, duplicateDTO);
-    return httpsResult.data;
-
+  private configHeader() {
+    const user: User = JSON.parse(localStorage.getItem('user') as string);
+    if (user) {
+      const token = user.token;
+      return {
+        headers: {
+          contentType: 'application/json',
+          token: `${token}`
+        }
+      }
+    }
+    else throw new Error("User not logged in");
   }
 }
