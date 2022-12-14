@@ -107,7 +107,7 @@ public class ItemController : ControllerBase
 
         try
         {
-            var result = _itemService.DeleteItem(id, user);
+            _itemService.DeleteItem(id, user);
             return Ok("Item has been deleted.");
         }
         catch (ValidationException e)

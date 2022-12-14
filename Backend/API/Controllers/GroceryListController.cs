@@ -41,7 +41,7 @@ public class GroceryListController : ControllerBase
     
     [Produces("application/json")]
     [HttpGet]
-    [Route("grocerylist/{id}")]
+    [Route("{id}")]
     public ActionResult<GroceryListResponse> GetListById([FromRoute] int id, [FromHeader] String token)
     {
         if (!_authenticationService.AuthenticateToken(token))
@@ -150,7 +150,8 @@ public class GroceryListController : ControllerBase
         
         try
         {
-            return Ok(_groceryListService.DeleteList(id, user));
+            _groceryListService.DeleteList(id, user);
+            return Ok("List has been deleted.");
         }
         catch (ValidationException e)
         {
