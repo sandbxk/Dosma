@@ -1,6 +1,17 @@
 <div class="background">
 <div class="centered">
+  <div class="textContainer">
+    <h1>
+      Shopping made simple.
+    </h1>
+
+    <button *ngIf="isUserLoggedIn" mat-raised-button color="primary"  class="listButton" routerLink="/dashboard">
+      Go to my lists
+    </button>
+  </div>
   <div class="container">
+
+
 
     <div class="cardContainer">
 
@@ -13,7 +24,6 @@
         </mat-card-header>
 
         <mat-divider></mat-divider> <!-- Divider -->
-
         <mat-card-content>
           <ul>
             <li>Carrots</li>
@@ -34,15 +44,6 @@
         </mat-card-footer>
       </mat-card>
       <!-- End of Example Card -->
-      <div class="textContainer">
-        <h1>
-          Shopping made simple.
-        </h1>
-
-        <button *ngIf="isUserLoggedIn" mat-raised-button color="primary"  class="listButton" routerLink="/dashboard">
-          Go to my lists
-        </button>
-      </div>
 
       <mat-card class="listCardButton" (click)="login()">
         <mat-label>Login</mat-label>

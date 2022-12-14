@@ -37,6 +37,7 @@ export class NavbarComponent implements OnInit {
 
   logoutCurrentUser() {
     localStorage.removeItem('user');
+    this.router.navigate(['home']);
   }
 
   ngOnInit(): void {

@@ -225,6 +225,7 @@ export class GroceryListComponent implements OnInit {
     this.httpService.createItem(dto).then(result => {
       if (result) {
         let newItem: Item = dtoToItem(result);
+        newItem.index = this.groceryList.items.length;
 
         this.groceryList.items.push(newItem);
         this.applyAndSortIndexes();
@@ -283,7 +284,6 @@ export class GroceryListComponent implements OnInit {
         item.index = $event.index;
 
         this.groceryList.items[index] = item;
-        this.applyAndSortIndexes();
       }
 
     });

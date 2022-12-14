@@ -8,8 +8,8 @@ import {HomePageComponent} from "./components/home-page/home-page.component";
 const routes: Routes = [
   { path: 'dashboard', component: UserGroceryListOverviewComponent, canActivate: [AuthGuardService] },
   { path: 'grocery-list/:id', component: GroceryListComponent, canActivate: [AuthGuardService] },
-  { path: 'home', component: HomePageComponent },
-  { path: '**', redirectTo: 'home', pathMatch: 'full'},
+  { path: '', component: HomePageComponent },
+  { path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 
 @NgModule({
