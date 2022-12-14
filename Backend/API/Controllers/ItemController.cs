@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Application.DTOs;
 using Application.DTOs.Requests;
+using Application.DTOs.Response;
 using Application.Helpers;
 using Application.Interfaces;
 using Domain;
@@ -22,7 +23,7 @@ public class ItemController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<Item> CreateItem([FromBody] ItemRequest item, [FromHeader] String token)
+    public ActionResult<ItemResponse> CreateItem([FromBody] ItemRequest item, [FromHeader] String token)
     {
         if (!_authenticationService.AuthenticateToken(token))
         {
@@ -53,7 +54,7 @@ public class ItemController : ControllerBase
 
     [HttpPatch]
     [Route("{id}")]
-    public ActionResult<Item> UpdateItem([FromRoute] int id, [FromBody] Item item, [FromHeader] String token)
+    public ActionResult<ItemResponse> UpdateItem([FromRoute] int id, [FromBody] Item item, [FromHeader] String token)
     {
         if (!_authenticationService.AuthenticateToken(token))
         {
@@ -78,7 +79,7 @@ public class ItemController : ControllerBase
             {
                 return NotFound();
             }
-            return Ok("Item has been updated.");
+            return Ok(item.ItemToResponse());
         }
         catch (ValidationException e)
         {

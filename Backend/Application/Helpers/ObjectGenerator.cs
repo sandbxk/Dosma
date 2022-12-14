@@ -127,7 +127,19 @@ public static class ObjectGenerator
             Title = _this.Title,
             Quantity = _this.Quantity,
             Status = _this.Status,
-            Category = _this.Category,
+            Category = Enum.Parse<ListItemCategory>(_this.Category),
+            GroceryListId = _this.GroceryListId
+        };
+    }
+    
+    public static ItemResponse ItemToResponse(this Item _this)
+    {
+        return new ItemResponse
+        {
+            Title = _this.Title,
+            Quantity = _this.Quantity,
+            Status = _this.Status,
+            Category = _this.Category.ToString(),
             GroceryListId = _this.GroceryListId
         };
     }

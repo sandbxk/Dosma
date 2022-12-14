@@ -1,9 +1,10 @@
 ﻿using Domain;
 
-namespace Application.DTOs.Requests;
+namespace Application.DTOs.Response;
 
-public class ItemRequest
+public class ItemResponse
 {
+    public int Id { get; set; }
     public string Title { get; set; }
     public int Quantity { get; set; }
     
