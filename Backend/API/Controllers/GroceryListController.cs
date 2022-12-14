@@ -101,8 +101,7 @@ public class GroceryListController : ControllerBase
     [Consumes("application/json")]
     [Produces("application/json")]
     [HttpPatch]
-    [Route("{id}")]
-    public ActionResult<GroceryListResponse> UpdateList([FromRoute] int id, [FromBody] GroceryListUpdateRequest groceryList, [FromHeader] String token)
+    public ActionResult<GroceryListResponse> UpdateList([FromBody] GroceryListUpdateRequest groceryList, [FromHeader] String token)
     {
         if (!_authenticationService.AuthenticateToken(token))
             throw new UnauthorizedAccessException();
@@ -113,12 +112,7 @@ public class GroceryListController : ControllerBase
         {
             throw new NullReferenceException("User could not be found.");
         }
-        
-        if (id != groceryList.Id)
-        {
-            throw new ValidationException("List ID does not match ID in URL.");
-        }
-        
+
         try
         {
             return Ok(_groceryListService.UpdateList(groceryList));
