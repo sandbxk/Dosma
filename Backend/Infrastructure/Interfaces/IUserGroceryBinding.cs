@@ -10,5 +10,7 @@ public interface IUserGroceryBinding
     List<User> GetAllUsers(int groceryListId);
 
     List<GroceryList> GetAllGroceryLists(int userId);
+    
+    bool IsUserInGroceryList(int userId, int groceryListId);
 }
 

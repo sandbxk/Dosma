@@ -20,7 +20,7 @@ public class ItemController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<Item> CreateItem([FromBody] ItemDTO item, [FromHeader] String token)
+    public ActionResult<Item> CreateItem([FromBody] Item item, [FromHeader] String token)
     {
         if (!_authenticationService.AuthenticateToken(token))
         {
@@ -99,7 +99,7 @@ public class ItemController : ControllerBase
         }
         
         var user = _authenticationService.GetPartialUserFromToken(token);
-        
+
         if (user == null)
         {
             throw new NullReferenceException("User could not be found.");
@@ -108,11 +108,7 @@ public class ItemController : ControllerBase
         try
         {
             var result = _itemService.DeleteItem(id, user);
-            
-            if (result)
-                return Ok("Item has been deleted.");
-            else
-                return StatusCode(304, "Item could not be deleted.");
+            return Ok("Item has been deleted.");
         }
         catch (ValidationException e)
         {

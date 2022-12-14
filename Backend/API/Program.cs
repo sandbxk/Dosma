@@ -1,9 +1,5 @@
 using System.Text;
 using System.Text.Json.Serialization;
-using Application.DTOs;
-using Application.DTOs.Response;
-using AutoMapper;
-using Domain;
 using FluentValidation;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -32,13 +28,6 @@ ApplicationDependencies.RegisterSecurityLayer(builder.Services, Encoding.ASCII.G
 
 InfrastructureDependencies.RegisterInfrastructureLayer(builder.Services);
 
-var mapper = new MapperConfiguration(config => {
-    config.CreateMap<ItemDTO, Item>();
-    config.CreateMap<UserResponse, User>();
-}).CreateMapper();
-
-
-builder.Services.AddSingleton(mapper);
 builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

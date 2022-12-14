@@ -116,13 +116,4 @@ public static class ObjectGenerator
             SharedList = new List<UserList>()
         };
     }
-    
-    public static Item RequestToItem(this ItemCreateRequest _this)
-    {
-        return new Item()
-        {
-            Title = _this.Title,
-            Amount = _this.Amount,
-        };
-    }
 }
