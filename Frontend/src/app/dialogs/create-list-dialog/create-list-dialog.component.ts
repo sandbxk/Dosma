@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from "@angular/material/dialog";
 import {faker} from "@faker-js/faker";
 import {GroceryList} from "../../interfaces/GroceryList";
+import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 
 @Component({
   selector: 'app-create-list-dialog',

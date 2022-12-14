@@ -6,7 +6,7 @@ import {DataService} from "../../../services/data.service";
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 import {IComponentCanDeactivate} from "../../../services/PendingChanges.guard";
 import {Observable} from "rxjs";
-import {Item} from "../../interfaces/Item";
+import {dtoToItem, Item, itemToDto} from "../../interfaces/Item";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
@@ -285,7 +285,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
     this.httpService.createItem(dto).then(result => {
       if (result) {
-        let newItem: Item = result.toItem();
+        let newItem: Item = dtoToItem(result);
+
         this.groceryList.items.push(newItem);
         this.applyAndSortIndexes();
         }
@@ -336,7 +337,17 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   editItem($event: Item) {
     let index = this.groceryList.items.indexOf(this.editingItem);
-    this.groceryList.items[index] = $event;
+
+    this.httpService.updateItem(itemToDto($event)).then(result => {
+      if (result) {
+        let item: Item = dtoToItem(result)
+        item.index = $event.index;
+
+        this.groceryList.items[index] = item;
+        this.applyAndSortIndexes();
+      }
+
+    });
 
     this.editingItem = this.placeholderItem;
   }
@@ -344,7 +355,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
   deleteItems() {
     const itemsToDelete = this.selectedItems;
-
+    console.log(itemsToDelete);
     let deleteMessage = "";
 
     if (itemsToDelete.length === 1)
@@ -361,6 +372,21 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
     dialogRef.afterClosed().subscribe(userSaidYes => {
       if (userSaidYes) {
+
+        let deleteLocal = [];
+
+        for (let item of itemsToDelete) {
+          this.httpService.deleteItem(item.id).then(result => {
+            if (result) {
+              delete this.groceryList.items[this.groceryList.items.indexOf(item)];
+            }
+          }).catch(err => {
+            console.error(err);
+          });
+        }
+
+
+
         const setOfItemsToDelete = new Set(itemsToDelete);
         const newGroceryListItems = this.groceryList.items.filter((item) => {
           return !setOfItemsToDelete.has(item);

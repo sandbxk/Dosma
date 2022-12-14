@@ -21,17 +21,27 @@ export class ItemDTO {
   groceryListId: number = 0;
   status: Status = Status.Unchecked;
   category: string = 'None';
+}
 
-  toItem(): Item {
-    return {
-      id: this.id,
-      title: this.title,
-      quantity: this.quantity,
-      groceryListId: this.groceryListId,
-      status: this.status,
-      category: this.category,
-      index: 0
-    }
+export function dtoToItem(dto: ItemDTO): Item {
+  return {
+    id: dto.id,
+    title: dto.title,
+    quantity: dto.quantity,
+    groceryListId: dto.groceryListId,
+    status: dto.status,
+    category: dto.category,
+    index: 0
   }
+}
 
+export function itemToDto(item: Item): ItemDTO {
+  return {
+    id: item.id,
+    title: item.title,
+    quantity: item.quantity,
+    groceryListId: item.groceryListId,
+    status: item.status,
+    category: item.category,
+  }
 }

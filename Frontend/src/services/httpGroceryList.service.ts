@@ -29,7 +29,7 @@ export class HttpGroceryListService {
     axiosInstance.interceptors.response.use(
       response => {
         if(response.status==201) { //Created
-          this.matSnackbar.open("Great success")
+          this.matSnackbar.open("Great success", "Dismiss", {duration: 5000})
         }
         return response;
       },
@@ -70,11 +70,12 @@ export class HttpGroceryListService {
    * returns the new list with the correct id
    * @param dto
    */
-  async createList(dto: { title: string; }) {
+  async createList(dto: { title: string; }): Promise<GroceryList> {
     try {
       const header = this.configHeader();
-      const httpResult = await axiosInstance.post('GroceryList', dto, header);
-      return httpResult.data as GroceryList;
+      return await axiosInstance.post('GroceryList', dto, header).then(response => {
+        return response.data as GroceryList;
+      });
     }
     catch (e) {
       this.matSnackbar.open("You must be logged in to create lists", "Dismiss", {duration: 5000});
@@ -126,11 +127,11 @@ export class HttpGroceryListService {
   }
 
 
-  async updateItem(item: {id: number; quantity: number; title: string; category: string; status: Status; groceryListId: number }) {
+  async updateItem(item: ItemDTO): Promise<ItemDTO> {
     try {
       const header = this.configHeader();
       const httpResult = await axiosInstance.patch('item', item, header);
-      return httpResult.data as GroceryList;
+      return httpResult.data as ItemDTO;
     }
     catch (e) {
       this.matSnackbar.open("You must be logged in to update lists", "Dismiss", {duration: 5000});

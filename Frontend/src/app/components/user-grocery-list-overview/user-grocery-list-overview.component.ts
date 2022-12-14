@@ -67,20 +67,13 @@ export class UserGroceryListOverviewComponent implements OnInit {
    * Opens the create list dialog. If the user creates a list, it is added to the list of groceryLists and posted to the server
    */
   newGroceryList() {
-    let dialogueRef = this.dialog.open(CreateListDialogComponent); // Open the create list dialog
-
-    dialogueRef.afterClosed().subscribe(async result => { // Subscribe to the observable returned by the dialog
-      if (result !== undefined && result !== null) { // If the user created a list
-
-        let dto = {
-          title: result
+    this.dialog.open(CreateListDialogComponent).afterClosed().subscribe( // Open the create list dialog
+      result => {
+        if (result !== null) {
+            this.groceryLists.push(result); // Add the list to the list of groceryLists
         }
-
-        const createdList = await this.httpService.createList(dto);
-        this.groceryLists.splice(0, 0, createdList); // Add the created list to the list of groceryLists
       }
-    }).unsubscribe(); // Unsubscribe from the observable to prevent memory leaks
-
+    );
   }
 
   /**
