@@ -14,7 +14,7 @@ export class ObjectGenerator {
     user.id = payload.id;
     user.username = payload.username;
     user.name = payload.name;
-    user.expire_at = payload.exp;
+    user.expire_at = parseInt(payload.exp);
     //user.access_claims = JSON.parse(payload.access_claims);
 
     return user;

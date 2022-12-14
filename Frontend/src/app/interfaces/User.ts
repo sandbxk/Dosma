@@ -4,7 +4,7 @@ export class User {
   name: string = '';
   username: string = '';
   access_claims: AccessObject[] = [];
-  expire_at: string = '';
+  expire_at: number = 0;
   token: string = '';
 }
 

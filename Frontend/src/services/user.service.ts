@@ -21,10 +21,10 @@ export class UserService {
     let user : User | null = JSON.parse(localStorage.getItem('user') as string);
 
     if (user) {
-      // TODO: check if time is expired
-      return true;
+      let now = parseInt((new Date().getTime() / 1000).toFixed(0));
+      return now < user.expire_at;
     }
-    return false;
+    else return false;
   }
 
   /**
