@@ -141,6 +141,20 @@ public static class ObjectGenerator
         };
     }
     
+    public static Item RequestToItem(this ItemUpdateRequest _this)
+    {
+        return new Item()
+        {
+            Id = _this.Id,
+            Title = _this.Title,
+            Quantity = _this.Quantity,
+            Status = _this.Status,
+            Category = Enum.Parse<ListItemCategory>(_this.Category),
+            GroceryListId = _this.GroceryListId
+        };
+    }
+    
+    
     public static ItemResponse ItemToResponse(this Item _this)
     {
         return new ItemResponse

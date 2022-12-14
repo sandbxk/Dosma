@@ -53,7 +53,7 @@ public class ItemController : ControllerBase
     }
 
     [HttpPatch]
-    public ActionResult<ItemResponse> UpdateItem([FromBody] Item item, [FromHeader] String token)
+    public ActionResult<ItemResponse> UpdateItem([FromBody] ItemUpdateRequest item, [FromHeader] String token)
     {
         if (!_authenticationService.AuthenticateToken(token))
         {
@@ -69,13 +69,13 @@ public class ItemController : ControllerBase
         
         try
         {
-            var result = _itemService.UpdateItem(item);
+            var result = _itemService.UpdateItem(item.RequestToItem());
             
             if (result == null)
             {
                 return NotFound();
             }
-            return Ok(item.ItemToResponse());
+            return Ok(result.ItemToResponse());
         }
         catch (ValidationException e)
         {

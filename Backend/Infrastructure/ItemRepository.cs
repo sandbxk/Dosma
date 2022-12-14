@@ -83,6 +83,6 @@ public class ItemRepository : IRepository<Item>
         {
             throw new NullReferenceException("Unable to update item.");
         }
-        return model;
+        return existingItem;
     }
 }

@@ -12,3 +12,8 @@ public class ItemRequest
     
     public int GroceryListId { get; set; }
 }
+
+public class ItemUpdateRequest : ItemRequest
+{
+    public int Id { get; set; }
+}
