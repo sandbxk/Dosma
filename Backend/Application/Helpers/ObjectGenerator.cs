@@ -73,7 +73,16 @@ public static class ObjectGenerator
         }
         return userDTOs;
     }
-    
+
+    public static List<ItemResponse> ItemListToResponseList(this List<Item> _this)
+    {
+        List<ItemResponse> itemResponsesList = new();
+        foreach (var Item in _this)
+        {
+            itemResponsesList.Add(Item.ItemToResponse());
+        }
+        return itemResponsesList;
+    }
 
     public static GroceryListResponse GroceryListToResponse(this GroceryList groceryList)
     {
@@ -81,7 +90,7 @@ public static class ObjectGenerator
         {
             Id = groceryList.Id,
             Title = groceryList.Title,
-            Items = groceryList.Items,
+            Items = groceryList.Items.ItemListToResponseList(),
             Users = groceryList.Users.UsersToDTO()
         };
     }
