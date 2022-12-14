@@ -40,7 +40,7 @@ public class ItemController : ControllerBase
             try
         {
             var result = _itemService.AddItem(item.RequestToItem());
-            return Created("Item/" + result.Id, result);
+            return Created("Item/" + result.Id, result.ItemToResponse());
         }
         catch (ValidationException e)
         {
