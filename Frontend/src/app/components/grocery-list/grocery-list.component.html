@@ -17,15 +17,6 @@
     <!-- Container for the other actions -->
     <div class="listActionsContainer">
 
-      <!-- Sync button -- Disabled while syncing -->
-      <button mat-icon-button [disabled]="syncing"
-              class="listActionBtn"
-              (click)="sync()">
-        <mat-icon [ngClass]="{'syncingAnimation': syncing}">
-          sync
-        </mat-icon>
-      </button>
-
       <!-- Button for activating mat Menu -->
       <button mat-icon-button [matMenuTriggerFor]="listMenu"
               class="listActionBtn"
@@ -113,6 +104,7 @@
      groceryListId in the child component to the chosen value, using @input -->
      <div id="item-creation-panel" [ngClass]="creatingItem ? 'animateIntoFrame' : 'animateOutOfFrame'">
       <app-new-item
+        [disabled]="!creatingItem"
         id="new-item-panel" [groceryListId]="groceryList.id" [listSize]="groceryList.items.length" [inputCategories]="categories"
         (newItemEvent)="addItem($event)" (closeItemCreationEvent)="showNewItemPanel(!$event)">
       </app-new-item>

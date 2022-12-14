@@ -20,7 +20,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { EditListDialogComponent } from "./dialogs/edit-list-dialog/edit-list-dialog.component";
 import { DragDropModule } from "@angular/cdk/drag-drop";
-import { PendingChangesGuard } from "../services/PendingChanges.guard";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatExpansionModule} from "@angular/material/expansion";
 import { NewItemComponent } from './components/new-item/new-item.component';
@@ -76,7 +75,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     MatExpansionModule,
     MatAutocompleteModule
   ],
-  providers: [MatSnackBar, PendingChangesGuard],
+  providers: [MatSnackBar],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

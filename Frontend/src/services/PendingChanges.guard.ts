@@ -17,6 +17,7 @@ export interface IComponentCanDeactivate {
  * A guard that can be used to check if a component can be deactivated.
  *  If all guards return true, navigation continues.
  *  If any guard returns false, navigation is cancelled and a confirmation dialog is shown.
+ *  Removed from the app-routing.module.ts file, because it is not used anymore.
  */
 @Injectable()
 export class PendingChangesGuard implements CanDeactivate<IComponentCanDeactivate> {

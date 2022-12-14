@@ -26,6 +26,8 @@ export class NewItemComponent implements OnInit {
 
   @Input() listSize: number = 0;
 
+  @Input() disabled = false;
+
 
   constructor() { }
 

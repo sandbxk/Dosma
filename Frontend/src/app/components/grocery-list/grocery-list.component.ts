@@ -11,7 +11,6 @@ import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/con
 import {MatDialog} from "@angular/material/dialog";
 import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
 import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
-import {SyncService} from "../../../services/sync.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Status} from "../../interfaces/StatusEnum";
 import {isEqual} from "lodash";
@@ -50,7 +49,7 @@ import {isEqual} from "lodash";
     ])
   ]
 })
-export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
+export class GroceryListComponent implements OnInit {
 
   // Grocery list variable for the list the user currently has open
   groceryList: GroceryList = {
@@ -81,7 +80,6 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   selectedItems: Item[] = [];
   editingItem: Item = this.placeholderItem;
 
-  syncing: boolean = false;
 
 
   constructor(
@@ -90,12 +88,11 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     private dataService: DataService,
     private httpService: HttpGroceryListService,
     private dialog: MatDialog,
-    private syncService: SyncService,
     private matSnackBar: MatSnackBar
   ) { }
 
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit() {
 
     // Get the id from the route.
     this.routeId = this.currentRoute.snapshot.paramMap.get('id');
@@ -110,12 +107,12 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
     // If the id is 0, the data service did not pass a list, so we need to get it from the server
     if (this.groceryList.id === 0) {
-      this.groceryList = await this.httpService.getListById(this.routeId);
+      this.httpService.getListById(this.routeId).then(list => {
+        this.groceryList = list;
+      });
     }
 
     this.applyAndSortIndexes();
-
-    setInterval(this.sync, 120000); // Sync every 2 minutes
   }
 
 
@@ -142,23 +139,6 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   }
 
 
-
-
-
-
-  /**
-   * From IComponentCanDeactivate
-   * Will prevent the user from navigating away from the page if there are unsaved changes
-   * used for SyncService
-   */
-  @HostListener('window:beforeunload', ['$event'])
-  canDeactivate(): boolean | Observable<boolean> {
-    while (this.syncing) {
-      // Wait for the sync to finish
-    }
-    return true;
-  }
-
   /**
    * Called when the user drops an item in the list
    * @param event
@@ -175,48 +155,7 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     localStorage.setItem(this.routeId.toString(), JSON.stringify(this.groceryList.items));
   }
 
-  /**
-   * Syncs the local list with the server
-   * Starts with syncing down and notifying the user of any changes present on the server,
-   * the user can discard the changes or merge them with the local list
-   * Then the local list is synced up to the server
-   */
-  async sync() {
-    this.syncing = true;
 
-    try {
-
-    const updatedList = await this.syncService.syncDown()
-    if (updatedList.id !== 0 && updatedList !== this.groceryList) { //Must not be the placeholder list, and should not be identical to the current list
-
-      this.dialog.open(ConfirmationDialogComponent, {
-        data: {
-          title: "New changes detected",
-          message: "Would you like to update your list with the new changes? " +
-            "This will overwrite any recent changes you have made.",
-        }
-      }).afterClosed().subscribe((result: boolean) => {
-        if (result) {
-          this.groceryList = updatedList;
-        }
-      }).unsubscribe();
-    }
-
-    this.syncService.syncUp(this.groceryList).then(async () => {
-      this.matSnackBar.open("Synced", "Close", {
-        duration: 2000,
-      });
-    })
-      .catch(reason => this.matSnackBar
-        .open(reason, "Dismiss", {duration: 5000}))
-          .finally(() => this.syncing = false);
-
-
-    } catch (error) {
-      this.syncing = false;
-      this.matSnackBar.open('ERROR: Could not synchronize', "Dismiss", {duration: 5000});
-    }
-  }
 
 
  /**
@@ -413,6 +352,8 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
   /**
    * Will open a dialog to edit the list title
+   * If the user confirms, the list title will be updated on the server
+   * As it only updates the title, the list will not be reloaded. Instead the title will be updated locally if the update was successful
    */
   editListName() {
     // Open a dialog to edit the list name and pass the current grocery list
