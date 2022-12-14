@@ -145,6 +145,7 @@ public static class ObjectGenerator
     {
         return new ItemResponse
         {
+            Id = _this.Id,
             Title = _this.Title,
             Quantity = _this.Quantity,
             Status = _this.Status,
