@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Application.DTOs;
+using Application.DTOs.Requests;
+using Application.Helpers;
 using Application.Interfaces;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +22,7 @@ public class ItemController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<Item> CreateItem([FromBody] Item item, [FromHeader] String token)
+    public ActionResult<Item> CreateItem([FromBody] ItemRequest item, [FromHeader] String token)
     {
         if (!_authenticationService.AuthenticateToken(token))
         {
@@ -36,7 +38,7 @@ public class ItemController : ControllerBase
 
             try
         {
-            var result = _itemService.AddItem(item);
+            var result = _itemService.AddItem(item.RequestToItem());
             return Created("Item/" + result.Id, result);
         }
         catch (ValidationException e)

@@ -1,8 +1,11 @@
 
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Application.DTOs;
 using Application.DTOs.Requests;
 using Application.DTOs.Response;
 using Domain;
+using Microsoft.AspNetCore.Http;
 using GroceryListResponse = Application.DTOs.Response.GroceryListResponse;
 
 namespace Application.Helpers;
@@ -114,6 +117,18 @@ public static class ObjectGenerator
             Items = new List<Item>(),
             Users = new List<User>(),
             SharedList = new List<UserList>()
+        };
+    }
+    
+    public static Item RequestToItem(this ItemRequest _this)
+    {
+        return new Item()
+        {
+            Title = _this.Title,
+            Quantity = _this.Quantity,
+            Status = _this.Status,
+            Category = _this.Category,
+            GroceryListId = _this.GroceryListId
         };
     }
 }
