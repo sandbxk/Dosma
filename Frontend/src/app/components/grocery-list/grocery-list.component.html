@@ -89,7 +89,7 @@
       <app-tri-state-checkbox
         (click)="$event.stopPropagation()"
         [status]="item.status"
-        (statusChangedEvent)="item.status = $event"
+        (statusChangedEvent)="updateItemStatus(item, $event)"
         class="itemCheckbox">
 
       </app-tri-state-checkbox>

@@ -42,7 +42,7 @@
 
           <mat-card-content>
             <ul *ngIf="list.items.length > 0; else emptyList">  <!-- List of items in Grocery List -->
-              <li *ngFor="let item of list.items | slice:0:10; let i=index">
+              <li *ngFor="let item of list.items | slice:0:10; let i=index" [ngClass]="{'strikethrough': item.status.valueOf() !== 0}">
                 {{item.title | truncate:38}}
               </li>
               <!-- Make a list of the first 10 items in the list and

@@ -88,6 +88,7 @@ export class UserGroceryListOverviewComponent implements OnInit {
   /**
    * Opens the edit list dialog. If the user edits the list name, the list is updated in the list of groceryLists and posted to the server
    * It is only necessary to unsubscribe from infinite observables, which is not the case here
+   * Due to the update method only updating the name, the list object is simply updated with the new name if the request is successful
    * @param list
    */
   editList(list: GroceryList) {
@@ -97,20 +98,14 @@ export class UserGroceryListOverviewComponent implements OnInit {
       }
     });
 
-    dialogueRef.afterClosed().subscribe(async editedList => {
-      if (editedList !== null) {
-        let patchedList: GroceryList = {id: 0, title: "", items: []};
-
-        try {
-          patchedList = await this.httpService.updateList(editedList); // Update the edited list on the server
-          let index = this.groceryLists.findIndex(x => x.id === patchedList.id); // Find the index of the list in the list of groceryLists
-          this.groceryLists[index] = patchedList; // Update the list in the list of groceryLists
-        }
-        catch (err) {
-          console.error(err);
-        }
-      }
-    })
+    dialogueRef.afterClosed().pipe(first()).subscribe(dto => {
+      if (dto !== null && dto !== undefined)
+        this.httpService.updateList(dto).then(editedList => {
+          if (editedList.id === list.id) { // If the list was edited, update the list in the list of groceryLists
+            list.title = editedList.title;
+          }
+        });
+    });
   }
 
   deleteList(list: GroceryList) {

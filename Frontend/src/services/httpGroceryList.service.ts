@@ -96,7 +96,7 @@ export class HttpGroceryListService {
    *
    * @param editedList
    */
-  async updateList(editedList: GroceryList) {
+  async updateList(editedList: { id: number; title: string; }): Promise<GroceryList> {
     try {
       const header = this.configHeader();
       const httpResult = await axiosInstance.patch('GroceryList/', editedList, header);

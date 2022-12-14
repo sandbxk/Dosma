@@ -6,7 +6,7 @@
   <form class="form" [formGroup]="form">
     <mat-form-field class="form-full-width">
       <mat-label>Title</mat-label>
-      <input matInput (keyup.escape)="onCancel()" (keyup.enter)="onSave()" placeholder="List title" formControlName="title" value="{{groceryList.title}}">
+      <input matInput (keyup.escape)="onCancel()" (keyup.enter)="onSave()" placeholder="List title" formControlName="title" value="{{groceryListDto.title}}">
     </mat-form-field>
     <div *ngIf="title.errors?.['required']">
       Name is required.

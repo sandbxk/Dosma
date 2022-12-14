@@ -5,7 +5,7 @@ import {GroceryList} from "../../interfaces/GroceryList";
 import {DataService} from "../../../services/data.service";
 import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
 import {IComponentCanDeactivate} from "../../../services/PendingChanges.guard";
-import {Observable} from "rxjs";
+import {first, Observable} from "rxjs";
 import {dtoToItem, Item, itemToDto} from "../../interfaces/Item";
 import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -14,6 +14,7 @@ import {animate, keyframes, state, style, transition, trigger} from "@angular/an
 import {SyncService} from "../../../services/sync.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Status} from "../../interfaces/StatusEnum";
+import {isEqual} from "lodash";
 
 @Component({
   selector: 'app-grocery-list',
@@ -135,7 +136,6 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
       }
 
         this.groceryList.items.sort((a, b) => { // Sort the items by index
-          console.log(a.index, b.index);
           return a.index - b.index;
         }); // Sort the items by their index
     }
@@ -355,7 +355,6 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
   deleteItems() {
     const itemsToDelete = this.selectedItems;
-    console.log(itemsToDelete);
     let deleteMessage = "";
 
     if (itemsToDelete.length === 1)
@@ -372,8 +371,6 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
     dialogRef.afterClosed().subscribe(userSaidYes => {
       if (userSaidYes) {
-
-        let deleteLocal = [];
 
         for (let item of itemsToDelete) {
           this.httpService.deleteItem(item.id).then(result => {
@@ -419,18 +416,20 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   editListName() {
     // Open a dialog to edit the list name and pass the current grocery list
-      let dialogueRef = this.dialog.open(EditListDialogComponent, {
-        data: {
-          groceryList: this.groceryList
-        }
-      });
+    let dialogueRef = this.dialog.open(EditListDialogComponent, {
+      data: { // Pass the list to the dialog so that it can be edited
+        groceryList: this.groceryList
+      }
+    });
 
-      //Set the new list name after the dialog closes
-      dialogueRef.afterClosed().subscribe(async editedList => {
-        if (editedList !== null) {
-          this.groceryList.title = editedList.title;
-        }
-      }).unsubscribe(); // Unsubscribe to prevent memory leaks
+    dialogueRef.afterClosed().pipe(first()).subscribe(dto => {
+      if (dto !== null && dto !== undefined)
+        this.httpService.updateList(dto).then(editedList => {
+          if (editedList.id === this.groceryList.id) { // If the list was edited, update the list in the list of groceryLists
+            this.groceryList.title = editedList.title;
+          }
+        });
+    });
   }
 
   /**
@@ -488,4 +487,17 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     });
 
   }
+
+  updateItemStatus(item: Item, status: Status) {
+    item.status = status;
+    this.httpService.updateItem(itemToDto(item)).then(result => {
+      let updatedItem: Item = dtoToItem(result);
+      updatedItem.index = item.index;
+
+      if (!isEqual(item, updatedItem)) { // If the updated item is different from the original item with applied changes
+        this.groceryList.items[this.groceryList.items.indexOf(item)] = updatedItem;
+      }
+    });
+  }
+
 }

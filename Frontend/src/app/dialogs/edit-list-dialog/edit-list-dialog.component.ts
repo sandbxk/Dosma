@@ -10,12 +10,9 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class EditListDialogComponent implements OnInit {
 
-  groceryList: GroceryList = {
+  groceryListDto = {
     id: -1,
     title: "",
-    items: [],
-    //TBA created: new Date(),
-    //TBA modified: new Date()
   };
 
   form: any = {};
@@ -25,12 +22,12 @@ export class EditListDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<EditListDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.groceryList = data.groceryList;
+    this.groceryListDto = data.groceryList;
   }
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      title: new FormControl(this.groceryList.title, [
+      title: new FormControl(this.groceryListDto.title, [
         Validators.required,
       ])
     });
@@ -46,8 +43,8 @@ export class EditListDialogComponent implements OnInit {
 
   onSave() {
     if (this.title?.valid) {
-      this.groceryList.title = this.title.value;
-      this.dialogRef.close(this.groceryList)
+      this.groceryListDto.title = this.title.value;
+      this.dialogRef.close(this.groceryListDto)
     }
   }
 }
