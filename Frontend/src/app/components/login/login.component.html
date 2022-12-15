@@ -1,4 +1,4 @@
-<div style="width: 20em;">
+<div style="width: 15em;">
 <div style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px">
 
   <h2 style="margin-top: 4px">Login</h2>
@@ -41,8 +41,8 @@
   </form>
 
 <div class="buttonContainer">
-  <a mat-button (click)="openRegisterForm()">Register new account</a>
-  <button class="actionButton" style="float: right; margin-bottom: 20px" type="submit" mat-raised-button color="primary" (click)="login()">Login</button>
+  <button mat-button (click)="openRegisterForm()" style="padding: 1px 5px 1px 5px; float: left;">New account</button>
+  <button class="actionButton" style="float: right; margin-bottom: 20px; margin-left: 5px"  type="submit" mat-raised-button color="primary" (click)="login()">Login</button>
   <!--- <a mat-button (click)="openForgotPasswordForm()">Forgot password</a> -->
 </div>
 
