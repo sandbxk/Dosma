@@ -1,20 +1,18 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {Item} from "../../interfaces/Item";
-import {FormCustomValidators} from "../../util/formCustomValidators";
-
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Item } from '../../interfaces/Item';
+import { FormCustomValidators } from '../../util/formCustomValidators';
 
 @Component({
   selector: 'app-edit-item',
   templateUrl: './edit-item.component.html',
-  styleUrls: ['./edit-item.component.scss']
+  styleUrls: ['./edit-item.component.scss'],
 })
 /**
  * Component for editing an item in a grocery list.
  * Shares most of its code with the new item component, but is made separate for due to separations of concern and extendability.
  */
 export class EditItemComponent implements OnInit {
-
   formControlGroup: FormGroup = new FormGroup({});
 
   // List of categories for the autocomplete
@@ -24,22 +22,21 @@ export class EditItemComponent implements OnInit {
   @Output() editItemEvent = new EventEmitter<Item>();
   @Output() cancelEditItemEvent = new EventEmitter<boolean>();
 
-
-  constructor() {
-
-  }
+  constructor() {}
 
   ngOnInit(): void {
     // Initialize the formGroup and its controls
     this.formControlGroup = new FormGroup({
-      title: new FormControl(this.listItem.title, [
-        Validators.required]), //required
+      title: new FormControl(this.listItem.title, [Validators.required]), //required
       quantity: new FormControl(this.listItem.quantity, [
-        Validators.required, Validators.min(1), Validators.max(99)]), //Range 1-99, required
-      category: new FormControl(this.listItem.category,
-        [FormCustomValidators.autocompleteStringValidator(this.categories)]) //Use custom validator to check if the category is in the list
+        Validators.required,
+        Validators.min(1),
+        Validators.max(99),
+      ]), //Range 1-99, required
+      category: new FormControl(this.listItem.category, [
+        FormCustomValidators.autocompleteStringValidator(this.categories),
+      ]), //Use custom validator to check if the category is in the list
     });
-
   }
 
   /**
@@ -70,7 +67,8 @@ export class EditItemComponent implements OnInit {
    * Creates a new item and emits it to the parent component.
    */
   editItem() {
-    if (this.formControlGroup.valid) {  //If the form is valid, create the item and emit it to the parent component
+    if (this.formControlGroup.valid) {
+      //If the form is valid, create the item and emit it to the parent component
 
       const editedItem: Item = {
         id: this.listItem.id,
@@ -79,12 +77,11 @@ export class EditItemComponent implements OnInit {
         groceryListId: this.listItem.groceryListId,
         status: this.listItem.status,
         category: this.category?.value,
-        index: this.listItem.index
-      }
+        index: this.listItem.index,
+      };
 
       this.editItemEvent.emit(editedItem);
     }
-
   }
 
   //TODO:
@@ -105,6 +102,4 @@ export class EditItemComponent implements OnInit {
   private capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
-
-
 }

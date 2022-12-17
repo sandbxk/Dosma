@@ -1,14 +1,16 @@
 <div (keyup.enter)="onConfirm()" (keyup.escape)="onDismiss()">
   <h1 mat-dialog-title>
-  {{title}}
-</h1>
+    {{ title }}
+  </h1>
 
-<div mat-dialog-content >
-  <p>{{message}}</p>
-</div>
+  <div mat-dialog-content>
+    <p>{{ message }}</p>
+  </div>
 
-<div mat-dialog-actions>
-  <button mat-button class="noButton" (click)="onDismiss()">No</button>
-  <button mat-raised-button class="yesButton" (click)="onConfirm()">Yes</button>
-</div>
+  <div mat-dialog-actions>
+    <button mat-button class="noButton" (click)="onDismiss()">No</button>
+    <button mat-raised-button class="yesButton" (click)="onConfirm()">
+      Yes
+    </button>
+  </div>
 </div>

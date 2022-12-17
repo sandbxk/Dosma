@@ -1,60 +1,94 @@
-
-<div style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px">
-
-<h2 style="margin-top: 4px">Register</h2>
-<button style="" class="closeButton" mat-icon-button (click)="cancel()">
-  <mat-icon>close</mat-icon>
-</button>
-
+<div
+  style="
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  "
+>
+  <h2 style="margin-top: 4px">Register</h2>
+  <button style="" class="closeButton" mat-icon-button (click)="cancel()">
+    <mat-icon>close</mat-icon>
+  </button>
 </div>
 
 <div class="contentContainer">
-<form class="formContainer" [formGroup]="registerFormControlGroup">
+  <form class="formContainer" [formGroup]="registerFormControlGroup">
+    <mat-form-field style="margin: 5px" appearance="fill" color="accent">
+      <mat-label>Display name</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="displayName"
+        (keyup.enter)="register()"
+      />
+    </mat-form-field>
 
-  <mat-form-field style="margin: 5px;" appearance="fill" color="accent">
-    <mat-label>Display name</mat-label>
-    <input matInput
-           type="text"
-           formControlName="displayName"
-           (keyup.enter)="register()">
-  </mat-form-field>
+    <mat-form-field
+      style="margin: 5px"
+      appearance="fill"
+      color="accent"
+      (click)="usernameTakenError = false"
+    >
+      <mat-label>Username</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="username"
+        required
+        (keyup.enter)="register()"
+      />
+    </mat-form-field>
 
-  <mat-form-field style="margin: 5px;" appearance="fill" color="accent" (click)="usernameTakenError = false">
-    <mat-label>Username</mat-label>
-    <input matInput type="text"
-           formControlName="username"
-           required
-           (keyup.enter)="register()">
-  </mat-form-field>
+    <mat-form-field style="margin: 5px" appearance="fill" color="accent">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        type="password"
+        formControlName="password"
+        required
+        (keyup.enter)="register()"
+      />
+    </mat-form-field>
 
+    <mat-form-field style="margin: 5px" appearance="fill" color="accent">
+      <mat-label>Confirm Password</mat-label>
+      <input
+        matInput
+        type="password"
+        formControlName="confirmPassword"
+        required
+        (keyup.enter)="register()"
+      />
+    </mat-form-field>
 
-  <mat-form-field style="margin: 5px;" appearance="fill" color="accent">
-    <mat-label>Password</mat-label>
-    <input matInput type="password"
-           formControlName="password"
-           required
-           (keyup.enter)="register()">
-  </mat-form-field>
+    <!-- Errors -->
+    <div style="transform: translateY(-5px); max-width: 200px">
+      <mat-error *ngIf="usernameTakenError">
+        *Username already taken
+      </mat-error>
+      <mat-error *ngIf="username?.errors">
+        *Username must be between 3 and 20 characters
+      </mat-error>
+      <br />
+      <mat-error *ngIf="password?.errors || confirmPassword?.errors">
+        *Password must be matching and not empty
+      </mat-error>
+    </div>
 
-  <mat-form-field style="margin: 5px;" appearance="fill" color="accent">
-    <mat-label>Confirm Password</mat-label>
-    <input matInput type="password"
-           formControlName="confirmPassword"
-           required
-           (keyup.enter)="register()">
-  </mat-form-field>
-
-  <!-- Errors -->
-  <div style="transform: translateY(-5px); max-width: 200px" >
-    <mat-error *ngIf="usernameTakenError"> *Username already taken </mat-error>
-    <mat-error *ngIf="username?.errors"> *Username must be between 3 and 20 characters </mat-error>
-    <br>
-    <mat-error *ngIf="password?.errors || confirmPassword?.errors"> *Password must be matching and not empty </mat-error>
-  </div>
-
-  <div class="buttonContainer">
-  <a mat-button style="margin-bottom: 10px" (click)="openLoginForm()">Already a member?</a>
-  <button class="actionButton" type="submit" mat-raised-button color="primary" (click)="register()">Register</button>
-  </div>
-</form>
+    <div class="buttonContainer">
+      <a mat-button style="margin-bottom: 10px" (click)="openLoginForm()"
+        >Already a member?</a
+      >
+      <button
+        class="actionButton"
+        type="submit"
+        mat-raised-button
+        color="primary"
+        (click)="register()"
+      >
+        Register
+      </button>
+    </div>
+  </form>
 </div>

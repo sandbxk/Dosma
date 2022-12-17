@@ -13,7 +13,6 @@ $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
   flex-grow: 4; /* default 0 */
 }
 
-
 .listCard {
   margin: 0.5rem;
   padding: 0.5rem;
@@ -50,7 +49,6 @@ $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
   background-color: map.get($primary-colors, "main");
 }
 
-
 .listCard > mat-card-header {
   min-height: 2em;
   margin-bottom: 0.2em;
@@ -86,13 +84,11 @@ $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
   color: $light-text;
 }
 
-.listCard:hover > mat-card-header > div > button
-{
+.listCard:hover > mat-card-header > div > button {
   opacity: 1;
 }
 
-.opened
-{
+.opened {
   opacity: 1;
 }
 
@@ -141,7 +137,7 @@ $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
   color: $dark-text;
 }
 
-.listCardButton{
+.listCardButton {
   @extend .listCard;
   display: flex;
   background-color: $cardDefaultColor;
@@ -169,8 +165,6 @@ $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
   transition: 0.3s;
 }
 
-
-
 ::ng-deep .mat-menu-content {
   padding: 0 !important;
 }
@@ -185,7 +179,7 @@ $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
   padding: 0 0.5em;
 }
 
-button.mat-menu-item{
+button.mat-menu-item {
   background-color: $light-background;
 }
 

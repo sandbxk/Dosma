@@ -1,5 +1,4 @@
 export class User {
-
   id: number = 0;
   name: string = '';
   username: string = '';
@@ -8,13 +7,13 @@ export class User {
   token: string = '';
 }
 
-export type AccessLevel = "READ" | "WRITE" | "DELETE";
-export type AccessResources = "LIST" | undefined;
+export type AccessLevel = 'READ' | 'WRITE' | 'DELETE';
+export type AccessResources = 'LIST' | undefined;
 
 export class AccessObject {
-  access: AccessLevel[]  = [];
+  access: AccessLevel[] = [];
   resource: AccessResources;
-  values : string[] = [];
+  values: string[] = [];
 }
 
 export class TokenResponse {

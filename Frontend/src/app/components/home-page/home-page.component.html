@@ -1,60 +1,66 @@
 <div class="background">
   <div class="centered">
-   <div class="textContainer">
-     <h1>
-       Shopping made simple.
-     </h1>
+    <div class="textContainer">
+      <h1>Shopping made simple.</h1>
 
-     <button *ngIf="isUserLoggedIn" mat-raised-button color="primary"  class="listButton" routerLink="/dashboard">
-       Go to my lists
-     </button>
-   </div>
-   <div class="container">
+      <button
+        *ngIf="isUserLoggedIn"
+        mat-raised-button
+        color="primary"
+        class="listButton"
+        routerLink="/dashboard"
+      >
+        Go to my lists
+      </button>
+    </div>
+    <div class="container">
+      <div class="cardContainer">
+        <!-- Example Card -->
+        <mat-card class="listCard">
+          <mat-card-header>
+            <!--Card header for the list name -->
+            <div class="listCardTitle">
+              <h2>My Shopping List</h2>
+              <!--List name-->
+            </div>
+          </mat-card-header>
 
+          <mat-divider></mat-divider>
+          <!-- Divider -->
+          <mat-card-content>
+            <ul>
+              <li>Carrots</li>
+              <li>Cucumber</li>
+              <li>Bread</li>
+              <li>Milk</li>
+              <li>Eggs</li>
+              <li>Cheese</li>
+              <li>Ground Beef</li>
+              <li>Toilet paper</li>
+              <li>Toothpaste</li>
+              <li>Snacks</li>
+            </ul>
+          </mat-card-content>
 
+          <mat-card-footer>
+            <span>10 items</span>
+            <!-- Number of items in the list -->
+          </mat-card-footer>
+        </mat-card>
+        <!-- End of Example Card -->
 
-     <div class="cardContainer">
+        <mat-card class="listCardButton" (tap)="login()" (click)="login()">
+          <mat-label>Login</mat-label>
+        </mat-card>
 
-       <!-- Example Card -->
-       <mat-card class="listCard">
-         <mat-card-header> <!--Card header for the list name -->
-           <div class="listCardTitle">
-             <h2>My Shopping List</h2> <!--List name-->
-           </div>
-         </mat-card-header>
-
-         <mat-divider></mat-divider> <!-- Divider -->
-         <mat-card-content>
-           <ul>
-             <li>Carrots</li>
-             <li>Cucumber</li>
-             <li>Bread</li>
-             <li>Milk</li>
-             <li>Eggs</li>
-             <li>Cheese</li>
-             <li>Ground Beef</li>
-             <li>Toilet paper</li>
-             <li>Toothpaste</li>
-             <li>Snacks</li>
-           </ul>
-         </mat-card-content>
-
-         <mat-card-footer>
-           <span>10 items</span> <!-- Number of items in the list -->
-         </mat-card-footer>
-       </mat-card>
-       <!-- End of Example Card -->
-
-       <mat-card class="listCardButton"  (tap)="login()" (click)="login()">
-         <mat-label>Login</mat-label>
-       </mat-card>
-
-       <mat-card class="listCardButton" (tap)="register()" (click)="register()">
-         <mat-label>Register</mat-label>
-       </mat-card>
-
-
-     </div>
-   </div>
+        <mat-card
+          class="listCardButton"
+          (tap)="register()"
+          (click)="register()"
+        >
+          <mat-label>Register</mat-label>
+        </mat-card>
+      </div>
+    </div>
   </div>
 </div>

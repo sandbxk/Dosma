@@ -1,13 +1,9 @@
 @use "sass:map";
 @import "src/assets/themeVariables.scss";
 
-
 .spacer {
   flex: 1 1 auto;
 }
-
-
-
 
 ::ng-deep .mat-menu-content {
   padding: 0 !important;
@@ -18,7 +14,7 @@
   padding: 0 0.5em;
 }
 
-button.mat-menu-item{
+button.mat-menu-item {
   background-color: $light-background;
 }
 
@@ -31,8 +27,6 @@ button.mat-menu-item:hover {
   background-color: $light-background;
   min-height: 45px !important;
 }
-
-
 
 .userContainer {
   display: inline-flex;
@@ -68,4 +62,3 @@ button.mat-menu-item:hover {
 .userMenu:active {
   color: $light-disabled-text;
 }
-

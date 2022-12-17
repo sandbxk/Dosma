@@ -10,7 +10,14 @@ $cardAnimationTiming: 0.3s;
 }
 
 .background {
-  background: linear-gradient(50deg, $light-background, map.get($primary-colors, 'lighter'), $light-background, lighten(map.get($accent-colors, 'lighter'), 5%), $light-background);
+  background: linear-gradient(
+    50deg,
+    $light-background,
+    map.get($primary-colors, "lighter"),
+    $light-background,
+    lighten(map.get($accent-colors, "lighter"), 5%),
+    $light-background
+  );
   background-size: 400% 400%;
   animation: Gradient 15s ease infinite;
   padding: 0;
@@ -21,8 +28,6 @@ $cardAnimationTiming: 0.3s;
   justify-content: center;
   margin: 0;
   overflow-y: scroll;
-
-
 }
 
 @keyframes Gradient {
@@ -37,12 +42,10 @@ $cardAnimationTiming: 0.3s;
   }
 }
 
-
 .container {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-
 }
 
 .textContainer {
@@ -62,7 +65,7 @@ $cardAnimationTiming: 0.3s;
   flex-grow: 4; /* default 0 */
   width: 70%;
   height: 70%;
-  border-color: map.get($primary-colors, 'main');
+  border-color: map.get($primary-colors, "main");
   border-radius: 10px;
   padding: 20px;
 }
@@ -121,7 +124,6 @@ $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
   background-color: map.get($primary-colors, "main");
 }
 
-
 .listCard > mat-card-header {
   min-height: 2em;
   margin-bottom: 0.2em;
@@ -142,7 +144,6 @@ $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
   top: 0.2em;
   left: 5%;
 }
-
 
 .listCard > mat-card-content {
   padding-top: 1em;
@@ -184,7 +185,7 @@ $cardDefaultColor: lighten(map.get($primary-colors, "lighter"), 6%);
   color: $dark-text;
 }
 
-.listCardButton{
+.listCardButton {
   @extend .listCard;
   display: flex;
   background-color: $cardDefaultColor;

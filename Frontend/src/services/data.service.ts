@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from "rxjs";
-import {GroceryList} from "../app/interfaces/GroceryList";
+import { BehaviorSubject } from 'rxjs';
+import { GroceryList } from '../app/interfaces/GroceryList';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 /*
   This service is used to share data between components.
@@ -11,11 +11,10 @@ import {GroceryList} from "../app/interfaces/GroceryList";
   so that the selected list is shared between the two components.
  */
 export class DataService {
-
   private listStageObject = new BehaviorSubject({
     id: 0,
     title: '',
-    items: []
+    items: [],
   } as GroceryList);
 
   currentListStageObject = this.listStageObject.asObservable();

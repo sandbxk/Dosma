@@ -5,8 +5,6 @@
   flex: 1 1 auto;
 }
 
-
-
 .closeButton {
   float: right;
   position: relative;
@@ -42,7 +40,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
 }
 
 .actionButton:hover {
@@ -65,7 +62,6 @@
   color: map.get($warn-colors, "main");
   font-size: 0.8rem;
 }
-
 
 .hidden {
   opacity: 0;

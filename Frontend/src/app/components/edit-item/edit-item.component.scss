@@ -1,14 +1,12 @@
 @use "sass:map";
 @import "src/assets/themeVariables.scss";
 
-
-.quantityInput{
+.quantityInput {
   font-size: 1em;
   font-weight: 500;
   max-width: 80px;
   width: 60px;
   padding: 0.5em 0.5em 0 0.5em;
-
 }
 
 .quantityInput > input {
@@ -17,10 +15,9 @@
   border-radius: 3px;
   width: 23px;
   height: 23px;
-
 }
 
-.buttonContainer{
+.buttonContainer {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
@@ -30,14 +27,13 @@
   float: right;
 }
 
-.editItemContainer{
+.editItemContainer {
   padding: 10px;
   display: block;
   min-height: 80px;
 }
 
-
-.formContainer{
+.formContainer {
   display: inline-block;
   width: 100%;
 }
@@ -57,7 +53,6 @@
   float: right;
   max-width: 150px;
 }
-
 
 .saveButton {
   max-height: 32px;
@@ -88,5 +83,3 @@
   background-color: map.get($grey-colors, "lighter");
   color: $dark-text !important;
 }
-
-

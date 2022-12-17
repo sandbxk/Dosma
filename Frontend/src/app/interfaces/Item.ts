@@ -1,5 +1,5 @@
-import {Status} from "./StatusEnum";
-import {CategoryEnum} from "./CategoryEnum";
+import { Status } from './StatusEnum';
+import { CategoryEnum } from './CategoryEnum';
 
 export interface Item {
   id: number;
@@ -9,14 +9,11 @@ export interface Item {
   status: Status;
   category: string;
   index: number;
-
-
 }
-
 
 export class ItemDTO {
   id: number = 0;
-  title: string = "";
+  title: string = '';
   quantity: number = 1;
   groceryListId: number = 0;
   status: Status = Status.Unchecked;
@@ -31,8 +28,8 @@ export function dtoToItem(dto: ItemDTO): Item {
     groceryListId: dto.groceryListId,
     status: dto.status,
     category: dto.category,
-    index: 0
-  }
+    index: 0,
+  };
 }
 
 export function itemToDto(item: Item): ItemDTO {
@@ -43,5 +40,5 @@ export function itemToDto(item: Item): ItemDTO {
     groceryListId: item.groceryListId,
     status: item.status,
     category: item.category,
-  }
+  };
 }

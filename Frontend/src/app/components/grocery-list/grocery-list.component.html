@@ -1,9 +1,6 @@
-
-<div  class="parentContainer">
-
+<div class="parentContainer">
   <!-- Container for the GroceryList header, containing the title and other actions -->
   <div class="titleContainer">
-
     <!-- Back button -->
     <button mat-icon-button class="backButton" (click)="navigateBack()">
       <mat-icon class="back-icon"> arrow_back </mat-icon>
@@ -11,23 +8,31 @@
 
     <!-- Title -->
     <h2 class="title">
-      {{groceryList.title}}
+      {{ groceryList.title }}
     </h2>
 
     <!-- Container for the other actions -->
     <div class="listActionsContainer">
-
       <!-- Button for activating mat Menu -->
-      <button mat-icon-button [matMenuTriggerFor]="listMenu"
-              class="listActionBtn"
-              #t="matMenuTrigger" [class.opened]="t.menuOpen" aria-label="Item menu">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="listMenu"
+        class="listActionBtn"
+        #t="matMenuTrigger"
+        [class.opened]="t.menuOpen"
+        aria-label="Item menu"
+      >
         <mat-icon>more_vert</mat-icon>
       </button>
 
       <!-- Mat menu for the list actions -->
       <mat-menu #listMenu="matMenu">
         <!-- share button -->
-        <button *ngIf="selectedItems.length === 1" mat-menu-item (click)="duplicateSelectedItem()">
+        <button
+          *ngIf="selectedItems.length === 1"
+          mat-menu-item
+          (click)="duplicateSelectedItem()"
+        >
           <mat-icon>control_point_duplicate</mat-icon>
           <span>Duplicate item</span>
         </button>
@@ -41,100 +46,141 @@
           <mat-icon>delete</mat-icon>
           <span class="deleteLbl">Delete</span>
         </button>
-
       </mat-menu>
-
     </div>
   </div>
 
-
   <!-- ITEMS -->
-  <div cdkDropList class="itemDnDContainer" (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="dragAndDropIsDisabled()"> <!-- Drag and Drop container -->
-    <div  [@inOutAnimation] *ngFor="let item of groceryList.items"
-          class="itemBox"
-          [ngClass]="{
-          'itemBox': item.status === statusEnum.Unchecked,
-          'itemBoxChecked': item.status === statusEnum.Done,
-          'itemBoxSkipped': item.status === statusEnum.Skipped,
-          'itemBoxSelected': selectedItems.includes(item),
-          'itemBoxCheckedAndSelected': selectedItems.includes(item) && item.status === statusEnum.Done,
-          'itemBoxSkippedAndSelected': selectedItems.includes(item) && item.status === statusEnum.Skipped
-          }"
-          (click)="selectItem(item)"
-          cdkDrag [cdkDragData]="item">
+  <div
+    cdkDropList
+    class="itemDnDContainer"
+    (cdkDropListDropped)="drop($event)"
+    [cdkDropListDisabled]="dragAndDropIsDisabled()"
+  >
+    <!-- Drag and Drop container -->
+    <div
+      [@inOutAnimation]
+      *ngFor="let item of groceryList.items"
+      class="itemBox"
+      [ngClass]="{
+        itemBox: item.status === statusEnum.Unchecked,
+        itemBoxChecked: item.status === statusEnum.Done,
+        itemBoxSkipped: item.status === statusEnum.Skipped,
+        itemBoxSelected: selectedItems.includes(item),
+        itemBoxCheckedAndSelected:
+          selectedItems.includes(item) && item.status === statusEnum.Done,
+        itemBoxSkippedAndSelected:
+          selectedItems.includes(item) && item.status === statusEnum.Skipped
+      }"
+      (click)="selectItem(item)"
+      cdkDrag
+      [cdkDragData]="item"
+    >
       <!-- Individual items | ngClass will apply the the correct class as described by each scenario-->
 
       <div *ngIf="editingItem !== item; else editItemTemplate">
-
-      <div style="display: inline-flex; align-items: center">
-        <p class="quantityIndicator" *ngIf="item.quantity > 1; else standardQuantity">{{item.quantity}}</p> <!-- Quantity indicator -->
-        <ng-template #standardQuantity>  <!-- Standard quantity indicator with numbers -->
-          <p class="quantityIndicatorSingle" *ngIf="item.quantity == 1;"></p>  <!-- Single quantity indicator with only a circle -->
-        </ng-template>
-        <mat-label>{{item.title | truncate: 60}}</mat-label>  <!-- Item title truncated to 60 chars-->
-        <mat-label class="category" *ngIf="item.category && item.category != 'None'"> <!-- Item category | Not displayed if the category is 'None'-->
-          <span>  {{item.category}} </span>
-        </mat-label>
+        <div style="display: inline-flex; align-items: center">
+          <p
+            class="quantityIndicator"
+            *ngIf="item.quantity > 1; else standardQuantity"
+          >
+            {{ item.quantity }}
+          </p>
+          <!-- Quantity indicator -->
+          <ng-template #standardQuantity>
+            <!-- Standard quantity indicator with numbers -->
+            <p class="quantityIndicatorSingle" *ngIf="item.quantity == 1"></p>
+            <!-- Single quantity indicator with only a circle -->
+          </ng-template>
+          <mat-label>{{ item.title | truncate : 60 }}</mat-label>
+          <!-- Item title truncated to 60 chars-->
+          <mat-label
+            class="category"
+            *ngIf="item.category && item.category != 'None'"
+          >
+            <!-- Item category | Not displayed if the category is 'None'-->
+            <span> {{ item.category }} </span>
+          </mat-label>
+        </div>
+        <!-- MockCheckbox -->
+        <app-tri-state-checkbox
+          (click)="$event.stopPropagation()"
+          [status]="item.status"
+          (statusChangedEvent)="updateItemStatus(item, $event)"
+          class="itemCheckbox"
+        >
+        </app-tri-state-checkbox>
       </div>
-      <!-- MockCheckbox -->
-      <app-tri-state-checkbox
-        (click)="$event.stopPropagation()"
-        [status]="item.status"
-        (statusChangedEvent)="updateItemStatus(item, $event)"
-        class="itemCheckbox">
 
-      </app-tri-state-checkbox>
-
-      </div>
-
-      <ng-template #editItemTemplate>  <!-- Template for the edit item dialog -->
+      <ng-template #editItemTemplate>
+        <!-- Template for the edit item dialog -->
         <app-edit-item
           (click)="$event.stopPropagation()"
-          class="editingItemBox" [listItem]="item"
+          class="editingItemBox"
+          [listItem]="item"
           [categories]="categories"
           (editItemEvent)="editItem($event)"
-          (cancelEditItemEvent)="cancelEditItem(true)">
+          (cancelEditItemEvent)="cancelEditItem(true)"
+        >
         </app-edit-item>
       </ng-template>
-
     </div>
 
     <!-- item creation panel, using the new-item component. NewItemEvent and CancelItemCreationEvent are @output events
      in the child component and will be emitted in addItem() and close(). The [groceryListId] sets the variable
      groceryListId in the child component to the chosen value, using @input -->
-     <div id="item-creation-panel" [ngClass]="creatingItem ? 'animateIntoFrame' : 'animateOutOfFrame'">
+    <div
+      id="item-creation-panel"
+      [ngClass]="creatingItem ? 'animateIntoFrame' : 'animateOutOfFrame'"
+    >
       <app-new-item
         [disabled]="!creatingItem"
-        id="new-item-panel" [groceryListId]="groceryList.id" [listSize]="groceryList.items.length" [inputCategories]="categories"
-        (newItemEvent)="addItem($event)" (closeItemCreationEvent)="showNewItemPanel(!$event)">
+        id="new-item-panel"
+        [groceryListId]="groceryList.id"
+        [listSize]="groceryList.items.length"
+        [inputCategories]="categories"
+        (newItemEvent)="addItem($event)"
+        (closeItemCreationEvent)="showNewItemPanel(!$event)"
+      >
       </app-new-item>
     </div>
   </div>
 
-
   <!-- Anchored bottom panel for list actions -->
   <div class="dockToBottom">
-
-    <button (click)="showNewItemPanel(true)" mat-fab class="matFabAddBtn" style="margin-left: 12px">
+    <button
+      (click)="showNewItemPanel(true)"
+      mat-fab
+      class="matFabAddBtn"
+      style="margin-left: 12px"
+    >
       <mat-icon class="icon-display">add</mat-icon>
     </button>
 
-  <div class="crudActionsContainer" [ngClass]="selectedItems.length > 0 ? 'animateIntoFrame' : 'animateOutOfFrame'">
+    <div
+      class="crudActionsContainer"
+      [ngClass]="
+        selectedItems.length > 0 ? 'animateIntoFrame' : 'animateOutOfFrame'
+      "
+    >
+      <button
+        [ngClass]="
+          selectedItems.length === 1 ? 'animateIntoFrame' : 'animateOutOfFrame'
+        "
+        (click)="startEditingItem()"
+        mat-mini-fab
+        class="matFabMiniBtn"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
 
-    <button  [ngClass]="selectedItems.length === 1 ? 'animateIntoFrame' : 'animateOutOfFrame'"
-             (click)="startEditingItem()"
-             mat-mini-fab class="matFabMiniBtn">
-      <mat-icon>edit</mat-icon>
-    </button>
+      <button mat-mini-fab (click)="deleteItems()" class="matFabDeleteBtn">
+        <mat-icon>delete</mat-icon>
+      </button>
 
-    <button mat-mini-fab (click)="deleteItems()" class="matFabDeleteBtn">
-      <mat-icon>delete</mat-icon>
-    </button>
-
-    <button mat-mini-fab (click)="clearSelectedItems()" class="matFabMiniBtn">
-      <mat-icon>clear</mat-icon>
-    </button>
-  </div>
-
+      <button mat-mini-fab (click)="clearSelectedItems()" class="matFabMiniBtn">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
   </div>
 </div>

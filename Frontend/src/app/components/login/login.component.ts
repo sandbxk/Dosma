@@ -8,17 +8,16 @@ import { RegisterComponent } from '../register/register.component';
 
 @Component({
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-
-  loginRequest : LoginRequest = new LoginRequest();
+  loginRequest: LoginRequest = new LoginRequest();
   rememberMe: boolean = false;
   error: string | any = '';
 
   constructor(
     private authService: AuthenticationService,
-    private router : Router,
+    private router: Router,
     public loginForm: MatDialogRef<LoginComponent>,
     private dialog: MatDialog
   ) {}
@@ -32,32 +31,39 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.authService.login(this.loginRequest).then((result) => {
+    this.authService
+      .login(this.loginRequest)
+      .then((result) => {
         // handle success
-        localStorage.setItem('user', JSON.stringify(ObjectGenerator.userFromToken(result.token)));
+        localStorage.setItem(
+          'user',
+          JSON.stringify(ObjectGenerator.userFromToken(result.token))
+        );
         this.router.navigate(['/dashboard']);
         this.loginForm.close();
-      }).catch((error) => {
+      })
+      .catch((error) => {
         // mat snackbar handled in auth service
         this.error = error;
-
-      }).finally(() => {
+      })
+      .finally(() => {
         // save login data to local storage if remember me is checked regardless of login success
         if (this.rememberMe) {
-          localStorage.setItem('rememberedLogin', JSON.stringify(this.loginRequest));
+          localStorage.setItem(
+            'rememberedLogin',
+            JSON.stringify(this.loginRequest)
+          );
         } else {
           localStorage.removeItem('rememberedLogin');
         }
-      }
-    );
+      });
   }
 
   cancel() {
     this.loginForm.close();
   }
 
-  openRegisterForm() : void
-  {
+  openRegisterForm(): void {
     this.loginForm.close();
     this.dialog.open(RegisterComponent);
   }
@@ -70,8 +76,10 @@ export class LoginComponent implements OnInit {
     this.rememberMe = !this.rememberMe;
   }
 
-  private loadRememberMe() : void{
-    let remembered : LoginRequest | null = JSON.parse(localStorage.getItem("rememberedLogin") as string);
+  private loadRememberMe(): void {
+    let remembered: LoginRequest | null = JSON.parse(
+      localStorage.getItem('rememberedLogin') as string
+    );
 
     if (remembered) {
       this.loginRequest = remembered;
@@ -81,14 +89,14 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private loadSavedToken() : boolean {
-    let user : User | null = JSON.parse(localStorage.getItem('user') as string);
+  private loadSavedToken(): boolean {
+    let user: User | null = JSON.parse(localStorage.getItem('user') as string);
 
     if (user) {
       console.log('token found in local storage');
       // TODO: check if token is valid
-        // true -> TODO: auto login & navigate to dashboard & return true
-        // false -> TODO: remove token from local storage & return false
+      // true -> TODO: auto login & navigate to dashboard & return true
+      // false -> TODO: remove token from local storage & return false
       return false;
     }
 

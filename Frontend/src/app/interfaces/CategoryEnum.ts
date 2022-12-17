@@ -11,5 +11,5 @@ export enum CategoryEnum {
   Household = 9,
   Pet = 10,
   Hygiene = 11,
-  Other = 12
+  Other = 12,
 }

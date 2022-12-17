@@ -6,7 +6,7 @@ import { RegisterRequest, User } from 'src/app/interfaces/User';
 import { ObjectGenerator } from 'src/app/util/ObjectGenerator';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { LoginComponent } from '../login/login.component';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormCustomValidators } from 'src/app/util/formCustomValidators';
 
 @Component({
@@ -14,20 +14,18 @@ import { FormCustomValidators } from 'src/app/util/formCustomValidators';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
+  request: RegisterRequest = new RegisterRequest();
 
-  request : RegisterRequest = new RegisterRequest();
-
-  confirm_password : string = '';
-  registerFormControlGroup: FormGroup = new FormGroup({})
+  confirm_password: string = '';
+  registerFormControlGroup: FormGroup = new FormGroup({});
   usernameTakenError: boolean = false;
 
-
   constructor(
-    private authService : AuthenticationService,
+    private authService: AuthenticationService,
     private router: Router,
     public registerForm: MatDialogRef<RegisterComponent>,
-    private dialog: MatDialog,
-    ) { }
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.registerFormControlGroup = new FormGroup({
@@ -35,36 +33,41 @@ export class RegisterComponent implements OnInit {
         Validators.required,
         Validators.minLength(3), // minimum length of 3
         Validators.maxLength(20), // maxLength of 20 characters
-        Validators.pattern('^[a-zA-Z0-9]+$') //alphanumeric only
+        Validators.pattern('^[a-zA-Z0-9]+$'), //alphanumeric only
       ]),
 
       displayName: new FormControl('', []),
 
-      password: new FormControl('',[
+      password: new FormControl('', [
         Validators.required,
-        FormCustomValidators.matchValidator('confirmPassword', true)
-        ]),
+        FormCustomValidators.matchValidator('confirmPassword', true),
+      ]),
       confirmPassword: new FormControl('', [
         Validators.required,
-        FormCustomValidators.matchValidator('password')
-      ])
+        FormCustomValidators.matchValidator('password'),
+      ]),
     });
   }
 
   register() {
     if (this.registerFormControlGroup.valid) {
-        this.request.username = this.username?.value;
-        this.request.password = this.password?.value;
-        this.request.displayName = this.displayName?.value;
+      this.request.username = this.username?.value;
+      this.request.password = this.password?.value;
+      this.request.displayName = this.displayName?.value;
     }
 
-      this.authService.register(this.request).then((result) => {
-        localStorage.setItem('user', JSON.stringify(ObjectGenerator.userFromToken(result.token)));
-        this.openLoginForm()
-      }).catch((error) => {
+    this.authService
+      .register(this.request)
+      .then((result) => {
+        localStorage.setItem(
+          'user',
+          JSON.stringify(ObjectGenerator.userFromToken(result.token))
+        );
+        this.openLoginForm();
+      })
+      .catch((error) => {
         this.usernameTakenError = true;
       });
-
   }
 
   openLoginForm() {
@@ -91,7 +94,4 @@ export class RegisterComponent implements OnInit {
   get confirmPassword() {
     return this.registerFormControlGroup.get('confirmPassword')!;
   }
-
-
-
 }

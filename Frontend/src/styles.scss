@@ -2,17 +2,17 @@
 
 /* You can add global styles to this file, and also import other style files */
 
-
 // https://zoaibkhan.com/blog/angular-material-dark-mode-in-3-steps/#:~:text=For%20adding%20the%20dark%20mode,theme%20to%20the%20theme%20file.&text=To%20add%20a%20dark%20theme,correctly%20for%20the%20dark%20mode.
 
-
-html, body { height: 100%; }
+html,
+body {
+  height: 100%;
+}
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background: $light-background;
 }
-
 
 /* width */
 ::-webkit-scrollbar {
