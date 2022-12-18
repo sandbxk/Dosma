@@ -87,6 +87,11 @@ public class GroceryListService : IGroceryListService
 
     public bool DeleteList(int listID, TokenUser user)
     {
+        if (listID <= 0)
+        {
+            return false;
+        }
+        
         if (_userGroceryRepository.IsUserInGroceryList(user.Id, listID))
         {
             return _groceryListRepository.Delete(listID);
