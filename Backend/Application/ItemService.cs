@@ -33,10 +33,16 @@ public class ItemService : IItemService
 
     public bool DeleteItem(int id, TokenUser user)
     {
+        if (id <= 0)
+        {
+            return false;
+        }
+        
         if (_userGroceryBinding.IsUserInGroceryList(user.Id, _itemRepository.Single(id).GroceryListId))
         {
             return _itemRepository.Delete(id);
         }
+        
         throw new UnauthorizedAccessException("You are not authorized to delete this item");
     }
 
