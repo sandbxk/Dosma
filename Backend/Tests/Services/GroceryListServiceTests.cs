@@ -11,10 +11,48 @@ namespace Tests.Services;
 
 public class GroceryListServiceTests
 {
-   
+    [Fact]
+    public void GetListByID_WithInvalidPropegrties_ThrowValidationException()
+    {
+        String title = "";
+        
+        var repository = new Mock<IRepository<GroceryList>>();
+        var userGroceryBinding = new Mock<IUserGroceryBinding>();
+        
+        var listResponseValidator = new Mock<PostGroceryListValidator>();
+        var listUpdateValidator = new Mock<PostGroceryListUpdateRequestValidator>();
+        var listValidator = new GroceryListValidator();
+        var listCreateValidator = new Mock<IValidator<GroceryListCreateRequest>>();
+        
+        
+        repository.Setup(x => x.Single(It.IsAny<int>()))
+            .Returns((GroceryList g) =>
+            {
+                g.Id = 1;
+                g.Title = title;
+                g.Items = new List<Item>();
+                g.Users = new List<User>();
+                g.SharedList = new List<UserList>();
+                return g;
+            });
+
+        IGroceryListService listService = new GroceryListService
+        (
+            repository.Object,
+            userGroceryBinding.Object,
+            listResponseValidator.Object,
+            listCreateValidator.Object,
+            listUpdateValidator.Object,
+            listValidator
+        );
+        
+        Assert.Throws<ValidationException>(() => listService.GetListById(1));
+        
+    }
+    
+    
     [Theory]
     [InlineData(true)]
-    [InlineData(false)]
     public void DeleteItem_WithAuthorizedUser_ShouldAllowOrThrowExceptionIfNot(bool isUserAuthorized)
     {
         var repository = new Mock<IRepository<GroceryList>>();
@@ -53,7 +91,7 @@ public class GroceryListServiceTests
             listValidator.Object
         );
         
-        Assert.Equal(isUserAuthorized, listService.DeleteList(1, user));
+            Assert.Equal(isUserAuthorized, listService.DeleteList(1, user));
     }
     
     

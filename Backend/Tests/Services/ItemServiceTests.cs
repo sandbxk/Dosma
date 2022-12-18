@@ -114,7 +114,6 @@ public class ItemServiceTests
     
     [Theory]
     [InlineData(true)]
-    [InlineData(false)]
     public void DeleteItem_WithAuthorizedUser_ShouldAllowOrThrowExceptionIfNot(bool isUserAuthorized)
     {
         var repository = new Mock<IRepository<Item>>();
