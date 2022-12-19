@@ -1,28 +1,53 @@
-name: Install Angular dependencies
+name: Install Angular dependencies and build
 
 on:
   push:
     branches:
       - dev*
+      - main
   pull_request:
    branches:
       - main
+      - dev*
   
-
 jobs:
-  deploy:
+  Install-and-Build:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./Frontend
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v3
 
     - name: Setup Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: latest
+        node-version: 18.x.x
+      
+    - name: Cache modules
+      id: npm-cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ./Frontend/node_modules
+        key: ${{ runner.os }}-frontend-packages-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{runner.os}}-frontend-packages
+        
+    - name: Cache dist
+      id: angular-cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          Frontend/dist
+        key: ${{ runner.os }}-frontend-dist-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{runner.os}}-frontend-dist
 
-    - name: Install Node dependencies
-      run: npm install --prefix ./frontend/
 
+    - name: Download npm packages
+      run: npm install
+      working-directory: ${{env.working-directory}}
+      
     - name: Build
-      run: ng build frontend
+      run: npm run build Frontend
+      working-directory: ${{env.working-directory}} 

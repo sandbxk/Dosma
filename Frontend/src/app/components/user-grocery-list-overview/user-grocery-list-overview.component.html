@@ -1,0 +1,77 @@
+<div class="centered">
+  <div class="parentContainer">
+    <div class="flexContainer">
+      <!--flex Container-->
+
+      <!-- Card-Button for adding a new Grocery List -->
+      <mat-card (click)="newGroceryList()" class="listCardButton">
+        <mat-icon> add </mat-icon>
+      </mat-card>
+
+      <div [@inOutAnimation] *ngFor="let list of groceryLists">
+        <!--Card for each list-->
+        <mat-card (click)="selectList(list)" class="listCard">
+          <mat-card-header>
+            <!--Card header for the list name -->
+            <div class="listCardTitle">
+              <h2>{{ list.title | truncate : 19 }}</h2>
+              <!--List name-->
+              <!-- Button for activating the mat-menu -->
+              <button
+                (click)="$event.stopPropagation()"
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                class="menuButton"
+                #t="matMenuTrigger"
+                [class.opened]="t.menuOpen"
+                aria-label="Grocery list menu"
+              >
+                <!--Stop Propagation stops the event chain at the button, meaning the (click) event defined for the parent (card) will not be called-->
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <!--Mat menu -->
+              <mat-menu #menu="matMenu">
+                <!-- Edit list name -->
+                <button mat-menu-item (click)="editList(list)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit name</span>
+                </button>
+                <!-- Delete list -->
+                <button mat-menu-item (click)="deleteList(list)">
+                  <mat-icon>delete</mat-icon>
+                  <span class="deleteLbl">Delete</span>
+                </button>
+              </mat-menu>
+            </div>
+          </mat-card-header>
+
+          <mat-divider></mat-divider>
+          <!-- Divider -->
+
+          <mat-card-content>
+            <ul *ngIf="list.items.length > 0; else emptyList">
+              <!-- List of items in Grocery List -->
+              <li
+                *ngFor="let item of list.items | slice : 0 : 10; let i = index"
+                [ngClass]="{ strikethrough: item.status.valueOf() !== 0 }"
+              >
+                {{ item.title | truncate : 38 }}
+              </li>
+              <!-- Make a list of the first 10 items in the list and
+              Truncate the item titles to 38 characters-->
+            </ul>
+            <ng-template #emptyList>
+              <p class="emptyListText">No items in list</p>
+              <!-- If the list is empty, display this text -->
+            </ng-template>
+          </mat-card-content>
+
+          <mat-card-footer>
+            <span>{{ list.items.length }} items</span>
+            <!-- Number of items in the list -->
+          </mat-card-footer>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

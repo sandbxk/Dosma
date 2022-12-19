@@ -1,0 +1,85 @@
+@use "sass:map";
+@import "src/assets/themeVariables.scss";
+
+.quantityInput {
+  font-size: 1em;
+  font-weight: 500;
+  max-width: 80px;
+  width: 60px;
+  padding: 0.5em 0.5em 0 0.5em;
+}
+
+.quantityInput > input {
+  background: map.get($accent-colors, "main");
+  color: $light-text;
+  border-radius: 3px;
+  width: 23px;
+  height: 23px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  padding: 0.2em;
+  position: relative;
+  right: 0;
+  float: right;
+}
+
+.editItemContainer {
+  padding: 10px;
+  display: block;
+  min-height: 80px;
+}
+
+.formContainer {
+  display: inline-block;
+  width: 100%;
+}
+
+.titleInput {
+  font-size: 1em;
+  font-weight: 500;
+  padding: 0.5em;
+  width: 300px;
+  min-width: 100px;
+}
+
+.categoryInput {
+  font-size: 1em;
+  font-weight: 500;
+  padding: 0.5em;
+  float: right;
+  max-width: 150px;
+}
+
+.saveButton {
+  max-height: 32px;
+}
+
+.saveButton:hover {
+  background-color: map.get($primary-colors, "darker");
+  color: $dark-primary-text !important;
+}
+
+.saveButton:active {
+  background-color: map.get($primary-colors, "lighter");
+  color: $dark-primary-text !important;
+}
+
+.cancelButton {
+  margin-right: 10px;
+  max-height: 32px;
+  background-color: map.get($grey-colors, "main");
+}
+
+.cancelButton:hover {
+  background-color: map.get($grey-colors, "darker");
+  color: $light-text !important;
+}
+
+.cancelButton:active {
+  background-color: map.get($grey-colors, "lighter");
+  color: $dark-text !important;
+}
