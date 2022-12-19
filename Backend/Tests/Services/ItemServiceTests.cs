@@ -167,5 +167,4 @@ public class ItemServiceTests
 
         Assert.Throws<FluentValidation.ValidationException>(() => itemService.UpdateItem(item));
     }
-    
 }

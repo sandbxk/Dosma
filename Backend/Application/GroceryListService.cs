@@ -59,7 +59,7 @@ public class GroceryListService : IGroceryListService
             return response;
         }
 
-        throw new Exception("Could not bind user to grocery list");
+        throw new UnauthorizedAccessException("Could not bind user to grocery list");
     }
 
     public GroceryListResponse GetListById(int listID)
