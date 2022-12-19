@@ -1,7 +1,13 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Status} from "../../interfaces/StatusEnum";
-import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
-
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Status } from '../../interfaces/StatusEnum';
+import {
+  animate,
+  keyframes,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 /**
  * A component that displays a checkbox with three states - 'done', 'skipped', and unchecked.
@@ -10,42 +16,40 @@ import {animate, keyframes, state, style, transition, trigger} from "@angular/an
   selector: 'app-tri-state-checkbox',
   templateUrl: './tri-state-checkbox.component.html',
   styleUrls: ['tri-state-checkbox.component.scss'],
-  animations: [trigger("inOutAnimation", [
-    state("in", style({ opacity: 1 })),
-    transition(":enter", [
-      animate(
-        100,
-        keyframes([
-          style({ opacity: 0, offset: 0 }),
-          style({ opacity: 0.25, offset: 0.25 }),
-          style({ opacity: 0.5, offset: 0.5 }),
-          style({ opacity: 0.75, offset: 0.75 }),
-          style({ opacity: 1, offset: 1 }),
-        ])
-      )
+  animations: [
+    trigger('inOutAnimation', [
+      state('in', style({ opacity: 1 })),
+      transition(':enter', [
+        animate(
+          100,
+          keyframes([
+            style({ opacity: 0, offset: 0 }),
+            style({ opacity: 0.25, offset: 0.25 }),
+            style({ opacity: 0.5, offset: 0.5 }),
+            style({ opacity: 0.75, offset: 0.75 }),
+            style({ opacity: 1, offset: 1 }),
+          ])
+        ),
+      ]),
+      transition(':leave', [
+        animate(
+          100,
+          keyframes([
+            style({ opacity: 1, offset: 0 }),
+            style({ opacity: 0.75, offset: 0.25 }),
+            style({ opacity: 0.5, offset: 0.5 }),
+            style({ opacity: 0.25, offset: 0.75 }),
+            style({ opacity: 0, offset: 1 }),
+          ])
+        ),
+      ]),
     ]),
-    transition(":leave", [
-      animate(
-        100,
-        keyframes([
-          style({ opacity: 1, offset: 0 }),
-          style({ opacity: 0.75, offset: 0.25 }),
-          style({ opacity: 0.5, offset: 0.5 }),
-          style({ opacity: 0.25, offset: 0.75 }),
-          style({ opacity: 0, offset: 1 }),
-        ])
-      )
-    ])
-  ])
-]
-
+  ],
 })
 export class TriStateCheckboxComponent {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   @Output() statusChangedEvent = new EventEmitter<Status>();
 
@@ -77,6 +81,4 @@ export class TriStateCheckboxComponent {
   public get statusEnum(): typeof Status {
     return Status;
   }
-
-
 }

@@ -1,28 +1,36 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
-import {GroceryList} from "../../interfaces/GroceryList";
-import {DataService} from "../../../services/data.service";
-import {HttpGroceryListService} from "../../../services/httpGroceryList.service";
-import {IComponentCanDeactivate} from "../../../services/PendingChanges.guard";
-import {Observable} from "rxjs";
-import {Item} from "../../interfaces/Item";
-import {ConfirmationDialogComponent} from "../../dialogs/confirmation-dialog/confirmation-dialog.component";
-import {MatDialog} from "@angular/material/dialog";
-import {EditListDialogComponent} from "../../dialogs/edit-list-dialog/edit-list-dialog.component";
-import {animate, keyframes, state, style, transition, trigger} from "@angular/animations";
-import {SyncService} from "../../../services/sync.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {Status} from "../../interfaces/StatusEnum";
+import { Component, HostListener, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { GroceryList } from '../../interfaces/GroceryList';
+import { DataService } from '../../../services/data.service';
+import { HttpGroceryListService } from '../../../services/httpGroceryList.service';
+import { IComponentCanDeactivate } from '../../../services/PendingChanges.guard';
+import { first, Observable } from 'rxjs';
+import { dtoToItem, Item, itemToDto } from '../../interfaces/Item';
+import { ConfirmationDialogComponent } from '../../dialogs/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { EditListDialogComponent } from '../../dialogs/edit-list-dialog/edit-list-dialog.component';
+import {
+  animate,
+  keyframes,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Status } from '../../interfaces/StatusEnum';
+import { isEqual } from 'lodash';
 
 @Component({
   selector: 'app-grocery-list',
   templateUrl: './grocery-list.component.html',
   styleUrls: ['./grocery-list.component.scss'],
-  animations: [  // This is the animation for the items, triggered upon adding and removing items
-    trigger("inOutAnimation", [
-      state("in", style({ opacity: 1 })),
-      transition(":enter", [
+  animations: [
+    // This is the animation for the items, triggered upon adding and removing items
+    trigger('inOutAnimation', [
+      state('in', style({ opacity: 1 })),
+      transition(':enter', [
         animate(
           300,
           keyframes([
@@ -32,9 +40,9 @@ import {Status} from "../../interfaces/StatusEnum";
             style({ opacity: 0.75, offset: 0.75 }),
             style({ opacity: 1, offset: 1 }),
           ])
-        )
+        ),
       ]),
-      transition(":leave", [
+      transition(':leave', [
         animate(
           300,
           keyframes([
@@ -44,33 +52,32 @@ import {Status} from "../../interfaces/StatusEnum";
             style({ opacity: 0.25, offset: 0.75 }),
             style({ opacity: 0, offset: 1 }),
           ])
-        )
-      ])
-    ])
-  ]
+        ),
+      ]),
+    ]),
+  ],
 })
-export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
-
+export class GroceryListComponent implements OnInit {
   // Grocery list variable for the list the user currently has open
   groceryList: GroceryList = {
     id: 0,
     title: '',
-    items: []
+    items: [],
   };
 
   // Invalid item used to reset the editing item. Object.Freeze is used to prevent the object from being modified, making it immutable
   placeholderItem: Item = Object.freeze({
     id: 0,
-    title: "Placeholder",
+    title: 'Placeholder',
     quantity: 0,
-    category: "None",
+    category: 'None',
     status: 0,
     groceryListId: 0,
-    index: -1
+    index: -1,
   });
 
   // Valid categories for items
-  categories: string[] = ['Fruits', 'Vegetables', 'Meat', 'Dairy', 'Bakery', 'Beverages', 'Other']; //TODO FETCH CATEGORIES FROM SERVER
+  categories: string[] = [];
   // The ID of the list we are currently viewing
   routeId: any = {};
 
@@ -80,48 +87,47 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
   selectedItems: Item[] = [];
   editingItem: Item = this.placeholderItem;
 
-  syncing: boolean = false;
-
-
   constructor(
     private currentRoute: ActivatedRoute,
     private router: Router,
     private dataService: DataService,
     private httpService: HttpGroceryListService,
     private dialog: MatDialog,
-    private syncService: SyncService,
     private matSnackBar: MatSnackBar
-  ) { }
+  ) {}
 
-  async ngOnInit(): Promise<void> {
-
+  ngOnInit() {
     // Get the id from the route.
     this.routeId = this.currentRoute.snapshot.paramMap.get('id');
 
+    // Get categories from server
+    this.categories = this.httpService.getCategories();
+
     // Get the grocery list from the data service, passed from the previous page
-    this.dataService.currentListStageObject.subscribe(list => {
-      this.groceryList = list;
-    }).unsubscribe();
+    this.dataService.currentListStageObject
+      .subscribe((list) => {
+        this.groceryList = list;
+      })
+      .unsubscribe();
 
     // If the id is 0, the data service did not pass a list, so we need to get it from the server
     if (this.groceryList.id === 0) {
-      this.groceryList = await this.httpService.getListById(this.routeId);
+      this.httpService.getListById(this.routeId).then((list) => {
+        this.groceryList = list;
+      });
     }
 
     this.applyAndSortIndexes();
-
-    setInterval(this.sync, 120000); // Sync every 2 minutes
   }
-
-
 
   applyAndSortIndexes() {
     const localItemsStorage = localStorage.getItem(this.routeId.toString()); // Get the list from local storage
-    if (localItemsStorage) { // If the list exists in local storage
+    if (localItemsStorage) {
+      // If the list exists in local storage
 
       let localItems: Item[] = JSON.parse(localItemsStorage); // Parse the list
 
-      let indexes = localItems.map(i => i.id); // Get the indexes of the item.ids in the list
+      let indexes = localItems.map((i) => i.id); // Get the indexes of the item.ids in the list
 
       for (let i = 0; i < this.groceryList.items.length; i++) {
         let index = indexes.indexOf(this.groceryList.items[i].id); // Get the index of the item with the same id in the local storage list
@@ -130,42 +136,11 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
         }
       }
 
-        this.groceryList.items.sort((a, b) => { // Sort the items by index
-          console.log(a.index, b.index);
-          return a.index - b.index;
-        }); // Sort the items by their index
+      this.groceryList.items.sort((a, b) => {
+        // Sort the items by index
+        return a.index - b.index;
+      }); // Sort the items by their index
     }
-  }
-
-  //TODO:
-  // 1. Delete an item from the list
-  // 2. ListMenu Options
-  //    - Delete all items from the list?
-  //    - Mark all items as purchased
-
-  //TODO: Item status
-  // 5. Mark all items as purchased -> ListMenu Options
-  // On check, opacity 0.7 and strikethrough
-  // On skipped, color warn-light, opacity 0.7 and strikethrough
-
-
-  //TODO: Sync
-  // 7. Sync on timer -> SyncService?
-  // 8. Sync on button press -> SyncService?
-
-
-  /**
-   * From IComponentCanDeactivate
-   * Will prevent the user from navigating away from the page if there are unsaved changes
-   * used for SyncService
-   */
-  @HostListener('window:beforeunload', ['$event'])
-  canDeactivate(): boolean | Observable<boolean> {
-    while (this.syncing) {
-      // Wait for the sync to finish
-      //TODO: update all items to have the correct index and save in local storage
-    }
-    return true;
   }
 
   /**
@@ -173,7 +148,11 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    * @param event
    */
   drop(event: CdkDragDrop<Item>) {
-    moveItemInArray(this.groceryList.items, event.previousIndex, event.currentIndex);
+    moveItemInArray(
+      this.groceryList.items,
+      event.previousIndex,
+      event.currentIndex
+    );
     event.item.data.index = event.currentIndex;
 
     //Update the index of all items in the list
@@ -181,53 +160,15 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
       this.groceryList.items[i].index = i;
     }
 
-    localStorage.setItem(this.routeId.toString(), JSON.stringify(this.groceryList.items));
+    localStorage.setItem(
+      this.routeId.toString(),
+      JSON.stringify(this.groceryList.items)
+    );
   }
 
   /**
-   * Syncs the local list with the server
-   * Starts with syncing down and notifying the user of any changes present on the server,
-   * the user can discard the changes or merge them with the local list
-   * Then the local list is synced up to the server
+   * Navigates back to the dashboard with all the user's grocery lists
    */
-  async sync() {
-    this.syncing = true;
-
-    try {
-
-    const updatedList = await this.syncService.syncDown()
-    if (updatedList.id !== 0 && updatedList !== this.groceryList) { //Must not be the placeholder list, and should not be identical to the current list
-
-      this.dialog.open(ConfirmationDialogComponent, {
-        data: {
-          title: "New changes detected",
-          message: "Would you like to update your list with the new changes? " +
-            "This will overwrite any recent changes you have made.",
-        }
-      }).afterClosed().subscribe((result: boolean) => {
-        if (result) {
-          this.groceryList = updatedList;
-        }
-      }).unsubscribe();
-    }
-
-    this.syncService.syncUp(this.groceryList).then(async () => {
-    })
-      .catch(reason => this.matSnackBar
-        .open(reason, "Dismiss", {duration: 5000}))
-          .finally(() => this.syncing = false);
-
-
-    } catch (error) {
-      this.syncing = false;
-      this.matSnackBar.open('ERROR: Could not synchronize', "Dismiss", {duration: 5000});
-    }
-  }
-
-
- /**
-  * Navigates back to the dashboard with all the user's grocery lists
-  */
   navigateBack() {
     this.router.navigate(['/dashboard']);
   }
@@ -241,16 +182,22 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     let dialogueRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Delete Grocery List',
-        message: "Are you sure you want to delete this grocery list?",
-      }
+        message: 'Are you sure you want to delete this grocery list?',
+      },
     });
 
-    dialogueRef.afterClosed().subscribe(userSaidYes => {
+    dialogueRef.afterClosed().subscribe((userSaidYes) => {
       if (userSaidYes) {
-        this.httpService.deleteList(this.groceryList).then(() => {
-          this.navigateBack();
-        })
-          .catch(err => {
+        this.httpService
+          .deleteList(this.groceryList.id)
+          .then((result) => {
+            if (result) this.navigateBack();
+            else
+              this.matSnackBar.open('ERROR: Could not delete list', 'Dismiss', {
+                duration: 5000,
+              });
+          })
+          .catch((err) => {
             console.error(err);
           });
       }
@@ -263,10 +210,9 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   selectItem(item: Item) {
     if (this.selectedItems.includes(item))
-      this.selectedItems.splice(this.selectedItems.indexOf(item), 1); // Remove the item from the array
-
-    else
-      this.selectedItems.push(item); // Add the item to the array
+      this.selectedItems.splice(this.selectedItems.indexOf(item), 1);
+    // Remove the item from the array
+    else this.selectedItems.push(item); // Add the item to the array
   }
 
   /**
@@ -274,8 +220,32 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    * @param $event The item to be added to the list, emitted from the new-item component
    */
   addItem($event: Item) {
-    this.groceryList.items.push($event);
-    const scrollToItem = () => this.scrollToItemCreationPanel()
+    let item: Item = $event;
+
+    let dto = {
+      title: item.title,
+      quantity: item.quantity,
+      groceryListId: item.groceryListId,
+      category: item.category,
+      status: item.status,
+    };
+
+    this.httpService
+      .createItem(dto)
+      .then((result) => {
+        if (result) {
+          let newItem: Item = dtoToItem(result);
+          newItem.index = this.groceryList.items.length;
+
+          this.groceryList.items.push(newItem);
+          this.applyAndSortIndexes();
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    const scrollToItem = () => this.scrollToItemCreationPanel();
     setTimeout(scrollToItem, 250); // Timeout is required as an additional element comes into view when the panel is shown, changing the scroll position
   }
 
@@ -288,26 +258,26 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
     this.creatingItem = showing;
 
     if (showing) {
-      this.cancelEditItem(true) // Cancel any item editing and close the editing panel
+      this.cancelEditItem(true); // Cancel any item editing and close the editing panel
 
-      const scrollToItem = () => this.scrollToItemCreationPanel()
+      const scrollToItem = () => this.scrollToItemCreationPanel();
       setTimeout(scrollToItem, 250); // Timeout is required as an additional element comes into view when the panel is shown, changing the scroll position
     }
-
   }
 
   /**
    * Scrolls the item creation panel into view
    */
   scrollToItemCreationPanel() {
-     const element: HTMLElement = document.getElementById("item-creation-panel")!
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-        inline: "nearest"
-      });
+    const element: HTMLElement = document.getElementById(
+      'item-creation-panel'
+    )!;
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest',
+    });
   }
-
 
   /**
    * Replaces the original item with the edited item emitted from the edit-item component
@@ -315,31 +285,52 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   editItem($event: Item) {
     let index = this.groceryList.items.indexOf(this.editingItem);
-    this.groceryList.items[index] = $event;
+
+    this.httpService.updateItem(itemToDto($event)).then((result) => {
+      if (result) {
+        let item: Item = dtoToItem(result);
+        item.index = $event.index;
+
+        this.groceryList.items[index] = item;
+      }
+    });
 
     this.editingItem = this.placeholderItem;
   }
 
-
   deleteItems() {
     const itemsToDelete = this.selectedItems;
-
-    let deleteMessage = "";
+    let deleteMessage = '';
 
     if (itemsToDelete.length === 1)
-      deleteMessage = "Are you sure you want to delete this item?";
+      deleteMessage = 'Are you sure you want to delete this item?';
     else
       deleteMessage = `Are you sure you want to delete these ${itemsToDelete.length} items?`;
 
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Delete Items',
-        message: deleteMessage
-      }
+        message: deleteMessage,
+      },
     });
 
-    dialogRef.afterClosed().subscribe(userSaidYes => {
+    dialogRef.afterClosed().subscribe((userSaidYes) => {
       if (userSaidYes) {
+        for (let item of itemsToDelete) {
+          this.httpService
+            .deleteItem(item.id)
+            .then((result) => {
+              if (result) {
+                delete this.groceryList.items[
+                  this.groceryList.items.indexOf(item)
+                ];
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
+
         const setOfItemsToDelete = new Set(itemsToDelete);
         const newGroceryListItems = this.groceryList.items.filter((item) => {
           return !setOfItemsToDelete.has(item);
@@ -369,21 +360,30 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
 
   /**
    * Will open a dialog to edit the list title
+   * If the user confirms, the list title will be updated on the server
+   * As it only updates the title, the list will not be reloaded. Instead the title will be updated locally if the update was successful
    */
   editListName() {
     // Open a dialog to edit the list name and pass the current grocery list
-      let dialogueRef = this.dialog.open(EditListDialogComponent, {
-        data: {
-          groceryList: this.groceryList
-        }
-      });
+    let dialogueRef = this.dialog.open(EditListDialogComponent, {
+      data: {
+        // Pass the list to the dialog so that it can be edited
+        groceryList: this.groceryList,
+      },
+    });
 
-      //Set the new list name after the dialog closes
-      dialogueRef.afterClosed().subscribe(async editedList => {
-        if (editedList !== null) {
-          this.groceryList.title = editedList.title;
-        }
-      }).unsubscribe(); // Unsubscribe to prevent memory leaks
+    dialogueRef
+      .afterClosed()
+      .pipe(first())
+      .subscribe((dto) => {
+        if (dto !== null && dto !== undefined)
+          this.httpService.updateList(dto).then((editedList) => {
+            if (editedList.id === this.groceryList.id) {
+              // If the list was edited, update the list in the list of groceryLists
+              this.groceryList.title = editedList.title;
+            }
+          });
+      });
   }
 
   /**
@@ -391,9 +391,11 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    * Does so through the cdkDropListDisabled directive
    */
   dragAndDropIsDisabled() {
-    if (this.editingItem.id !== 0) //If an item is being edited, disable drag and drop
+    if (this.editingItem.id !== 0)
+      //If an item is being edited, disable drag and drop
       return true;
-    if (this.creatingItem) //If the item creation panel is open, disable drag and drop
+    if (this.creatingItem)
+      //If the item creation panel is open, disable drag and drop
       return true;
 
     return false;
@@ -404,12 +406,55 @@ export class GroceryListComponent implements OnInit, IComponentCanDeactivate {
    */
   startEditingItem() {
     if (this.selectedItems.length === 1) {
-      this.editingItem = this.selectedItems[0];  // Set the item to be edited to the selected item
-      this.showNewItemPanel(false);  // Close the new item panel if it is open
+      this.editingItem = this.selectedItems[0]; // Set the item to be edited to the selected item
+      this.showNewItemPanel(false); // Close the new item panel if it is open
     }
   }
 
-  get statusEnum(){
+  get statusEnum() {
     return Status;
+  }
+
+  duplicateSelectedItem() {
+    let selectedItem = this.selectedItems[0]; // Get the selected item
+
+    //DTO
+    const duplicateDTO = {
+      title: selectedItem.title,
+      quantity: selectedItem.quantity,
+      status: selectedItem.status,
+      groceryListId: selectedItem.groceryListId,
+      category: selectedItem.category,
+    };
+
+    //Post the duplicated item
+    this.httpService.duplicateItem(duplicateDTO).then((item) => {
+      let duplicatedItem: Item = {
+        // add missing properties
+        id: item.id,
+        groceryListId: item.groceryListId,
+        index: this.selectedItems.length,
+        quantity: item.quantity,
+        status: item.status,
+        title: item.title,
+        category: item.category,
+      };
+
+      this.groceryList.items.push(duplicatedItem);
+    });
+  }
+
+  updateItemStatus(item: Item, status: Status) {
+    item.status = status;
+    this.httpService.updateItem(itemToDto(item)).then((result) => {
+      let updatedItem: Item = dtoToItem(result);
+      updatedItem.index = item.index;
+
+      if (!isEqual(item, updatedItem)) {
+        // If the updated item is different from the original item with applied changes
+        this.groceryList.items[this.groceryList.items.indexOf(item)] =
+          updatedItem;
+      }
+    });
   }
 }

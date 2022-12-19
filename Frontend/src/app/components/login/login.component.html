@@ -1,24 +1,80 @@
+<div style="width: 15em">
+  <div
+    style="
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    "
+  >
+    <h2 style="margin-top: 4px">Login</h2>
+    <button style="" class="closeButton" mat-icon-button (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
 
-<button mat-icon-button (click)="cancel()">
-    <mat-icon>close</mat-icon>
-</button>
+  <div mat-dialog-content class="contentContainer">
+    <form class="formContainer">
+      <mat-form-field appearance="fill" (click)="clearError()" color="accent">
+        <mat-label>Username</mat-label>
+        <input
+          required="true"
+          matInput
+          type="text"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="this.loginRequest.username"
+          name="username"
+          (keyup.enter)="login()"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="fill" (click)="clearError()" color="accent">
+        <mat-label>Password</mat-label>
+        <input
+          required="true"
+          matInput
+          type="password"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="this.loginRequest.password"
+          name="password"
+          (keyup.enter)="login()"
+        />
+      </mat-form-field>
 
-<div mat-dialog-content>
-  <form >
-    <mat-form-field appearance="fill">
-      <mat-label>Username</mat-label>
-      <input required="true" matInput type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.loginRequest.username" name="username" (keyup.enter)="login()">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Password</mat-label>
-      <input required="true" matInput type="password" [ngModelOptions]="{standalone: true}" [(ngModel)]="this.loginRequest.password" name="password" (keyup.enter)="login()">
-    </mat-form-field>
-    <mat-checkbox (change)="toggleRememberMe()" [checked]="rememberMe" name="rememberMe">Remember me</mat-checkbox>
-    <div class="error" *ngIf="this.error">
-      {{this.error}}
+      <mat-checkbox
+        style="float: left"
+        (change)="toggleRememberMe()"
+        [checked]="rememberMe"
+        name="rememberMe"
+        color="accent"
+        >Remember me</mat-checkbox
+      >
+
+      <div class="error">
+        <p class="errorText" [ngClass]="error !== '' ? 'visible' : 'hidden'">
+          {{ error }}
+        </p>
+      </div>
+    </form>
+
+    <div class="buttonContainer">
+      <button
+        mat-button
+        (click)="openRegisterForm()"
+        style="padding: 1px 5px 1px 5px; float: left"
+      >
+        New account
+      </button>
+      <button
+        class="actionButton"
+        style="float: right; margin-bottom: 20px; margin-left: 5px"
+        type="submit"
+        mat-raised-button
+        color="primary"
+        (click)="login()"
+      >
+        Login
+      </button>
+      <!--- <a mat-button (click)="openForgotPasswordForm()">Forgot password</a> -->
     </div>
-    <button type="submit" mat-raised-button color="primary" (click)="login()">Login</button>
-    <a mat-button (click)="openRegisterForm()">Register new account</a>
-    <a mat-button (click)="openForgotPasswordForm()">Forgot password</a>
-  </form>
+  </div>
 </div>

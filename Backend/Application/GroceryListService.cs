@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.ComponentModel.DataAnnotations;
-using Application.DTOs;
+﻿using Application.DTOs;
 using Application.DTOs.Response;
 using Application.Helpers;
 using Application.Interfaces;
-using AutoMapper;
 using Domain;
 using FluentValidation;
-using Infrastructure;
 using Infrastructure.Interfaces;
 
 namespace Application;
@@ -63,7 +59,7 @@ public class GroceryListService : IGroceryListService
             return response;
         }
 
-        throw new Exception("Could not bind user to grocery list");
+        throw new UnauthorizedAccessException("Could not bind user to grocery list");
     }
 
     public GroceryListResponse GetListById(int listID)
@@ -91,18 +87,16 @@ public class GroceryListService : IGroceryListService
 
     public bool DeleteList(int listID, TokenUser user)
     {
-        // remove the user from the list
-        if (_userGroceryRepository.RemoveUserFromGroceryList(user.Id, listID))
+        if (listID <= 0)
         {
-            // delete list only if no other users are assigned to it.
-            // without sharing this should always be true
-            if (_userGroceryRepository.GetAllUsers(listID).Count() == 0)
-            {
-                return _groceryListRepository.Delete(listID);
-            }
+            return false;
         }
-
-        return false;
+        
+        if (_userGroceryRepository.IsUserInGroceryList(user.Id, listID))
+        {
+            return _groceryListRepository.Delete(listID);
+        }
+        throw new UnauthorizedAccessException("You are not authorized to delete this list");
     }
 
     public GroceryListResponse UpdateList(GroceryListUpdateRequest request)

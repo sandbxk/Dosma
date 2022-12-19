@@ -1,28 +1,25 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {GroceryList} from "../../interfaces/GroceryList";
+import { GroceryList } from '../../interfaces/GroceryList';
 
 @Component({
   selector: 'app-confirmation-dialog',
   templateUrl: './confirmation-dialog.component.html',
-  styleUrls: ['./confirmation-dialog.component.scss']
+  styleUrls: ['./confirmation-dialog.component.scss'],
 })
 export class ConfirmationDialogComponent implements OnInit {
-
-  title: string = "";
-  message: string = "";
+  title: string = '';
+  message: string = '';
 
   constructor(
     public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-    )
-  {
+  ) {
     this.title = data.title;
     this.message = data.message;
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onDismiss() {
     this.dialogRef.close(false);
@@ -31,5 +28,4 @@ export class ConfirmationDialogComponent implements OnInit {
   onConfirm() {
     this.dialogRef.close(true);
   }
-
 }

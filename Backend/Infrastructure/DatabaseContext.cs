@@ -90,6 +90,5 @@ public class DatabaseContext : DbContext
     public DbSet<Item> ItemTable { get; set; }
     public DbSet<User> UserTable { get; set; }
     public DbSet<GroceryList> GroceryListsTable { get; set; }
-    
     public DbSet<UserList> GroceryListUserJoinTable { get; set; }
 }

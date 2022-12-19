@@ -1,20 +1,19 @@
 export class User {
-
   id: number = 0;
   name: string = '';
   username: string = '';
   access_claims: AccessObject[] = [];
-  expire_at: string = '';
+  expire_at: number = 0;
   token: string = '';
 }
 
-export type AccessLevel = "READ" | "WRITE" | "DELETE";
-export type AccessResources = "LIST" | undefined;
+export type AccessLevel = 'READ' | 'WRITE' | 'DELETE';
+export type AccessResources = 'LIST' | undefined;
 
 export class AccessObject {
-  access: AccessLevel[]  = [];
+  access: AccessLevel[] = [];
   resource: AccessResources;
-  values : string[] = [];
+  values: string[] = [];
 }
 
 export class TokenResponse {

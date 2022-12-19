@@ -50,6 +50,11 @@ public class UserGroceryRepository : IUserGroceryBinding
         return lists;
     }
 
+    public bool IsUserInGroceryList(int userId, int groceryListId)
+    {
+        return _dbContext.GroceryListUserJoinTable.Any(u => u.UserID == userId && u.GroceryListID == groceryListId);
+    }
+
     public List<User> GetAllUsers(int groceryListId)
     {
         return _dbContext.GroceryListUserJoinTable.Where(ug => ug.GroceryListID == groceryListId).Select(x => x.User).ToList();

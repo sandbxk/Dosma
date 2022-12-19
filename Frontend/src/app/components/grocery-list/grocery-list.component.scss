@@ -51,7 +51,6 @@ Item box
 .itemBoxSelected {
   @extend .itemBox;
   background: map.get($primary-colors, "main");
-
 }
 
 .itemBoxSelected:hover {
@@ -77,36 +76,52 @@ Item box
 }
 
 .editingItemBox:hover {
-  background: mix(darken($light-background, 5%), map.get($accent-colors, "lighter"), 80%);
+  background: mix(
+    darken($light-background, 5%),
+    map.get($accent-colors, "lighter"),
+    80%
+  );
   transition: 0.3s;
 }
 
-
 .itemBox:first-child {
-  border-top: solid 2px map.get($accent-colors, "lighter");;
+  border-top: solid 2px map.get($accent-colors, "lighter");
 }
 
 .itemBoxChecked {
   @extend .itemBox;
-  background: saturate(mix($light-background, map.get($accent-colors, "darker"), 40%), 30%);
+  background: saturate(
+    mix($light-background, map.get($accent-colors, "darker"), 40%),
+    30%
+  );
   text-decoration: line-through;
   opacity: 0.6;
 }
 
 .itemBoxChecked:hover {
-  background: saturate(mix($light-background, map.get($accent-colors, "main"), 40%), 20%);
+  background: saturate(
+    mix($light-background, map.get($accent-colors, "main"), 40%),
+    20%
+  );
   transition: 0.3s;
 }
 
 .itemBoxCheckedAndSelected {
   @extend .itemBoxChecked;
-  background: mix(map.get($primary-colors, "main"), map.get($accent-colors, "darker"), 60%);
+  background: mix(
+    map.get($primary-colors, "main"),
+    map.get($accent-colors, "darker"),
+    60%
+  );
   text-decoration: line-through;
   opacity: 0.9;
 }
 
 .itemBoxCheckedAndSelected:hover {
-  background: lighten(mix(map.get($primary-colors, "main"), map.get($accent-colors, "main"), 60%), 10%);
+  background: lighten(
+    mix(map.get($primary-colors, "main"), map.get($accent-colors, "main"), 60%),
+    10%
+  );
   transition: 0.3s;
 }
 
@@ -124,18 +139,21 @@ Item box
 
 .itemBoxSkippedAndSelected {
   @extend .itemBoxSkipped;
-  background: saturate(mix($light-background, map.get($warn-colors, "darker"), 40%), 20%);
+  background: saturate(
+    mix($light-background, map.get($warn-colors, "darker"), 40%),
+    20%
+  );
   text-decoration: line-through;
   opacity: 0.9;
 }
 
 .itemBoxSkippedAndSelected:hover {
-  background: saturate(mix($light-background, map.get($warn-colors, "main"), 40%), 10%);
+  background: saturate(
+    mix($light-background, map.get($warn-colors, "main"), 40%),
+    10%
+  );
   transition: 0.3s;
 }
-
-
-
 
 /*
 Menu button on list item
@@ -159,15 +177,17 @@ Menu button on list item
   font-weight: 500;
 }
 
-
-.opened
-{
+.opened {
   opacity: 1;
 }
 
-
 ::ng-deep .mat-menu-content {
   padding: 0 !important;
+}
+
+::ng-deep .mat-menu-panel {
+  background-color: $light-background;
+  min-height: 45px !important;
 }
 
 .mat-menu-item {
@@ -175,7 +195,7 @@ Menu button on list item
   padding: 0 0.5em;
 }
 
-button.mat-menu-item{
+button.mat-menu-item {
   background-color: $light-background;
 }
 
@@ -184,12 +204,11 @@ button.mat-menu-item:hover {
   color: $dark-primary-text !important;
 }
 
-
 /*
 Quantity box for indicating the quantity of an item
  */
 
-.quantityIndicator{
+.quantityIndicator {
   background: map.get($accent-colors, "main");
   color: $light-text;
   border-radius: 3px;
@@ -207,12 +226,11 @@ Quantity box for indicating the quantity of an item
   margin-bottom: 0;
 }
 
-.quantityIndicatorSingle{
+.quantityIndicatorSingle {
   @extend .quantityIndicator;
   border-radius: 30px;
   width: 23px;
   height: 23px;
-
 }
 
 .itemCheckbox {
@@ -222,7 +240,6 @@ Quantity box for indicating the quantity of an item
 }
 
 .parentContainer {
-  //overflow-y: scroll;
   max-width: 100%;
   height: 100%;
   position: relative;
@@ -310,21 +327,6 @@ Quantity box for indicating the quantity of an item
   opacity: 1;
 }
 
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.syncingAnimation {
-  animation: rotate 1s linear infinite;
-  color: map.get($primary-colors, "main");
-}
-
-
 .backButton {
   position: fixed;
   background-color: transparent;
@@ -346,20 +348,15 @@ Quantity box for indicating the quantity of an item
   background-color: map.get($primary-colors, "darker");
 }
 
-.back-icon:active  {
+.back-icon:active {
   background-color: map.get($primary-colors, "lighter");
 }
-
-
-
-
 
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;
   box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.2),
-  0 4px 5px 1px rgba(0, 0, 0, 0.14),
-  0 2px 7px 2px rgba(0, 0, 0, 0.12);
+    0 4px 5px 1px rgba(0, 0, 0, 0.14), 0 2px 7px 2px rgba(0, 0, 0, 0.12);
 }
 
 .cdk-drag-placeholder {
@@ -373,7 +370,6 @@ Quantity box for indicating the quantity of an item
 .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
-
 
 .dockToBottom {
   width: $width;
@@ -427,7 +423,6 @@ Quantity box for indicating the quantity of an item
   color: map.get($primary-colors, "darker");
 }
 
-
 .matFabMiniBtn {
   @extend .matFabAddBtn;
   background-color: map.get($grey-colors, "lighter");
@@ -457,15 +452,22 @@ Quantity box for indicating the quantity of an item
 }
 
 @keyframes leaveToBottom {
-  from { transform: translate(0); }
-  to { transform: translateY(50%) }
+  from {
+    transform: translate(0);
+  }
+  to {
+    transform: translateY(50%);
+  }
 }
 
 @keyframes returnFromBottom {
-  from { transform: translateY(50%); }
-  to { transform: translateY(0) }
+  from {
+    transform: translateY(50%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
-
 
 .animateOutOfFrame {
   animation: leaveToBottom 0.5s ease-in-out;

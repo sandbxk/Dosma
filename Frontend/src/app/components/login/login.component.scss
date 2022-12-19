@@ -1,4 +1,74 @@
+@use "sass:map";
+@import "src/assets/themeVariables.scss";
 
 .spacer {
   flex: 1 1 auto;
+}
+
+.closeButton {
+  float: right;
+  position: relative;
+  cursor: pointer;
+  top: 0px;
+  background-color: transparent;
+}
+
+.closeButton:hover {
+  background-color: darken($light-background, 20%);
+}
+
+.closeButton:active {
+  background-color: darken($light-background, 40%);
+}
+
+.formContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 35px;
+}
+
+.buttonContainer {
+  bottom: 0;
+  position: relative;
+  display: inline-block;
+  width: 90%;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.actionButton:hover {
+  background-color: map.get($primary-colors, "darker");
+  color: $dark-primary-text !important;
+}
+
+.actionButton:active {
+  background-color: map.get($primary-colors, "lighter");
+  color: $dark-primary-text !important;
+}
+
+.error {
+  max-width: 200px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.errorText {
+  color: map.get($warn-colors, "main");
+  font-size: 0.8rem;
+}
+
+.hidden {
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.visible {
+  opacity: 1;
+  transition: 0.3s;
 }
