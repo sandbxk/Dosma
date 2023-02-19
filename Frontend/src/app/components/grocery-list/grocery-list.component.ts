@@ -299,7 +299,7 @@ export class GroceryListComponent implements OnInit {
   }
 
   deleteItems() {
-    const itemsToDelete = this.selectedItems;
+    let itemsToDelete = this.selectedItems;
     let deleteMessage = '';
 
     if (itemsToDelete.length === 1)
@@ -336,6 +336,7 @@ export class GroceryListComponent implements OnInit {
           return !setOfItemsToDelete.has(item);
         });
         this.groceryList.items = newGroceryListItems;
+        this.selectedItems = [];
       }
     });
   }

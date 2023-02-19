@@ -61,9 +61,15 @@ export class HttpGroceryListService {
       const httpResponse = await axiosInstance.get<any>('GroceryList', header);
       return httpResponse.data as GroceryList[];
     } catch (e) {
-      this.matSnackbar.open('You must be logged in to view lists', 'Dismiss', {
-        duration: 5000,
-      });
+      if (e instanceof Error) {
+        this.matSnackbar.open(e.message, 'Dismiss', {
+          duration: 5000,
+        });
+      } else {
+        this.matSnackbar.open('Something went wrong', 'Dismiss', {
+          duration: 5000,
+        });
+      }
       return [];
     }
   }
@@ -82,11 +88,15 @@ export class HttpGroceryListService {
           return response.data as GroceryList;
         });
     } catch (e) {
-      this.matSnackbar.open(
-        'You must be logged in to create lists',
-        'Dismiss',
-        { duration: 5000 }
-      );
+      if (e instanceof Error) {
+        this.matSnackbar.open(e.message, 'Dismiss', {
+          duration: 5000,
+        });
+      } else {
+        this.matSnackbar.open('Something went wrong', 'Dismiss', {
+          duration: 5000,
+        });
+      }
       let error: GroceryList = {
         id: 0,
         title: 'Error',
@@ -114,11 +124,15 @@ export class HttpGroceryListService {
       );
       return httpResult.data as GroceryList;
     } catch (e) {
-      this.matSnackbar.open(
-        'You must be logged in to update lists',
-        'Dismiss',
-        { duration: 5000 }
-      );
+      if (e instanceof Error) {
+        this.matSnackbar.open(e.message, 'Dismiss', {
+          duration: 5000,
+        });
+      } else {
+        this.matSnackbar.open('Something went wrong', 'Dismiss', {
+          duration: 5000,
+        });
+      }
       throw new Error('You must be logged in to update lists');
     }
   }
@@ -137,12 +151,15 @@ export class HttpGroceryListService {
         return response.data as ItemDTO;
       });
     } catch (e) {
-      console.log(e);
-      this.matSnackbar.open(
-        'You must be logged in to create items',
-        'Dismiss',
-        { duration: 5000 }
-      );
+      if (e instanceof Error) {
+        this.matSnackbar.open(e.message, 'Dismiss', {
+          duration: 5000,
+        });
+      } else {
+        this.matSnackbar.open('Something went wrong', 'Dismiss', {
+          duration: 5000,
+        });
+      }
       throw new Error('You must be logged in to create items');
     }
   }
@@ -153,11 +170,15 @@ export class HttpGroceryListService {
       const httpResult = await axiosInstance.patch('item', item, header);
       return httpResult.data as ItemDTO;
     } catch (e) {
-      this.matSnackbar.open(
-        'You must be logged in to update lists',
-        'Dismiss',
-        { duration: 5000 }
-      );
+      if (e instanceof Error) {
+        this.matSnackbar.open(e.message, 'Dismiss', {
+          duration: 5000,
+        });
+      } else {
+        this.matSnackbar.open('Something went wrong', 'Dismiss', {
+          duration: 5000,
+        });
+      }
       throw new Error('You must be logged in to update lists');
     }
   }
@@ -168,11 +189,15 @@ export class HttpGroceryListService {
       await axiosInstance.delete(`item/${itemId}`, header); //Errors handled in interceptor
       return true;
     } catch (e) {
-      this.matSnackbar.open(
-        'You must be logged in to delete items',
-        'Dismiss',
-        { duration: 5000 }
-      );
+      if (e instanceof Error) {
+        this.matSnackbar.open(e.message, 'Dismiss', {
+          duration: 5000,
+        });
+      } else {
+        this.matSnackbar.open('Something went wrong', 'Dismiss', {
+          duration: 5000,
+        });
+      }
       return false;
     }
   }
@@ -187,11 +212,15 @@ export class HttpGroceryListService {
       await axiosInstance.delete(`GroceryList/${groceryListId}`, header); //Errors handled in interceptor
       return true;
     } catch (e) {
-      this.matSnackbar.open(
-        'You must be logged in to delete lists',
-        'Dismiss',
-        { duration: 5000 }
-      );
+      if (e instanceof Error) {
+        this.matSnackbar.open(e.message, 'Dismiss', {
+          duration: 5000,
+        });
+      } else {
+        this.matSnackbar.open('Something went wrong', 'Dismiss', {
+          duration: 5000,
+        });
+      }
       return false;
     }
   }
@@ -209,9 +238,15 @@ export class HttpGroceryListService {
       );
       return httpsResult.data as GroceryList;
     } catch (e) {
-      this.matSnackbar.open('You must be logged in to view lists', 'Dismiss', {
-        duration: 5000,
-      });
+      if (e instanceof Error) {
+        this.matSnackbar.open(e.message, 'Dismiss', {
+          duration: 5000,
+        });
+      } else {
+        this.matSnackbar.open('Something went wrong', 'Dismiss', {
+          duration: 5000,
+        });
+      }
       let error: GroceryList = {
         id: 0,
         title: 'Error',
@@ -243,9 +278,15 @@ export class HttpGroceryListService {
       );
       return httpsResult.data as Item;
     } catch (e) {
-      this.matSnackbar.open('You must be logged in to view lists', 'Dismiss', {
-        duration: 5000,
-      });
+      if (e instanceof Error) {
+        this.matSnackbar.open(e.message, 'Dismiss', {
+          duration: 5000,
+        });
+      } else {
+        this.matSnackbar.open('Something went wrong', 'Dismiss', {
+          duration: 5000,
+        });
+      }
       let error: Item = {
         id: 0,
         title: 'Error',
